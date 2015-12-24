@@ -1,0 +1,73 @@
+.ui-widget {
+	font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
+	font-size: 11px;
+}
+
+#crud-container {
+	margin: 50px auto 0px auto;
+	width: 600px;
+	position: relative;
+}
+
+#crud {
+	position: relative;
+	text-align: center;
+	width: 100%;
+	table-layout:fixed;
+}
+
+#crud thead tr th .desc,#crud thead tr th .asc {
+	cursor: pointer;
+}
+
+#crud thead tr th {
+	padding: 5px 0px 5px 0px;
+	font-size: 14px;
+	cursor: pointer;
+	text-align: center;
+}
+
+#crud thead tr th.nosort {
+	cursor: auto;
+}
+
+#crud thead tr td input.search {
+	width:100%;
+}
+
+
+#crud tbody tr .ui-state-hover {
+	font-weight: normal;
+}
+
+#crud tbody tr td{
+	overflow:hidden;
+}
+#crud tfoot tr td.crud-create {
+	text-align: left;
+}
+
+#crud tfoot tr td.crud-pager {
+	text-align: right;
+}
+
+#crud tfoot tr td.crud-pager .ui-widget {
+	font-size: 10px;
+}
+
+
+table.crud-sub-table{
+	width: 100%;
+}
+
+table.crud-sub-table td{
+	text-align: left;
+}
+
+table.crud-sub-table td input[type=text]{
+	width: 100%;
+}
+
+table.crud-sub-table td textarea{
+	width: 100%;
+}
