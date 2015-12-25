@@ -68,12 +68,7 @@ if (empty($_SESSION['username'])) {
                         <div class="container-fluid">
                             <a class="brand" href="../dashboard"><i class="icon-home icon-white"></i> Go get rich Admin</a>
                             <ul class="nav user_menu pull-right">
-                                <li class="hidden-phone hidden-tablet">
-                                    <div class="nb_boxes clearfix">                                        
-                                        <a data-toggle="modal" data-backdrop="static" href="#myTasks" class="label ttip_b" title="Course Register">10 <i class="splashy-calendar_week"></i></a>
-                                    </div>
-                                </li>
-
+                                
                                 <li class="divider-vertical hidden-phone hidden-tablet"></li>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= $_SESSION['username']; ?> <b class="caret"></b></a>
@@ -281,6 +276,23 @@ if (empty($_SESSION['username'])) {
                                 $("html").removeClass("js");
                             });
                         });
+                        function prepareAndUpdateDetail(headerID) {
+                            $.ajax({
+                                url: "../../model/com.gogetrich.function/prepareToUpdateDetail.php?headerID=" + headerID,
+                                type: 'POST',
+                                beforeSend: function (xhr) {
+                                    $("html").addClass("js");
+                                },
+                                success: function (data, textStatus, jqXHR) {
+                                    if (data == 200) {
+                                        window.location.href = 'courseUpdate?hId=' + headerID;
+                                    } else {
+                                        alert(data);
+                                    }
+                                    $("html").removeClass("js");
+                                }
+                            });
+                        }
                         function clearAndLocate() {
                             $.ajax({
                                 url: "../../model/com.gogetrich.function/clearCourseDetailTmp.php",

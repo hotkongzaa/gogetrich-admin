@@ -24,7 +24,7 @@ a,button,input {outline:none !important}
 .js, .js body {overflow:hidden}
 .js body > * {visibility:hidden}
 .js #loading_layer {visibility:visible;display:block !important;position:absolute;top:0;left:0;width:100%;height:100%;background:#fff;z-index:10000}
-.js #loading_layer img {position:fixed;top:50%;left:50%;width:64px;height:10px;margin:-5px 0 0 -32px}
+.js #loading_layer img {position:fixed;top:40%;left:47%;width:150px;height:150px;margin:-5px 0 0 -32px}
 .js .tab-pane {display:block !important}
 .js .hide {display: inherit}
 

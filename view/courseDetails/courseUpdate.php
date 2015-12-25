@@ -9,6 +9,13 @@ if (empty($_SESSION['username'])) {
         echo '<script type="text/javascript">var r=confirm("Session expire (30 mins)!"); if(r==true){window.location.href="../../index.php";}else{window.location.href="../../index.php";}</script>';
     } else {
         require '../../model-db-connection/config.php';
+        //Manage course header
+        $sqlGetHeaderToShow = "SELECT * FROM GTRICH_COURSE_HEADER WHERE HEADER_ID = '" . $_GET['hId'] . "'";
+        $resHeader = mysql_query($sqlGetHeaderToShow);
+        $rowHeader = mysql_fetch_array($resHeader);
+        if ($rowHeader['HEADER_NAME'] == "") {
+            $notFound = "Cannot found course, Please contact administrator";
+        }
     }
 }
 ?>
@@ -181,7 +188,7 @@ if (empty($_SESSION['username'])) {
                                     <a href="courseDetail">Course Detail</a>
                                 </li>
                                 <li>
-                                    Course Create
+                                    Course Update
                                 </li>
                             </ul>
                         </div>
@@ -191,6 +198,7 @@ if (empty($_SESSION['username'])) {
                             <div>
                                 <a href="courseDetail"><i class="splashy-arrow_state_blue_left"></i> Back</a>
                             </div>
+                            <div id="notificationHeader"></div>
                             <br/>
                             <form id="courseDetailForm" class="stepy-wizzard form-horizontal">
                                 <fieldset title="Course Detail Header">
@@ -237,8 +245,8 @@ if (empty($_SESSION['username'])) {
                                         <div class="controls">
                                             <select id="courseStatus" name="courseStatus" class="span9">
                                                 <option value="">== Select Course Status ===</option>
-                                                <option value="0">Active</option>
-                                                <option value="1">Not Active</option>
+                                                <option value="0">Publish</option>
+                                                <option value="1">Not Publish</option>
                                             </select>
                                         </div>
                                     </div>
@@ -302,7 +310,7 @@ if (empty($_SESSION['username'])) {
                                     <div class="control-group">
                                         <div id="tempCourseTbl" style="margin-top: 50px;"></div>
                                     </div>
-                                    <button type="button" class="finish btn btn-primary" onclick="submitCreateCourseProcess()">
+                                    <button type="button" class="finish btn btn-primary" onclick="submitUpdateCourseProcess()">
                                         <i class="icon-ok icon-white"></i> Submit Course
                                     </button>
                                 </fieldset>                                
@@ -314,6 +322,7 @@ if (empty($_SESSION['username'])) {
             </div>            
 
             <input type="hidden" id="tempCourseDetailID"/>
+            <input type="hidden" id="courseHeaderID"/>
             <script src="../assets/js/jquery.min.js"></script>
             <script src="../assets/js/jquery-ui-1.11.1.js"></script>
             <!-- smart resize event -->
@@ -386,7 +395,7 @@ if (empty($_SESSION['username'])) {
                                             course_page.initialElement();
                                             $("#useMap").click(function () {
                                                 if ($("#useMap").is(':checked')) {
-                                                    $("#hideMap").show();  // checked
+                                                    $("#hideMap").show(); // checked
                                                     $("#ifChooseMap").hide();
                                                     $("#lat").val("");
                                                     $("#lng").val("");
@@ -401,8 +410,30 @@ if (empty($_SESSION['username'])) {
                                                 var lng = $("#lng").val();
                                                 $("#mapUsingDialog").modal("show");
                                             });
-                                        });
+<?php
+if (!empty($notFound)) {
+    ?>
+                                                $("#notificationHeader").html('<div class="alert alert-error">' +
+                                                        '<a class="close" data-dismiss="alert">×</a>' +
+                                                        '<strong>Course not found !</strong> Cannot found this course</div>');
+                                                $("#courseCate, #courseName, #courseStatus, #courseDetailForm-next-0").prop("disabled", "true");
+    <?php
+}
+?>
 
+                                            $("#courseCate").val('<?= $rowHeader['REF_CATE_ID'] ?>');
+                                            $("#courseName").val('<?= $rowHeader['HEADER_NAME'] ?>');
+                                            $("#courseStatus").val('<?= $rowHeader['HEADER_COURSE_STATUS'] ?>');
+                                            $("#courseHeaderID").val('<?= $rowHeader['HEADER_ID'] ?>');
+                                            var date = '<?= $rowHeader['HEADER_EVENT_DATE'] ?>'.split(",");
+                                            var resultDate = new Array();
+                                            for (var i = 0; i < date.length; i++) {
+                                                resultDate.push(date[i].trim());
+                                            }
+                                            $("#chooseDate").multiDatesPicker({
+                                                addDates: resultDate
+                                            });
+                                        });
                                         course_page = {
                                             initialElement: function () {
                                                 $("html").removeClass("js");
@@ -411,7 +442,6 @@ if (empty($_SESSION['username'])) {
                                                     numberOfMonths: [1, 4]
                                                 });
                                                 CKEDITOR.replace('descriptionDetail');
-//                                            $("#courseDetail,#descriptionDetail").wysiwyg();
                                                 $("#tempCourseTbl").load("tmpCourseTable.php");
                                             }
                                         };
@@ -572,11 +602,12 @@ if (empty($_SESSION['username'])) {
                                             }
 
                                         }
-                                        function submitCreateCourseProcess() {
+                                        function submitUpdateCourseProcess() {
                                             var courseCategory = $("#courseCate").val();
                                             var courseName = $("#courseName").val();
                                             var courseEventDate = $("#courseEventDate").val();
                                             var courseStatus = $("#courseStatus").val();
+                                            var headerID = $("#courseHeaderID").val();
                                             if (courseEventDate == "") {
                                                 alert("Please select Course Event Date");
                                             } else {
@@ -589,17 +620,17 @@ if (empty($_SESSION['username'])) {
                                                     success: function (data, textStatus, jqXHR) {
                                                         if (data == 200) {
                                                             $.ajax({
-                                                                url: "../../model/com.gogetrich.function/SaveDetailHeaderAndDetail.php",
+                                                                url: "../../model/com.gogetrich.function/updateDetailHeaderAndDetail.php",
                                                                 type: 'POST',
-                                                                data: {'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
+                                                                data: {'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
                                                                 success: function (saveHeaderData, textStatus, jqXHR) {
                                                                     if (saveHeaderData == 200) {
-                                                                        alert("Save course success");
+                                                                        alert("Update course success");
                                                                         window.location.href = "courseDetail";
                                                                     } else {
                                                                         $("#notificationDetail").html('<div class="alert alert-error">' +
                                                                                 '<a class="close" data-dismiss="alert">×</a>' +
-                                                                                '<strong>Cannot sumit course !</strong> ' + saveHeaderData + '</div>');
+                                                                                '<strong>Cannot update course !</strong> ' + saveHeaderData + '</div>');
                                                                         setTimeout(function () {
                                                                             $("#notificationDetail").empty();
                                                                         }, 5000);
@@ -609,7 +640,7 @@ if (empty($_SESSION['username'])) {
                                                         } else {
                                                             $("#notificationDetail").html('<div class="alert alert-error">' +
                                                                     '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Cannot sumit course !</strong> ' + data + '</div>');
+                                                                    '<strong>Cannot update course !</strong> ' + data + '</div>');
                                                             setTimeout(function () {
                                                                 $("#notificationDetail").empty();
                                                             }, 5000);
@@ -618,7 +649,6 @@ if (empty($_SESSION['username'])) {
                                                     }
                                                 });
                                             }
-
                                         }
                                         function getCourseTmpForEdit(courseTmpID) {
                                             saveCourseTempState = "Edit";
@@ -644,7 +674,6 @@ if (empty($_SESSION['username'])) {
                                                         $("#ifChooseMap").show();
                                                     }
                                                     CKEDITOR.instances.descriptionDetail.setData(json.DETAIL_DESCRIPTION);
-//                                                $("#descriptionDetail").wysiwyg("setContent", json.DETAIL_DESCRIPTION);
                                                     $("#tempCourseDetailID").val(json.DETAIL_ID);
                                                 }
                                             });

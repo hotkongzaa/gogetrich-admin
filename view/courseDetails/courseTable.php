@@ -29,14 +29,18 @@ require '../../model-db-connection/config.php';
                 <td><?= $row['HEADER_CREATE_DATE_TIME'] ?></td>
                 <td style="text-align: center"><?php
                     if ($row['HEADER_COURSE_STATUS'] == 0) {
-                        echo 'Active';
+                        echo 'Publish';
                     } else {
-                        echo 'Not Active';
+                        echo 'Not Publish';
                     }
                     ?></td>
                 <td style="text-align: center">
-                    <a href="#" class="btn btn-small" title="Edit"><i class="icon-adt_atach"></i> Edit</a>
-                    <a href="#" class="btn btn-small" title="Delete" onclick="deleteCourseHeaderDetailByID('<?= $row['HEADER_ID'] ?>')"><i class="icon-adt_trash"></i> Delete</a>
+                    <a href="#" class="btn btn-small" title="Edit" onclick="prepareAndUpdateDetail('<?= $row['HEADER_ID'] ?>')">
+                        <i class="icon-adt_atach"></i> Edit
+                    </a>
+                    <a href="#" class="btn btn-small" title="Delete" onclick="deleteCourseHeaderDetailByID('<?= $row['HEADER_ID'] ?>')">
+                        <i class="icon-adt_trash"></i> Delete
+                    </a>
                 </td>
             </tr>
             <?php
