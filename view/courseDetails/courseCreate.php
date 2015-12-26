@@ -496,7 +496,7 @@ if (empty($_SESSION['username'])) {
                                                         }
                                                     }
                                                 });
-                                                saveCourseTempState == "Save";
+                                                saveCourseTempState = "Save";
                                             } else {
                                                 var tempDetailID = $("#tempCourseDetailID").val();
                                                 $.ajax({
@@ -525,7 +525,7 @@ if (empty($_SESSION['username'])) {
                                                         }
                                                     }
                                                 });
-                                                saveCourseTempState == "Save";
+                                                saveCourseTempState = "Save";
                                             }
                                         }
                                         function clearHeaderDetailField() {
@@ -536,7 +536,7 @@ if (empty($_SESSION['username'])) {
                                             $('#useMap').attr('checked', false);
                                             $("#hideMap").hide();
                                             $("#ifChooseMap").show();
-                                            saveCourseTempState == "Save";
+                                            saveCourseTempState = "Save";
                                         }
                                         function deleteCourseTmp(tmpCourseID) {
                                             var r = confirm("Do you want to delete this permanently !");
