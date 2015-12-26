@@ -68,12 +68,6 @@ if (empty($_SESSION['username'])) {
                         <div class="container-fluid">
                             <a class="brand" href="../dashboard"><i class="icon-home icon-white"></i> Go get rich Admin</a>
                             <ul class="nav user_menu pull-right">
-                                <li class="hidden-phone hidden-tablet">
-                                    <div class="nb_boxes clearfix">                                        
-                                        <a data-toggle="modal" data-backdrop="static" href="#myTasks" class="label ttip_b" title="Course Register">10 <i class="splashy-calendar_week"></i></a>
-                                    </div>
-                                </li>
-
                                 <li class="divider-vertical hidden-phone hidden-tablet"></li>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= $_SESSION['username']; ?> <b class="caret"></b></a>
@@ -111,8 +105,8 @@ if (empty($_SESSION['username'])) {
                                                 <li class="dropdown">
                                                     <a href="#">Schedule <b class="caret-right"></b></a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="courseCategories">Course Categories</a></li>
-                                                        <li><a href="../descriptionHeader/descriptionHeader">Course Description Header</a></li>   
+                                                        <li><a href="../courseCategories/courseCategories">Course Categories</a></li>
+                                                        <li><a href="descriptionHeader">Course Description Header</a></li>   
                                                         <li><a href="../courseDetails/courseDetail">Course Detail</a></li>                                                       
                                                     </ul>
                                                 </li>
@@ -131,59 +125,7 @@ if (empty($_SESSION['username'])) {
                         </div>
                     </div>
                 </div>                
-                <div class="modal hide fade" id="myTasks">
-                    <div class="modal-header">
-                        <button class="close" data-dismiss="modal">×</button>
-                        <h3>New Tasks</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-info">In this table jquery plugin turns a table row into a clickable link.</div>
-                        <table class="table table-condensed table-striped" data-rowlink="a">
-                            <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>Summary</th>
-                                    <th>Updated</th>
-                                    <th>Priority</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>P-23</td>
-                                    <td><a href="javascript:void(0)">Admin should not break if URL&hellip;</a></td>
-                                    <td>23/05/2012</td>
-                                    <td class="tac"><span class="label label-important">High</span></td>
-                                    <td>Open</td>
-                                </tr>
-                                <tr>
-                                    <td>P-18</td>
-                                    <td><a href="javascript:void(0)">Displaying submenus in custom&hellip;</a></td>
-                                    <td>22/05/2012</td>
-                                    <td class="tac"><span class="label label-warning">Medium</span></td>
-                                    <td>Reopen</td>
-                                </tr>
-                                <tr>
-                                    <td>P-25</td>
-                                    <td><a href="javascript:void(0)">Featured image on post types&hellip;</a></td>
-                                    <td>22/05/2012</td>
-                                    <td class="tac"><span class="label label-success">Low</span></td>
-                                    <td>Updated</td>
-                                </tr>
-                                <tr>
-                                    <td>P-10</td>
-                                    <td><a href="javascript:void(0)">Multiple feed fixes and&hellip;</a></td>
-                                    <td>17/05/2012</td>
-                                    <td class="tac"><span class="label label-warning">Medium</span></td>
-                                    <td>Open</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="javascript:void(0)" class="btn">Go to task manager</a>
-                    </div>
-                </div>
+
             </header>
 
             <!-- main content -->
@@ -202,7 +144,7 @@ if (empty($_SESSION['username'])) {
                                     <a href="#">Schedule</a>
                                 </li>
                                 <li>
-                                    Course Categories
+                                    Course Description header
                                 </li>
                             </ul>
                         </div>
@@ -210,8 +152,8 @@ if (empty($_SESSION['username'])) {
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="heading clearfix">
-                                <h3 class="pull-left">Course Categories</h3>
-                                <span class="pull-right btn" onclick="createCate();"><i class="icon-plus"></i> Create Category</span>
+                                <h3 class="pull-left">Course Description Header</h3>
+                                <span class="pull-right btn" onclick="createCate();"><i class="icon-plus"></i> Create Description Header</span>
                             </div>
                             <div id="courseCateTbl"></div>
                         </div>                        
@@ -221,16 +163,16 @@ if (empty($_SESSION['username'])) {
             <div class="modal hide fade" id="createCate">
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal">×</button>
-                    <h3>Category Form</h3>
+                    <h3>Description Header Form</h3>
                 </div>
                 <div class="modal-body">                   
-                    <div id="alertCate" class="alert alert-danger">Please enter category name</div>
+                    <div id="alertCate" class="alert alert-danger">Please enter description header name</div>
                     <form id="courseCateForm">
                         <div class="formSep">
-                            <label>Category Name*</label>
-                            <input type="text" name="cateName" id="cateName">
-                            <input type="hidden" name="cateID" id="cateID">
-                            <input type="hidden" name="cateDate" id="cateDate">
+                            <label>Description Header Name*</label>
+                            <input type="text" name="headerName" id="headerName">
+                            <input type="hidden" name="headerID" id="headerID">
+                            <input type="hidden" name="headerDate" id="headerDate">
                         </div>                        
                     </form>
                 </div>
@@ -277,7 +219,7 @@ if (empty($_SESSION['username'])) {
                         $(document).ready(function () {
                             $("#alertCate").hide();
 
-                            $("#courseCateTbl").load("courseCateTable.php", function () {
+                            $("#courseCateTbl").load("descrtionHeaderTbl.php", function () {
                                 $("html").removeClass("js");
                             });
                         });
@@ -288,32 +230,32 @@ if (empty($_SESSION['username'])) {
                             $("#courseCateForm").trigger("reset");
                         }
                         function saveCate() {
-                            var cateName = $("#cateName").val();
-                            if (cateName == "") {
+                            var headerName = $("#headerName").val();
+                            if (headerName == "") {
                                 $("#alertCate").show();
                             } else {
                                 $("html").addClass("js");
                                 if (saveState == "Save") {
                                     $.ajax({
-                                        url: "../../model/com.gogetrich.function/SaveCourseCategory.php?cateName=" + cateName,
+                                        url: "../../model/com.gogetrich.function/SaveDescHeader.php?descHeaderName=" + headerName,
                                         type: 'POST',
                                         success: function (data, textStatus, jqXHR) {
                                             $('#createCate').modal('hide');
                                             $("#alertCate").hide();
-                                            $("#courseCateTbl").load("courseCateTable.php", function () {
+                                            $("#courseCateTbl").load("descrtionHeaderTbl.php", function () {
                                                 $("html").removeClass("js");
                                             });
                                         }
                                     });
                                 } else {
-                                    var cateID = $("#cateID").val();
+                                    var headerID = $("#headerID").val();
                                     $.ajax({
-                                        url: "../../model/com.gogetrich.function/UpdateCourseCategory.php?cateID=" + cateID + "&cateName=" + cateName,
+                                        url: "../../model/com.gogetrich.function/updateDescHeader.php?headerID=" + headerID + "&descHeaderName=" + headerName,
                                         type: 'POST',
                                         success: function (data, textStatus, jqXHR) {
                                             $('#createCate').modal('hide');
                                             $("#alertCate").hide();
-                                            $("#courseCateTbl").load("courseCateTable.php", function () {
+                                            $("#courseCateTbl").load("descrtionHeaderTbl.php", function () {
                                                 $("html").removeClass("js");
                                             });
                                         }
@@ -327,12 +269,16 @@ if (empty($_SESSION['username'])) {
                             if (r == true) {
                                 $("html").addClass("js");
                                 $.ajax({
-                                    url: "../../model/com.gogetrich.function/DeleteCourseCate.php?cateID=" + cateID,
+                                    url: "../../model/com.gogetrich.function/deleteDescHeaderByID.php?headerID=" + cateID,
                                     type: 'POST',
                                     success: function (data, textStatus, jqXHR) {
-                                        $("#courseCateTbl").load("courseCateTable.php", function () {
-                                            $("html").removeClass("js");
-                                        });
+                                        if (data == 200) {
+                                            $("#courseCateTbl").load("descrtionHeaderTbl.php", function () {
+                                                $("html").removeClass("js");
+                                            });
+                                        } else {
+                                            alert(data);
+                                        }
                                     }
                                 });
                             }
@@ -341,14 +287,14 @@ if (empty($_SESSION['username'])) {
                         function getCourseCateByID(cateID) {
                             saveState = "Edit";
                             $.ajax({
-                                url: "../../model/com.gogetrich.function/GetCourseCateByID.php?cateID=" + cateID,
+                                url: "../../model/com.gogetrich.function/getDescHeaderByID.php?headerID=" + cateID,
                                 type: 'POST',
                                 success: function (data, textStatus, jqXHR) {
                                     $('#createCate').modal('show');
                                     var json = $.parseJSON(data);
-                                    $("#cateID").val(json.CATE_ID);
-                                    $("#cateName").val(json.CATE_NAME);
-                                    $("#cateDate").val(json.CATE_CREATE_DATE_TIME);
+                                    $("#headerID").val(json.DESC_HEADER_ID);
+                                    $("#headerName").val(json.DESC_HEADER_NAME);
+                                    $("#headerDate").val(json.DESC_HEADER_CREATED_DATE_TIME);
                                 }
                             });
                         }

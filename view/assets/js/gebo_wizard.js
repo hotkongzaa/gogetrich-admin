@@ -14,14 +14,14 @@ gebo_wizard = {
         $('#simple_wizard').stepy({
             titleClick: true,
             nextLabel: 'Next <i class="icon-chevron-right icon-white"></i>',
-            backLabel: '<i class="icon-chevron-left"></i> Back',
+            backLabel: '<i class="icon-chevron-left"></i> Previous',
             finishButton: false
         });
     },
     validation: function () {
         $('#courseDetailForm').stepy({
-            nextLabel: 'Forward <i class="icon-chevron-right icon-white"></i>',
-            backLabel: '<i class="icon-chevron-left"></i> Backward',
+            nextLabel: 'Next <i class="icon-chevron-right icon-white"></i>',
+            backLabel: '<i class="icon-chevron-left"></i> Previous',
             block: true,
             errorImage: true,
             titleClick: true,

@@ -110,7 +110,7 @@ if (empty($_SESSION['username'])) {
                                                     <a href="#">Schedule <b class="caret-right"></b></a>
                                                     <ul class="dropdown-menu">
                                                         <li><a href="../courseCategories/courseCategories">Course Categories</a></li>
-                                                        <li><a href="#">Course Description Header</a></li>   
+                                                        <li><a href="../descriptionHeader/descriptionHeader">Course Description Header</a></li>   
                                                         <li><a href="courseDetail">Course Detail</a></li>                                                       
                                                     </ul>
                                                 </li>

@@ -49,7 +49,6 @@ if (empty($_SESSION['username'])) {
 
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans" />
         <link rel="stylesheet" href="../assets/css/jquery-ui.css" />
-        <!--<link rel="stylesheet" href="../assets/css/jquery.wysiwyg.css" />-->
 
         <!-- wizard -->
         <link rel="stylesheet" href="../assets/lib/stepy/css/jquery.stepy.css" />
@@ -117,7 +116,7 @@ if (empty($_SESSION['username'])) {
                                                     <a href="#">Schedule <b class="caret-right"></b></a>
                                                     <ul class="dropdown-menu">
                                                         <li><a href="../courseCategories/courseCategories">Course Categories</a></li>
-                                                        <li><a href="#">Course Description Header</a></li>   
+                                                        <li><a href="../descriptionHeader/descriptionHeader">Course Description Header</a></li>   
                                                         <li><a href="courseDetail">Course Detail</a></li>                                                       
                                                     </ul>
                                                 </li>
@@ -364,12 +363,6 @@ if (empty($_SESSION['username'])) {
             <script src="../assets/js/jquery-validation/jquery.validate.js"></script>
             <script src="../assets/js/jquery-ui.multidatespicker.js"></script>
             <script src="../assets/ckeditor/ckeditor.js"></script>
-            <!--<script src="../assets/js/jquery.wysiwyg.js"></script>-->
-<!--            <script src="../assets/js/wysiwyg.table.js"></script>
-            <script src="../assets/js/wysiwyg.link.js"></script>
-            <script src="../assets/js/wysiwyg.image.js"></script>
-            <script src="../assets/js/wysiwyg.cssWrap.js"></script>
-            <script src="../assets/js/wysiwyg.colorpicker.js"></script>-->
             <!-- wizard -->
             <script src="../assets/lib/stepy/js/jquery.stepy.min.js"></script>
 
@@ -386,12 +379,6 @@ if (empty($_SESSION['username'])) {
                     color: white; /* a color that is readeable with the color above */
                 }
                 /* end: jQuery UI Datepicker emphasis on selected dates */
-                .wysiwyg {
-                    width: 898px !important;
-                }
-                .wysiwyg iframe{
-                    width: 898px !important;
-                }
             </style>
             <script type="text/javascript">
                                         var saveCourseTempState = "Save";
@@ -439,6 +426,8 @@ if (!empty($notFound)) {
                                             $("#chooseDate").multiDatesPicker({
                                                 addDates: resultDate
                                             });
+                                            $('#chooseDate').multiDatesPicker('removeIndexes', 0);
+
                                         });
                                         course_page = {
                                             initialElement: function () {
