@@ -273,6 +273,12 @@ if (empty($_SESSION['username'])) {
                                         </div>
                                     </div>
                                     <div class="control-group">
+                                        <label for="detailOrder" class="control-label">Detail order*:</label>
+                                        <div class="controls">
+                                            <input type="text" name="detailOrder" id="detailOrder"/>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
                                         <div class="controls">
                                             <label><input type="checkbox" id="useMap" value="map"/> Using Google Map API <i class="splashy-map"></i></label><br/>
                                             <div class="control-group" id="hideMap">
@@ -483,6 +489,7 @@ if (!empty($notFound)) {
                                             var lat = $("#lat").val();
                                             var lng = $("#lng").val();
                                             var courseDetail = CKEDITOR.instances.descriptionDetail.getData();
+                                            var detailOrder = $("#detailOrder").val();
 //                                        var courseDetail = $("#descriptionDetail").val();
                                             if (descHeaderId == "") {
                                                 alert("Please select Description Header");
@@ -492,18 +499,18 @@ if (!empty($notFound)) {
                                                 } else if (lng == "") {
                                                     alert("Please enter Longitude of your location");
                                                 } else {
-                                                    processTempTransaction(descHeaderId, lat, lng, courseDetail);
+                                                    processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder);
                                                 }
                                             } else {
-                                                processTempTransaction(descHeaderId, lat, lng, courseDetail);
+                                                processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder);
                                             }
                                         }
-                                        function processTempTransaction(descHeaderId, lat, lng, courseDetail) {
+                                        function processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder) {
                                             if (saveCourseTempState == "Save") {
                                                 $.ajax({
                                                     url: "../../model/com.gogetrich.function/SaveCourseToTemp.php",
                                                     type: 'POST',
-                                                    data: {'descHeaderId': descHeaderId, 'lat': lat, 'lng': lng, 'courseDetail': courseDetail},
+                                                    data: {'detailOrder': detailOrder, 'descHeaderId': descHeaderId, 'lat': lat, 'lng': lng, 'courseDetail': courseDetail},
                                                     beforeSend: function (xhr) {
                                                         $("html").addClass("js");
                                                     },
@@ -532,7 +539,7 @@ if (!empty($notFound)) {
                                                 $.ajax({
                                                     url: "../../model/com.gogetrich.function/UpdateCourseInTemp.php",
                                                     type: 'POST',
-                                                    data: {'descHeaderId': descHeaderId, 'lat': lat, 'lng': lng, 'courseDetail': courseDetail, 'tempDetailID': tempDetailID},
+                                                    data: {'detailOrder': detailOrder, 'descHeaderId': descHeaderId, 'lat': lat, 'lng': lng, 'courseDetail': courseDetail, 'tempDetailID': tempDetailID},
                                                     beforeSend: function (xhr) {
                                                         $("html").addClass("js");
                                                     },
@@ -566,6 +573,7 @@ if (!empty($notFound)) {
                                             $('#useMap').attr('checked', false);
                                             $("#hideMap").hide();
                                             $("#ifChooseMap").show();
+                                            $("#detailOrder").val("");
                                             saveCourseTempState = "Save";
                                         }
                                         function deleteCourseTmp(tmpCourseID) {
@@ -608,6 +616,7 @@ if (!empty($notFound)) {
                                             var courseEventDate = $("#courseEventDate").val();
                                             var courseStatus = $("#courseStatus").val();
                                             var headerID = $("#courseHeaderID").val();
+                                            var detailOrder = $("#detailOrder").val();
                                             if (courseEventDate == "") {
                                                 alert("Please select Course Event Date");
                                             } else {
@@ -622,7 +631,7 @@ if (!empty($notFound)) {
                                                             $.ajax({
                                                                 url: "../../model/com.gogetrich.function/updateDetailHeaderAndDetail.php",
                                                                 type: 'POST',
-                                                                data: {'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
+                                                                data: {'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
                                                                 success: function (saveHeaderData, textStatus, jqXHR) {
                                                                     if (saveHeaderData == 200) {
                                                                         alert("Update course success");
@@ -675,6 +684,7 @@ if (!empty($notFound)) {
                                                     }
                                                     CKEDITOR.instances.descriptionDetail.setData(json.DETAIL_DESCRIPTION);
                                                     $("#tempCourseDetailID").val(json.DETAIL_ID);
+                                                    $("#detailOrder").val(json.DETAIL_ORDER);
                                                 }
                                             });
                                         }

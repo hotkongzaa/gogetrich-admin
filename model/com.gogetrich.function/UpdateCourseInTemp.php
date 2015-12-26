@@ -13,9 +13,10 @@ $lat = $_POST['lat'];
 $lng = $_POST['lng'];
 $courseDetail = $_POST['courseDetail'];
 $tempDetailID = $_POST['tempDetailID'];
+$detailOrder = $_POST['detailOrder'] ? $_POST['detailOrder'] : $_GET['detailOrder'];
 
 $sqlUpdate = "UPDATE GTRICH_COURSE_DETAIL_TMP "
-        . "SET DETAIL_DESCRIPTION = '" . $courseDetail . "',DETAIL_LAT='" . $lat . "',DETAIL_LNG='" . $lng . "',REF_COURSE_HEADER_ID='" . $descHeaderId . "',DISTRIBUTOR_ID='" . $_SESSION['userId'] . "' "
+        . "SET DETAIL_ORDER='" . $detailOrder . "',DETAIL_DESCRIPTION = '" . $courseDetail . "',DETAIL_LAT='" . $lat . "',DETAIL_LNG='" . $lng . "',REF_COURSE_HEADER_ID='" . $descHeaderId . "',DISTRIBUTOR_ID='" . $_SESSION['userId'] . "' "
         . "WHERE DETAIL_ID = '" . $tempDetailID . "'";
 
 if (mysql_query($sqlUpdate)) {

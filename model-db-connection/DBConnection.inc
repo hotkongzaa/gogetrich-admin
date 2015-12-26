@@ -56,6 +56,7 @@ if (mysqli_query($con, $sql)) {
             . "DETAIL_LNG VARCHAR(100),"
             . "DETAIL_CREATED_DATE_TIME TIMESTAMP,"
             . "REF_COURSE_HEADER_ID VARCHAR(100),"
+            . "DETAIL_ORDER VARCHAR(100),"
             . "PRIMARY KEY (DETAIL_ID)"
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
     mysqli_query($con_create_tbl, $sqlCreateCourseDetail);
@@ -68,6 +69,7 @@ if (mysqli_query($con, $sql)) {
             . "DETAIL_CREATED_DATE_TIME TIMESTAMP,"
             . "REF_COURSE_HEADER_ID VARCHAR(100),"
             . "DISTRIBUTOR_ID VARCHAR(100),"
+            . "DETAIL_ORDER VARCHAR(100),"
             . "PRIMARY KEY (DETAIL_ID)"
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
     mysqli_query($con_create_tbl, $sqlCreateCourseDetailTmp);
