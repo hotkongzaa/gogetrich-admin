@@ -220,6 +220,12 @@ if (empty($_SESSION['username'])) {
                                         </div>
                                     </div>
                                     <div class="control-group">
+                                        <label class="control-label">Sub-Course Name</label>
+                                        <div class="controls">
+                                            <input type="text" name="subCourseName" id="subCourseName" class="span10"/>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
                                         <label class="control-label">Course Event Date</label>
                                         <div class="controls">
                                             <div id="chooseDate"></div><br/>
@@ -268,7 +274,7 @@ if (empty($_SESSION['username'])) {
                                     <div class="control-group">
                                         <label for="detailOrder" class="control-label">Detail order:</label>
                                         <div class="controls">
-                                            <input type="text" name="detailOrder" id="detailOrder"/> <span>* 0 : Default value (order by date time)</span>
+                                            <input type="number" min="1" max="100" name="detailOrder" id="detailOrder"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -463,6 +469,8 @@ if (empty($_SESSION['username'])) {
                                             var detailOrder = $("#detailOrder").val();
                                             if (descHeaderId == "") {
                                                 alert("Please select Description Header");
+                                            } else if ($("#detailOrder").val() == "") {
+                                                alert("Please enter detail order as numberic");
                                             } else if ($("#useMap").is(':checked')) {
                                                 if (lat == "") {
                                                     alert("Please enter Latitude of your location");
@@ -587,6 +595,7 @@ if (empty($_SESSION['username'])) {
                                             var courseEventDate = $("#courseEventDate").val();
                                             var courseStatus = $("#courseStatus").val();
                                             var courseAddiDetail = CKEDITOR.instances.courseDetail.getData();
+                                            var subCourseName = $("#subCourseName").val();
                                             if (courseEventDate == "") {
                                                 alert("Please select Course Event Date");
                                             } else {
@@ -601,7 +610,7 @@ if (empty($_SESSION['username'])) {
                                                             $.ajax({
                                                                 url: "../../model/com.gogetrich.function/SaveDetailHeaderAndDetail.php",
                                                                 type: 'POST',
-                                                                data: {'courseAddiDetail': courseAddiDetail, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
+                                                                data: {'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
                                                                 success: function (saveHeaderData, textStatus, jqXHR) {
                                                                     if (saveHeaderData == 200) {
                                                                         alert("Save course success");

@@ -39,10 +39,11 @@ if (mysqli_query($con, $sql)) {
     $sqlCreateCourseHeader = "CREATE TABLE IF NOT EXISTS GTRICH_COURSE_HEADER ("
             . "HEADER_ID VARCHAR(100) NOT NULL,"
             . "HEADER_NAME VARCHAR(255),"
+            . "SUB_HEADER_NAME VARCHAR(255),"
             . "HEADER_EVENT_DATE VARCHAR(255),"
             . "HEADER_DETAIL MEDIUMTEXT,"
             . "HEADER_CREATE_DATE_TIME TIMESTAMP,"
-            . "HEADER_COURSE_STATUS VARCHAR(20),"
+            . "HEADER_COURSE_STATUS VARCHAR(20),"            
             . "REF_CATE_ID VARCHAR(100),"
             . "PRIMARY KEY (HEADER_ID)"
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";

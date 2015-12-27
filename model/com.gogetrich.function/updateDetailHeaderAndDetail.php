@@ -15,11 +15,13 @@ $courseName = $_POST['courseName'];
 $courseEventDate = $_POST['courseEventDate'];
 $courseStatus = $_POST['courseStatus'];
 $headaerID = $_POST['headerID'];
-$courseAddiDetail = $_POST['courseAddiDetail'] ? $_POST['courseAddiDetail'] : $_GET['courseAddiDetail'];
+$courseAddiDetail = $_POST['courseAddiDetail'];
+$subCourseName = $_POST['subCourseName'];
 
 $sqlUpdateHeader = "UPDATE GTRICH_COURSE_HEADER "
         . "SET REF_CATE_ID = '" . $courseCategory . "', "
         . "HEADER_NAME = '" . $courseName . "', "
+        . "SUB_HEADER_NAME = '" . $subCourseName . "', "
         . "HEADER_EVENT_DATE = '" . $courseEventDate . "',"
         . "HEADER_COURSE_STATUS = '" . $courseStatus . "', "
         . "HEADER_DETAIL = '" . $courseAddiDetail . "'"
