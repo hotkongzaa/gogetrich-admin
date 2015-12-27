@@ -89,8 +89,8 @@ class CategoryDaoImpl implements CategoryDao {
 
         $mysqli->set_charset("utf8");
         // prepare and bind
-        $stmt = $mysqli->prepare("UPDATE GTRICH_COURSE_CATEGORY SET CATE_NAME=?,CATE_CREATE_DATE_TIME=NOW() WHERE CATE_ID=?");
-        $stmt->bind_param("ss", $obj->getCateName(), $obj->getCateID());
+        $stmt = $mysqli->prepare("UPDATE GTRICH_COURSE_CATEGORY SET CATE_NAME=?,CATE_CREATE_DATE_TIME=? WHERE CATE_ID=?");
+        $stmt->bind_param("sss", $obj->getCateName(), $obj->getCateDate(), $obj->getCateID());
         if ($stmt->execute()) {
             return 200;
         } else {

@@ -16,5 +16,6 @@ $cateName = $_GET['cateName'];
 $cateVO = new CategoryVO();
 $cateVO->setCateID($_GET['cateID']);
 $cateVO->setCateName($cateName);
+$cateVO->setCateDate($_GET['cateDate']);
 
 echo $cateService->updateCourseCate($cateVO);

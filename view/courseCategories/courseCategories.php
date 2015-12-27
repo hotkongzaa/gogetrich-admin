@@ -307,8 +307,9 @@ if (empty($_SESSION['username'])) {
                                     });
                                 } else {
                                     var cateID = $("#cateID").val();
+                                    var cateDate = $("#cateDate").val();
                                     $.ajax({
-                                        url: "../../model/com.gogetrich.function/UpdateCourseCategory.php?cateID=" + cateID + "&cateName=" + cateName,
+                                        url: "../../model/com.gogetrich.function/UpdateCourseCategory.php?cateID=" + cateID + "&cateName=" + cateName + "&cateDate=" + cateDate,
                                         type: 'POST',
                                         success: function (data, textStatus, jqXHR) {
                                             $('#createCate').modal('hide');
