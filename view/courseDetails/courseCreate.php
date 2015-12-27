@@ -392,7 +392,10 @@ if (empty($_SESSION['username'])) {
                                                     $("#ifChooseMap").hide();
                                                     $("#lat").val("");
                                                     $("#lng").val("");
+                                                    CKEDITOR.instances.descriptionDetail.setData('');
                                                 } else {
+                                                    $("#lat").val("");
+                                                    $("#lng").val("");
                                                     $("#hideMap").hide();
                                                     $("#ifChooseMap").show();
                                                     CKEDITOR.instances.descriptionDetail.setData('');
