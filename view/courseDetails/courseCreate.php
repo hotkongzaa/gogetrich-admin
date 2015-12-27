@@ -226,12 +226,13 @@ if (empty($_SESSION['username'])) {
                                             <input type="hidden" name="courseEventDate" id="courseEventDate" class="span10"/>
                                         </div>
                                     </div>
-                                    <!--                                    <div class="control-group">
-                                                                            <label class="control-label">Course Detail</label>
-                                                                            <div class="controls">
-                                                                                <textarea name="courseDetail" id="courseDetail" class="span10"></textarea>
-                                                                            </div>
-                                                                        </div>-->
+                                    <div class="control-group">
+                                        <label class="control-label">Additional Course Header Detail</label>
+                                        <div class="controls">                                            
+                                            <span class="alert-danger">*This element will shown in OUR TRAINING / SCHEDULE table column</span>
+                                            <textarea name="courseDetail" id="courseDetail" class="span10"></textarea>                                            
+                                        </div>
+                                    </div>
                                     <div class="control-group">
                                         <label for="descHeaderID" class="control-label">Course Status:</label>
                                         <div class="controls">
@@ -355,12 +356,6 @@ if (empty($_SESSION['username'])) {
             <script src="../assets/js/jquery-validation/jquery.validate.js"></script>
             <script src="../assets/js/jquery-ui.multidatespicker.js"></script>
             <script src="../assets/ckeditor/ckeditor.js"></script>
-            <!--<script src="../assets/js/jquery.wysiwyg.js"></script>-->
-<!--            <script src="../assets/js/wysiwyg.table.js"></script>
-            <script src="../assets/js/wysiwyg.link.js"></script>
-            <script src="../assets/js/wysiwyg.image.js"></script>
-            <script src="../assets/js/wysiwyg.cssWrap.js"></script>
-            <script src="../assets/js/wysiwyg.colorpicker.js"></script>-->
             <!-- wizard -->
             <script src="../assets/lib/stepy/js/jquery.stepy.min.js"></script>
 
@@ -417,6 +412,7 @@ if (empty($_SESSION['username'])) {
                                                     numberOfMonths: [1, 4]
                                                 });
                                                 CKEDITOR.replace('descriptionDetail');
+                                                CKEDITOR.replace('courseDetail');
 //                                            $("#courseDetail,#descriptionDetail").wysiwyg();
                                                 $("#tempCourseTbl").load("tmpCourseTable.php");
                                             }
@@ -585,6 +581,7 @@ if (empty($_SESSION['username'])) {
                                             var courseName = $("#courseName").val();
                                             var courseEventDate = $("#courseEventDate").val();
                                             var courseStatus = $("#courseStatus").val();
+                                            var courseAddiDetail = CKEDITOR.instances.courseDetail.getData();
                                             if (courseEventDate == "") {
                                                 alert("Please select Course Event Date");
                                             } else {
@@ -599,7 +596,7 @@ if (empty($_SESSION['username'])) {
                                                             $.ajax({
                                                                 url: "../../model/com.gogetrich.function/SaveDetailHeaderAndDetail.php",
                                                                 type: 'POST',
-                                                                data: {'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
+                                                                data: {'courseAddiDetail': courseAddiDetail, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
                                                                 success: function (saveHeaderData, textStatus, jqXHR) {
                                                                     if (saveHeaderData == 200) {
                                                                         alert("Save course success");

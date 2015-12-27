@@ -233,12 +233,12 @@ if (empty($_SESSION['username'])) {
                                             <input type="hidden" name="courseEventDate" id="courseEventDate" class="span10"/>
                                         </div>
                                     </div>
-                                    <!--                                    <div class="control-group">
-                                                                            <label class="control-label">Course Detail</label>
-                                                                            <div class="controls">
-                                                                                <textarea name="courseDetail" id="courseDetail" class="span10"></textarea>
-                                                                            </div>
-                                                                        </div>-->
+                                    <div class="control-group">
+                                        <label class="control-label">Course Detail</label>
+                                        <div class="controls">
+                                            <textarea name="courseDetail" id="courseDetail" class="span10"><?= $rowHeader['HEADER_DETAIL'] ?></textarea>
+                                        </div>
+                                    </div>
                                     <div class="control-group">
                                         <label for="descHeaderID" class="control-label">Course Status:</label>
                                         <div class="controls">
@@ -418,6 +418,9 @@ if (!empty($notFound)) {
                                             $("#courseName").val('<?= $rowHeader['HEADER_NAME'] ?>');
                                             $("#courseStatus").val('<?= $rowHeader['HEADER_COURSE_STATUS'] ?>');
                                             $("#courseHeaderID").val('<?= $rowHeader['HEADER_ID'] ?>');
+
+
+
                                             var date = '<?= $rowHeader['HEADER_EVENT_DATE'] ?>'.split(",");
                                             var resultDate = new Array();
                                             for (var i = 0; i < date.length; i++) {
@@ -437,6 +440,7 @@ if (!empty($notFound)) {
                                                     numberOfMonths: [1, 4]
                                                 });
                                                 CKEDITOR.replace('descriptionDetail');
+                                                CKEDITOR.replace('courseDetail');
                                                 $("#tempCourseTbl").load("tmpCourseTable.php");
                                             }
                                         };
@@ -606,6 +610,7 @@ if (!empty($notFound)) {
                                             var courseStatus = $("#courseStatus").val();
                                             var headerID = $("#courseHeaderID").val();
                                             var detailOrder = $("#detailOrder").val();
+                                            var courseAddiDetail = CKEDITOR.instances.courseDetail.getData();
                                             if (courseEventDate == "") {
                                                 alert("Please select Course Event Date");
                                             } else {
@@ -620,7 +625,7 @@ if (!empty($notFound)) {
                                                             $.ajax({
                                                                 url: "../../model/com.gogetrich.function/updateDetailHeaderAndDetail.php",
                                                                 type: 'POST',
-                                                                data: {'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
+                                                                data: {'courseAddiDetail': courseAddiDetail, 'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
                                                                 success: function (saveHeaderData, textStatus, jqXHR) {
                                                                     if (saveHeaderData == 200) {
                                                                         alert("Update course success");

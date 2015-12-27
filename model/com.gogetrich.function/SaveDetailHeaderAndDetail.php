@@ -15,10 +15,11 @@ $courseName = $_POST['courseName'];
 $courseEventDate = $_POST['courseEventDate'];
 $courseStatus = $_POST['courseStatus'];
 $headaerID = md5(date("h:i:sa"));
+$courseAddiDetail = $_POST['courseAddiDetail'] ? $_POST['courseAddiDetail'] : $_GET['courseAddiDetail'];
 
 $sqlSaveHeader = "INSERT INTO GTRICH_COURSE_HEADER (HEADER_ID,HEADER_NAME,HEADER_EVENT_DATE,HEADER_DETAIL,HEADER_CREATE_DATE_TIME,HEADER_COURSE_STATUS,REF_CATE_ID) "
         . "VALUES "
-        . "('" . $headaerID . "','" . $courseName . "','" . $courseEventDate . "',null,NOW(),'" . $courseStatus . "','" . $courseCategory . "')";
+        . "('" . $headaerID . "','" . $courseName . "','" . $courseEventDate . "','" . $courseAddiDetail . "',NOW(),'" . $courseStatus . "','" . $courseCategory . "')";
 $saveResHeader = mysql_query($sqlSaveHeader);
 
 if ($saveResHeader) {
