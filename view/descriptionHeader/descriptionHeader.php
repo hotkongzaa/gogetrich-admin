@@ -249,8 +249,9 @@ if (empty($_SESSION['username'])) {
                                     });
                                 } else {
                                     var headerID = $("#headerID").val();
+                                    var headerDate = $("#headerDate").val();
                                     $.ajax({
-                                        url: "../../model/com.gogetrich.function/updateDescHeader.php?headerID=" + headerID + "&descHeaderName=" + headerName,
+                                        url: "../../model/com.gogetrich.function/updateDescHeader.php?headerID=" + headerID + "&descHeaderName=" + headerName + "&headerDate=" + headerDate,
                                         type: 'POST',
                                         success: function (data, textStatus, jqXHR) {
                                             $('#createCate').modal('hide');

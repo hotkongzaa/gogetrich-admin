@@ -266,7 +266,7 @@ if (empty($_SESSION['username'])) {
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="detailOrder" class="control-label">Detail order*:</label>
+                                        <label for="detailOrder" class="control-label">Detail order:</label>
                                         <div class="controls">
                                             <input type="text" name="detailOrder" id="detailOrder"/> <span>* 0 : Default value (order by date time)</span>
                                         </div>
@@ -321,6 +321,7 @@ if (empty($_SESSION['username'])) {
             </div>            
 
             <input type="hidden" id="tempCourseDetailID"/>
+            <input type="hidden" id="dateTimeCourseTemp"/>
             <script src="../assets/js/jquery.min.js"></script>
             <script src="../assets/js/jquery-ui-1.11.1.js"></script>
             <!-- smart resize event -->
@@ -502,10 +503,11 @@ if (empty($_SESSION['username'])) {
                                                 saveCourseTempState = "Save";
                                             } else {
                                                 var tempDetailID = $("#tempCourseDetailID").val();
+                                                var dateTimeTem = $("#dateTimeCourseTemp").val();
                                                 $.ajax({
                                                     url: "../../model/com.gogetrich.function/UpdateCourseInTemp.php",
                                                     type: 'POST',
-                                                    data: {'detailOrder': detailOrder, 'descHeaderId': descHeaderId, 'lat': lat, 'lng': lng, 'courseDetail': courseDetail, 'tempDetailID': tempDetailID},
+                                                    data: {'dateTimeTem': dateTimeTem, 'detailOrder': detailOrder, 'descHeaderId': descHeaderId, 'lat': lat, 'lng': lng, 'courseDetail': courseDetail, 'tempDetailID': tempDetailID},
                                                     beforeSend: function (xhr) {
                                                         $("html").addClass("js");
                                                     },
@@ -652,6 +654,7 @@ if (empty($_SESSION['username'])) {
                                                     //                                                $("#descriptionDetail").wysiwyg("setContent", json.DETAIL_DESCRIPTION);
                                                     $("#tempCourseDetailID").val(json.DETAIL_ID);
                                                     $("#detailOrder").val(json.DETAIL_ORDER);
+                                                    $("#dateTimeCourseTemp").val(json.DETAIL_CREATED_DATE_TIME);
                                                 }
                                             });
                                         }

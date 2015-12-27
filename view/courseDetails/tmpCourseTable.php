@@ -27,7 +27,18 @@ require '../../model-db-connection/config.php';
                 <td style="text-align: center" width="50px"><?= $id ?></td>
                 <td><?= $row['DESC_HEADER_NAME'] ?></td>
                 <td><?= $row['DETAIL_DESCRIPTION'] ?></td>
-                <td><?= $row['DETAIL_LAT'] ?>,<?= $row['DETAIL_LNG'] ?></td>
+                <?php
+                if (empty($row['DETAIL_LAT'])) {
+                    ?>
+                    <td></td>
+                    <?php
+                } else {
+                    ?>
+                    <td><?= $row['DETAIL_LAT'] ?>,<?= $row['DETAIL_LNG'] ?></td>
+                    <?php
+                }
+                ?>
+
                 <td style="text-align: center"><?= $row['DETAIL_CREATED_DATE_TIME'] ?></td>
                 <td style="text-align: center" class="edit"><?= $row['DETAIL_ORDER'] ?></td>
                 <td style="text-align: center">
