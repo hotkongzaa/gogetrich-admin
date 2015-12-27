@@ -5,7 +5,7 @@ require '../../model-db-connection/config.php';
     <thead>
         <tr>                                                              
             <th>No.</th>
-            <th>Course Categories Name</th>
+            <th>Course Description Header</th>
             <th>Create Date Time</th>
             <th></th>
         </tr>
