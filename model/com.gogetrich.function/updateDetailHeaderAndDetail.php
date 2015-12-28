@@ -17,6 +17,7 @@ $courseStatus = $_POST['courseStatus'];
 $headaerID = $_POST['headerID'];
 $courseAddiDetail = $_POST['courseAddiDetail'];
 $subCourseName = $_POST['subCourseName'];
+$courseHeaderTime = $_POST['courseHeaderTime'];
 
 $sqlUpdateHeader = "UPDATE GTRICH_COURSE_HEADER "
         . "SET REF_CATE_ID = '" . $courseCategory . "', "
@@ -24,7 +25,8 @@ $sqlUpdateHeader = "UPDATE GTRICH_COURSE_HEADER "
         . "SUB_HEADER_NAME = '" . $subCourseName . "', "
         . "HEADER_EVENT_DATE = '" . $courseEventDate . "',"
         . "HEADER_COURSE_STATUS = '" . $courseStatus . "', "
-        . "HEADER_DETAIL = '" . $courseAddiDetail . "'"
+        . "HEADER_DETAIL = '" . $courseAddiDetail . "', "
+        . "HEADER_CREATE_DATE_TIME = '" . $courseHeaderTime . "' "
         . "WHERE HEADER_ID = '" . $headaerID . "'";
 
 $saveResHeader = mysql_query($sqlUpdateHeader);

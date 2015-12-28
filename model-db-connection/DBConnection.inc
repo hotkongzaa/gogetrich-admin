@@ -24,6 +24,7 @@ if (mysqli_query($con, $sql)) {
             . "AD_LAST_NAME VARCHAR(255),"
             . "AD_PHONE_NUMBER VARCHAR(120),"
             . "AD_CREATED_DATE_TIME TIMESTAMP,"
+            . "USER_PREVILLAGE VARCHAR(255),"
             . "PRIMARY KEY (AD_ID)"
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
     mysqli_query($con_create_tbl, $sqlCreateCustomerDetail);
@@ -43,7 +44,7 @@ if (mysqli_query($con, $sql)) {
             . "HEADER_EVENT_DATE VARCHAR(255),"
             . "HEADER_DETAIL MEDIUMTEXT,"
             . "HEADER_CREATE_DATE_TIME TIMESTAMP,"
-            . "HEADER_COURSE_STATUS VARCHAR(20),"            
+            . "HEADER_COURSE_STATUS VARCHAR(20),"
             . "REF_CATE_ID VARCHAR(100),"
             . "PRIMARY KEY (HEADER_ID)"
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";

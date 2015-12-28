@@ -335,6 +335,7 @@ if (empty($_SESSION['username'])) {
             <input type="hidden" id="tempCourseDetailID"/>
             <input type="hidden" id="courseHeaderID"/>
             <input type="hidden" id="dateTimeCourseTemp"/>
+            <input type="hidden" id="courseHeaderTime"/>
             <script src="../assets/js/jquery.min.js"></script>
             <script src="../assets/js/jquery-ui-1.11.1.js"></script>
             <!-- smart resize event -->
@@ -429,6 +430,7 @@ if (!empty($notFound)) {
                                             $("#courseStatus").val('<?= $rowHeader['HEADER_COURSE_STATUS'] ?>');
                                             $("#courseHeaderID").val('<?= $rowHeader['HEADER_ID'] ?>');
                                             $("#subCourseName").val('<?= $rowHeader['SUB_HEADER_NAME'] ?>');
+                                            $("#courseHeaderTime").val('<?= $rowHeader['HEADER_CREATE_DATE_TIME'] ?>');
 
 
 
@@ -626,6 +628,7 @@ if (!empty($notFound)) {
                                             var detailOrder = $("#detailOrder").val();
                                             var courseAddiDetail = CKEDITOR.instances.courseDetail.getData();
                                             var subCourseName = $("#subCourseName").val();
+                                            var courseHeaderTime = $("#courseHeaderTime").val();
                                             if (courseEventDate == "") {
                                                 alert("Please select Course Event Date");
                                             } else {
@@ -640,7 +643,7 @@ if (!empty($notFound)) {
                                                             $.ajax({
                                                                 url: "../../model/com.gogetrich.function/updateDetailHeaderAndDetail.php",
                                                                 type: 'POST',
-                                                                data: {'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
+                                                                data: {'courseHeaderTime': courseHeaderTime, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
                                                                 success: function (saveHeaderData, textStatus, jqXHR) {
                                                                     if (saveHeaderData == 200) {
                                                                         alert("Update course success");
