@@ -308,6 +308,18 @@ if (empty($_SESSION['username'])) {
                                                                         <li>
                                                                             <strong>ลงทะเบียนเมื่อ: </strong> <?= $rowGetRegisDetailByID['CREATED_DATE_TIME'] ?>
                                                                         </li>
+                                                                        <li><strong>Multi-registration user: </strong></li>
+                                                                        <ul>
+                                                                            <?php
+                                                                            $disArray = explode("||", $rowGetRegisDetailByID['ADDITIONAL_ENROLL_CUS_NAME']);
+                                                                            for ($i = 0; $i < sizeof($disArray) - 1; $i++) {
+                                                                                $arrayMulti = explode(",", $disArray[$i]);
+                                                                                ?>
+                                                                            <li>Name: <?= $arrayMulti[0] ?> <br/>Email: <?= $arrayMulti[1] ?> <br/>Phone: <?= $arrayMulti[2] ?></li>
+                                                                                <?php
+                                                                            }
+                                                                            ?>
+                                                                        </ul>
                                                                     </div>
                                                                 </div>
                                                             </div>                                                        
