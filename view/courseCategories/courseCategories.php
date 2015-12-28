@@ -67,12 +67,7 @@ if (empty($_SESSION['username'])) {
                     <div class="navbar-inner">
                         <div class="container-fluid">
                             <a class="brand" href="../dashboard"><i class="icon-home icon-white"></i> Go get rich Admin</a>
-                            <ul class="nav user_menu pull-right">
-                                <li class="hidden-phone hidden-tablet">
-                                    <div class="nb_boxes clearfix">                                        
-                                        <a data-toggle="modal" data-backdrop="static" href="#myTasks" class="label ttip_b" title="Course Register">10 <i class="splashy-calendar_week"></i></a>
-                                    </div>
-                                </li>
+                            <ul class="nav user_menu pull-right">               
 
                                 <li class="divider-vertical hidden-phone hidden-tablet"></li>
                                 <li class="dropdown">
@@ -96,10 +91,10 @@ if (empty($_SESSION['username'])) {
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li>
-                                                    <a href="form_elements.html">View All Users</a>
+                                                    <a href="#">View All Users</a>
                                                 </li>
                                                 <li>
-                                                    <a href="form_elements.html">View User Enroll</a>
+                                                    <a href="../dashboard">View User Enroll</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -130,60 +125,7 @@ if (empty($_SESSION['username'])) {
                             </nav>
                         </div>
                     </div>
-                </div>                
-                <div class="modal hide fade" id="myTasks">
-                    <div class="modal-header">
-                        <button class="close" data-dismiss="modal">×</button>
-                        <h3>New Tasks</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-info">In this table jquery plugin turns a table row into a clickable link.</div>
-                        <table class="table table-condensed table-striped" data-rowlink="a">
-                            <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>Summary</th>
-                                    <th>Updated</th>
-                                    <th>Priority</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>P-23</td>
-                                    <td><a href="javascript:void(0)">Admin should not break if URL&hellip;</a></td>
-                                    <td>23/05/2012</td>
-                                    <td class="tac"><span class="label label-important">High</span></td>
-                                    <td>Open</td>
-                                </tr>
-                                <tr>
-                                    <td>P-18</td>
-                                    <td><a href="javascript:void(0)">Displaying submenus in custom&hellip;</a></td>
-                                    <td>22/05/2012</td>
-                                    <td class="tac"><span class="label label-warning">Medium</span></td>
-                                    <td>Reopen</td>
-                                </tr>
-                                <tr>
-                                    <td>P-25</td>
-                                    <td><a href="javascript:void(0)">Featured image on post types&hellip;</a></td>
-                                    <td>22/05/2012</td>
-                                    <td class="tac"><span class="label label-success">Low</span></td>
-                                    <td>Updated</td>
-                                </tr>
-                                <tr>
-                                    <td>P-10</td>
-                                    <td><a href="javascript:void(0)">Multiple feed fixes and&hellip;</a></td>
-                                    <td>17/05/2012</td>
-                                    <td class="tac"><span class="label label-warning">Medium</span></td>
-                                    <td>Open</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="javascript:void(0)" class="btn">Go to task manager</a>
-                    </div>
-                </div>
+                </div>                                
             </header>
 
             <!-- main content -->

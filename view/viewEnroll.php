@@ -11,6 +11,10 @@ if (empty($_SESSION['username'])) {
         
     }
     require '../model-db-connection/config.php';
+    $sqlGetCusInfo = "SELECT * "
+            . "FROM RICH_CUSTOMER WHERE CUS_ID = '" . $_GET['uID'] . "'";
+    $resGetCusInfo = mysql_query($sqlGetCusInfo);
+    $rowGetCusInfo = mysql_fetch_assoc($resGetCusInfo);
 }
 ?>
 <!DOCTYPE html>
@@ -136,17 +140,35 @@ if (empty($_SESSION['username'])) {
             <!-- main content -->
             <div id="contentwrapper">
                 <div class="main_content" style="margin-left: 0px !important; height:700px !important;">
-
+                    <nav>
+                        <div id="jCrumbs" class="breadCrumb module">
+                            <ul>
+                                <li>
+                                    <a href="dashboard"><i class="icon-home"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#">User management</a>
+                                </li>
+                                <li>
+                                    <a href="#">View User Enroll</a>
+                                </li>
+                                <li>
+                                    View user: <?= $rowGetCusInfo['CUS_FIRST_NAME'] ?> <?= $rowGetCusInfo['CUS_LAST_NAME'] ?>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    <div>
+                        <a href="dashboard"><i class="splashy-arrow_state_blue_left"></i> Back</a><br/><br/>
+                    </div>
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="heading clearfix">
-                                <h3 class="pull-left">Customer Enroll</h3>          
-                                <!--span class="pull-right btn" onclick="createCate();"><i class="icon-plus"></i> Create Category</span-->
+                                <h3 class="pull-left">User Detail:</h3>                        
                             </div>
                             <div id="customerEnroll"></div>
                         </div>                        
-                    </div>
-
+                    </div>      
                 </div>
             </div>
 
@@ -199,16 +221,9 @@ if (empty($_SESSION['username'])) {
 
             <script>
             $(document).ready(function () {
-                dashboard.initialElement();
+                $("html").removeClass("js");
 
             });
-            dashboard = {
-                initialElement: function () {
-                    $("#customerEnroll").load("dashboard_tbl.php", function () {
-                        $("html").removeClass("js");
-                    });
-                }
-            };
             </script>
 
         </div>
