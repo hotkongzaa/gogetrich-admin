@@ -315,7 +315,7 @@ if (empty($_SESSION['username'])) {
                                                                             for ($i = 0; $i < sizeof($disArray) - 1; $i++) {
                                                                                 $arrayMulti = explode(",", $disArray[$i]);
                                                                                 ?>
-                                                                            <li>Name: <?= $arrayMulti[0] ?> <br/>Email: <?= $arrayMulti[1] ?> <br/>Phone: <?= $arrayMulti[2] ?></li>
+                                                                                <li>Name: <?= $arrayMulti[0] ?> <br/>Email: <?= $arrayMulti[1] ?> <br/>Phone: <?= $arrayMulti[2] ?></li>
                                                                                 <?php
                                                                             }
                                                                             ?>
