@@ -162,12 +162,204 @@ if (empty($_SESSION['username'])) {
                         <a href="dashboard"><i class="splashy-arrow_state_blue_left"></i> Back</a><br/><br/>
                     </div>
                     <div class="row-fluid">
-                        <div class="span12">
-                            <div class="heading clearfix">
-                                <h3 class="pull-left">User Detail:</h3>                        
+                        <?php
+                        if (!empty($rowGetCusInfo['CUS_FIRST_NAME'])) {
+                            ?>
+
+                            <div class="span12">
+                                <div class="heading clearfix">
+                                    <h3 class="pull-left"><strong>User Detail: </strong> <i class="splashy-group_green"></i> <?= $rowGetCusInfo['CUS_FIRST_NAME'] ?> <?= $rowGetCusInfo['CUS_LAST_NAME'] ?></h3>                        
+                                    <br/><br/>
+                                    <h3 class="pull-left"><strong>Course Registered: </strong><i class="splashy-document_a4_marked"></i> <?= $_GET['cName'] ?></h3>
+                                </div>
+                                <div class="span8">
+                                    <table class="table table-bordered table-striped table_vam">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Payment status: </strong></td>
+                                                <td>
+                                                    <?php
+                                                    if ($_GET['pT'] == md5("PENDING")) {
+                                                        echo '<i class="splashy-box_locked"></i>: PENDING';
+                                                    } else if ($_GET['pT'] == md5("COMPLETE")) {
+                                                        echo '<i class="splashy-box_okay"></i>: COMPLETE';
+                                                    } else if ($_GET['pT'] == md5("REJECT")) {
+                                                        echo '<i class="splashy-box_remove"></i>: REJECT';
+                                                    } else {
+                                                        echo '<i class="splashy-box_locked"></i>: UNKNOWN';
+                                                    }
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="250px"><strong>Username: </strong></td>
+                                                <td>
+                                                    <?= $rowGetCusInfo['CUS_USERNAME'] ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="250px"><strong>Name: </strong></td>
+                                                <td>
+                                                    <?= $rowGetCusInfo['CUS_FIRST_NAME'] ?> <?= $rowGetCusInfo['CUS_LAST_NAME'] ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="250px"><strong>Email: </strong></td>
+                                                <td>
+                                                    <?= $rowGetCusInfo['CUS_EMAIL'] ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="250px"><strong>Gender: </strong></td>
+                                                <td>
+                                                    <?= $rowGetCusInfo['CUS_GENDER'] ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="250px"><strong>Contact Address: </strong></td>
+                                                <td>
+                                                    <?= $rowGetCusInfo['CUS_CONTACT_ADDRESS'] ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="250px"><strong>Receipt Address: </strong></td>
+                                                <td>
+                                                    <?= $rowGetCusInfo['CUS_RECEIPT_ADDRESS'] ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="250px"><strong>Phone number: </strong></td>
+                                                <td>
+                                                    <?= $rowGetCusInfo['CUS_PHONE_NUMBER'] ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="250px"><strong>Facebook Address: </strong></td>
+                                                <td>
+                                                    <?= $rowGetCusInfo['CUS_FACEBOOK_ADDRESS'] ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="250px"><strong>Registered Date time: </strong></td>
+                                                <td>
+                                                    <?= $rowGetCusInfo['CREATED_DATE_TIME'] ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="250px" style="vertical-align: top"><strong>Course Registration: </strong></td>
+                                                <td>
+                                                    <div class="span12">
+                                                        <div id="accordion1" class="accordion">
+                                                            <?php
+                                                            $sqlGetEnrollDetail = "SELECT * FROM GTRICH_COURSE_HEADER GCH "
+                                                                    . "LEFT JOIN RICH_CUSTOMER_ENROLL RCE ON GCH.HEADER_ID = RCE.ENROLL_COURSE_ID "
+                                                                    . "WHERE ENROLL_ID = '" . $_GET['enID'] . "'";
+                                                            $resGetEnrollDetail = mysql_query($sqlGetEnrollDetail);
+                                                            $rowEnrollDetail = mysql_fetch_assoc($resGetEnrollDetail);
+                                                            ?>
+                                                            <div class="accordion-group">
+                                                                <div class="accordion-heading">
+                                                                    <a href="#collapseOne1" data-parent="#accordion1" data-toggle="collapse" class="accordion-toggle acc-in">
+                                                                        <strong>Course Name: </strong><i class="splashy-document_a4_marked"></i> <?= $rowEnrollDetail['HEADER_NAME'] ?>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="accordion-body in collapse" id="collapseOne1">
+                                                                    <div class="accordion-inner">
+                                                                        <?php
+                                                                        $sqlGetRegisDetailByID = "SELECT * FROM RICH_CUSTOMER_ENROLL WHERE ENROLL_ID = '" . $_GET['enID'] . "'";
+                                                                        $resGetRegisDetailByID = mysql_query($sqlGetRegisDetailByID);
+                                                                        $rowGetRegisDetailByID = mysql_fetch_assoc($resGetRegisDetailByID);
+                                                                        ?>
+                                                                        <li><strong>ช่องทางการจ่ายที่เลือก</strong> (Payment method): <?= $rowGetRegisDetailByID['ENROLL_PAYMENT_TERM'] == 1 ? "จ่ายเงินสดหน้างาน ในวันแรกของการอบรม" : "โอนเงินเข้าบัญชี (ชื่อบัญชี 'บจ. เอสอี ทอล์ค' ธนาคารกรุงเทพ เลขที่บัญชี 021-7-08688-3, กรุณาส่งสำเนาหลักฐานการโอนเงินมาที่ pinhatai.d@gmail.com)" ?></li>
+                                                                        <li><strong>ส่วนลด: </strong></li>
+                                                                        <ul>
+                                                                            <?php
+                                                                            $disArray = explode("||", $rowGetRegisDetailByID['ENROLL_SEMINARDISCOUNT']);
+                                                                            for ($i = 0; $i < sizeof($disArray) - 1; $i++) {
+                                                                                ?>
+                                                                                <li><?= $disArray[$i] ?></li>
+                                                                                <?php
+                                                                            }
+                                                                            ?>
+                                                                        </ul>
+                                                                        <li><strong>ผู้แนะนำ: </strong><?= $rowGetRegisDetailByID['ENROLL_INVITESUGGEST'] ?></li>
+                                                                        <li><strong>ความรู้ไปเพื่อประโยชน์: </strong></li>
+                                                                        <ul>
+                                                                            <?php
+                                                                            $disArray = explode("||", $rowGetRegisDetailByID['ENROLL_KNOWLEDGE_FOR_REASON']);
+                                                                            for ($i = 0; $i < sizeof($disArray) - 1; $i++) {
+                                                                                ?>
+                                                                                <li><?= $disArray[$i] == "อื่นๆ" ? "อื่นๆ: " . $rowGetRegisDetailByID['ENROLL_OTHER_KNOWLEDGE_FOR_REASON'] : $disArray[$i] ?></li>
+                                                                                <?php
+                                                                            }
+                                                                            ?>
+                                                                        </ul>
+                                                                        <li><strong>ข่าวสารจากแหล่งข้อมูล: </strong></li>
+                                                                        <ul>
+                                                                            <?php
+                                                                            $disArray = explode("||", $rowGetRegisDetailByID['ENROLL_NEWSFROM']);
+                                                                            for ($i = 0; $i < sizeof($disArray) - 1; $i++) {
+                                                                                ?>
+                                                                                <li><?= $disArray[$i] ?></li>
+                                                                                <?php
+                                                                            }
+                                                                            ?>
+                                                                        </ul>
+                                                                        <li>
+                                                                            <strong>ลงทะเบียนเมื่อ: </strong> <?= $rowGetRegisDetailByID['CREATED_DATE_TIME'] ?>
+                                                                        </li>
+                                                                    </div>
+                                                                </div>
+                                                            </div>                                                        
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="span3">
+                                    <div class="w-box" id="w_sort04">    
+                                        <div class="w-box-header">
+                                            Course Registered by this customer
+                                        </div>
+                                        <div class="w-box-content">
+                                            <table class="table table-striped table_vam no-th">
+                                                <tbody>
+                                                    <?php
+                                                    $sqlGetAnotherCourseByUserID = "SELECT * FROM RICH_CUSTOMER_ENROLL RCE "
+                                                            . "LEFT JOIN GTRICH_COURSE_HEADER GCH ON RCE.ENROLL_COURSE_ID = GCH.HEADER_ID "
+                                                            . "WHERE ENROLL_CUS_ID = '" . $_GET['uID'] . "'";
+                                                    $resAnotherRegis = mysql_query($sqlGetAnotherCourseByUserID);
+                                                    while ($rowAnotherRegistered = mysql_fetch_array($resAnotherRegis)) {
+                                                        ?>
+                                                        <tr>                                                        
+                                                            <td><?= $rowAnotherRegistered['HEADER_NAME'] ?></td>
+                                                            <td><?= $rowAnotherRegistered['PAYMENT_STATUS'] ?></td>
+                                                        </tr>
+                                                        <?php
+                                                    }
+                                                    ?>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="customerEnroll"></div>
-                        </div>                        
+
+                            <?php
+                        } else {
+                            ?>
+                            <div class="error_box">
+                                <h1>404 Page/File not found</h1>
+                                <p>The page/file you've requested has been moved or taken off the site.</p>
+                                <a href="dashboard" class="back_link btn btn-small">Go back</a>
+                            </div>
+                            <?php
+                        }
+                        ?>
+
                     </div>      
                 </div>
             </div>
@@ -221,8 +413,7 @@ if (empty($_SESSION['username'])) {
 
             <script>
             $(document).ready(function () {
-                $("html").removeClass("js");
-
+                setTimeout('$("html").removeClass("js")', 500);
             });
             </script>
 

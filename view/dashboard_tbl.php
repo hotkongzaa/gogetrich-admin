@@ -32,6 +32,8 @@ require '../model-db-connection/config.php';
                         echo '<i class="splashy-box_locked"></i>: ' . $rowGetUserEnroll['PAYMENT_STATUS'];
                     } else if ($rowGetUserEnroll['PAYMENT_STATUS'] == "COMPLETE") {
                         echo '<i class="splashy-box_okay"></i>: ' . $rowGetUserEnroll['PAYMENT_STATUS'];
+                    } else if ($rowGetUserEnroll['PAYMENT_STATUS'] == "REJECT") {
+                        echo '<i class="splashy-box_remove"></i>: ' . $rowGetUserEnroll['PAYMENT_STATUS'];
                     } else {
                         echo '<i class="splashy-box_locked"></i>: ' . $rowGetUserEnroll['PAYMENT_STATUS'];
                     }
@@ -44,11 +46,13 @@ require '../model-db-connection/config.php';
                     <div class="btn-group">
                         <button data-toggle="dropdown" class="btn dropdown-toggle">Action <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            <li><a href="viewEnroll?enID=<?= $rowGetUserEnroll['ENROLL_ID'] ?>&uID=<?= $rowGetUserEnroll['CUS_ID'] ?>"><i class="splashy-application_windows_share"></i> View Enroll</a></li>
+                            <li><a href="viewEnroll?enID=<?= $rowGetUserEnroll['ENROLL_ID'] ?>&uID=<?= $rowGetUserEnroll['CUS_ID'] ?>&cName=<?= $rowGetUserEnroll['HEADER_NAME'] ?>&pT=<?= md5($rowGetUserEnroll['PAYMENT_STATUS']) ?>"><i class="splashy-application_windows_share"></i> View Enroll</a></li>
                             <li><a href="#"><i class="splashy-application_windows_edit"></i> Edit Enroll</a>
                             <li><a href="#"><i class="splashy-application_windows_remove"></i> Delete Enroll</a></li>
                             <li class="divider"></li>
                             <li><a href="#"><i class="splashy-box_okay"></i> Complete payment</a></li>
+                            <li><a href="#"><i class="splashy-box_locked"></i> Pending payment</a></li>
+                            <li><a href="#"><i class="splashy-box_remove"></i> Reject payment</a></li>
                         </ul>
                     </div>
                 </td>
