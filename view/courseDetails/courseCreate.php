@@ -233,6 +233,12 @@ if (empty($_SESSION['username'])) {
                                         </div>
                                     </div>
                                     <div class="control-group">
+                                        <label class="control-label">Course Duration (days): </label>
+                                        <div class="controls">
+                                            <input type="number" min="1" max="100" name="courseDuration" id="courseDuration" class="span10"/>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
                                         <label class="control-label">Additional Course Header Detail</label>
                                         <div class="controls">                                            
                                             <span class="alert-danger">*This element will shown in OUR TRAINING / SCHEDULE table column</span>
@@ -596,6 +602,7 @@ if (empty($_SESSION['username'])) {
                                             var courseStatus = $("#courseStatus").val();
                                             var courseAddiDetail = CKEDITOR.instances.courseDetail.getData();
                                             var subCourseName = $("#subCourseName").val();
+                                            var courseDuration = $("#courseDuration").val();
                                             if (courseEventDate == "") {
                                                 alert("Please select Course Event Date");
                                             } else {
@@ -610,7 +617,7 @@ if (empty($_SESSION['username'])) {
                                                             $.ajax({
                                                                 url: "../../model/com.gogetrich.function/SaveDetailHeaderAndDetail.php",
                                                                 type: 'POST',
-                                                                data: {'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
+                                                                data: {'courseDuration': courseDuration, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
                                                                 success: function (saveHeaderData, textStatus, jqXHR) {
                                                                     if (saveHeaderData == 200) {
                                                                         alert("Save course success");

@@ -66,8 +66,8 @@ if (empty($_SESSION['username'])) {
                 <div class="navbar navbar-fixed-top">
                     <div class="navbar-inner">
                         <div class="container-fluid">
-                            <a class="brand" href="../dashboard"><i class="icon-home icon-white"></i> Go get rich Admin</a>
-                            <ul class="nav user_menu pull-right">               
+                            <a class="brand" href="dashboard"><i class="icon-home icon-white"></i> Go get rich Admin</a>
+                            <ul class="nav user_menu pull-right">                             
 
                                 <li class="divider-vertical hidden-phone hidden-tablet"></li>
                                 <li class="dropdown">
@@ -75,7 +75,7 @@ if (empty($_SESSION['username'])) {
                                     <ul class="dropdown-menu">
                                         <li><a href="#">My Profile</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="../../model/com.gogetrich.function/Logout.php">Log Out</a></li>
+                                        <li><a href="../model/com.gogetrich.function/Logout.php">Log Out</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -104,19 +104,22 @@ if (empty($_SESSION['username'])) {
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="dropdown">
-                                                    <a href="#">Schedule <b class="caret-right"></b></a>
+                                                    <a href="#"><i class="icon-calendar"></i> Course Schedule <b class="caret-right"></b></a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="courseCategories">Course Categories</a></li>
-                                                        <li><a href="../descriptionHeader/descriptionHeader">Course Description Header</a></li>   
-                                                        <li><a href="../courseDetails/courseDetail">Course Detail</a></li>                                                       
+                                                        <li><a href="courseCategories/courseCategories">Course Categories</a></li>
+                                                        <li><a href="descriptionHeader/descriptionHeader">Course Description Header</a></li>   
+                                                        <li><a href="courseDetails/courseDetail">Course Detail</a></li>                                                       
                                                     </ul>
                                                 </li>
                                                 <li class="dropdown">
-                                                    <a href="#">Learn to rich <b class="caret-right"></b></a>
+                                                    <a href="#"><i class="icon-bullhorn"></i> Learn to rich <b class="caret-right"></b></a>
                                                     <ul class="dropdown-menu">
                                                         <li><a href="#">Content Categories</a></li>
                                                         <li><a href="#">Content Detail</a></li>                                                       
                                                     </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="#"><i class="icon-book"></i> Blog management</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -125,7 +128,7 @@ if (empty($_SESSION['username'])) {
                             </nav>
                         </div>
                     </div>
-                </div>                                
+                </div>                                 
             </header>
 
             <!-- main content -->

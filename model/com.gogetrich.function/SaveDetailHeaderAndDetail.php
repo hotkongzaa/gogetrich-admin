@@ -17,10 +17,11 @@ $courseStatus = $_POST['courseStatus'];
 $headaerID = md5(date("h:i:sa"));
 $courseAddiDetail = $_POST['courseAddiDetail'];
 $subCourseName = $_POST['subCourseName'];
+$courseDuration = $_POST['courseDuration'];
 
-$sqlSaveHeader = "INSERT INTO GTRICH_COURSE_HEADER (HEADER_ID,HEADER_NAME,SUB_HEADER_NAME,HEADER_EVENT_DATE,HEADER_DETAIL,HEADER_CREATE_DATE_TIME,HEADER_COURSE_STATUS,REF_CATE_ID) "
+$sqlSaveHeader = "INSERT INTO GTRICH_COURSE_HEADER (HEADER_ID,HEADER_NAME,SUB_HEADER_NAME,HEADER_EVENT_DATE,HEADER_DETAIL,HEADER_CREATE_DATE_TIME,HEADER_COURSE_STATUS,HEADER_COURSE_DURATION,REF_CATE_ID) "
         . "VALUES "
-        . "('" . $headaerID . "','" . $courseName . "','" . $subCourseName . "','" . $courseEventDate . "','" . $courseAddiDetail . "',NOW(),'" . $courseStatus . "','" . $courseCategory . "')";
+        . "('" . $headaerID . "','" . $courseName . "','" . $subCourseName . "','" . $courseEventDate . "','" . $courseAddiDetail . "',NOW(),'" . $courseStatus . "','" . $courseDuration . "','" . $courseCategory . "')";
 $saveResHeader = mysql_query($sqlSaveHeader);
 
 if ($saveResHeader) {
