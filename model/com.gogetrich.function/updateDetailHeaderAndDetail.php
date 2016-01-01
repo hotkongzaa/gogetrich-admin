@@ -35,7 +35,8 @@ $saveResHeader = mysql_query($sqlUpdateHeader);
 
 if ($saveResHeader) {
     $delCourseBeforeUpdate = "DELETE FROM GTRICH_COURSE_DETAIL WHERE REF_COURSE_HEADER_ID ='" . $headaerID . "'";
-    if (mysql_query($delCourseBeforeUpdate)) {
+    $delPromotionBeforeUpdate = "DELETE FROM GTRICH_COURSE_PROMOTION WHERE REF_COURSE_HEADER_ID='" . $headaerID . "'";
+    if (mysql_query($delCourseBeforeUpdate) && mysql_query($delPromotionBeforeUpdate)) {
         $sqlSelectDetailFromTmp = "SELECT * FROM GTRICH_COURSE_DETAIL_TMP WHERE DISTRIBUTOR_ID = '" . $_SESSION['userId'] . "'";
         $resFromTmp = mysql_query($sqlSelectDetailFromTmp);
         while ($rowFromTmp = mysql_fetch_array($resFromTmp)) {
@@ -46,6 +47,19 @@ if ($saveResHeader) {
             if ($saveCourseDetail) {
                 $delCourseTmp = "DELETE FROM GTRICH_COURSE_DETAIL_TMP WHERE DETAIL_ID = '" . $rowFromTmp['DETAIL_ID'] . "'";
                 mysql_query($delCourseTmp);
+            }
+        }
+
+        $sqlSelectPromotionTmp = "SELECT * FROM GTRICH_PROMOTION_TMP WHERE DISTRIBUTOR_ID = '" . $_SESSION['userId'] . "'";
+        $resPromotionTmp = mysql_query($sqlSelectPromotionTmp);
+        while ($rowPromotionTmp = mysql_fetch_array($resPromotionTmp)) {
+            $insertIntoPromotion = "INSERT INTO GTRICH_COURSE_PROMOTION (PRO_ID,PRO_NAME,PRO_CREATED_DATE_TIME,REF_COURSE_HEADER_ID)"
+                    . " VALUES "
+                    . "('" . $rowPromotionTmp['PRO_ID'] . "','" . $rowPromotionTmp['PRO_NAME'] . "','" . $rowPromotionTmp['PRO_CREATED_DATE_TIME'] . "','" . $headaerID . "')";
+            $savePromotion = mysql_query($insertIntoPromotion);
+            if ($savePromotion) {
+                $delPromotionTmp = "DELETE FROM GTRICH_PROMOTION_TMP WHERE PRO_ID = '" . $rowPromotionTmp['PRO_ID'] . "'";
+                mysql_query($delPromotionTmp);
             }
         }
         echo 200;

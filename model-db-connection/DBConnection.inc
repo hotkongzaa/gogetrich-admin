@@ -84,14 +84,24 @@ if (mysqli_query($con, $sql)) {
             . "PRIMARY KEY (DESC_HEADER_ID)"
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
     mysqli_query($con_create_tbl, $sqlCreateDescHeader);
-    $sqlCreateDescHeader = "CREATE TABLE IF NOT EXISTS GTRICH_PROMOTION_TMP ("
+
+    $sqlCreatePromotion = "CREATE TABLE IF NOT EXISTS GTRICH_COURSE_PROMOTION ("
             . "PRO_ID VARCHAR(100) NOT NULL,"
             . "PRO_NAME VARCHAR(255),"
             . "PRO_CREATED_DATE_TIME TIMESTAMP,"
-            . "DISTRIBUTOR_ID TIMESTAMP,"
+            . "REF_COURSE_HEADER_ID VARCHAR(200),"
             . "PRIMARY KEY (PRO_ID)"
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-    mysqli_query($con_create_tbl, $sqlCreateDescHeader);
+    mysqli_query($con_create_tbl, $sqlCreatePromotion);
+
+    $sqlCreatePromotionTmp = "CREATE TABLE IF NOT EXISTS GTRICH_PROMOTION_TMP ("
+            . "PRO_ID VARCHAR(100) NOT NULL,"
+            . "PRO_NAME VARCHAR(255),"
+            . "PRO_CREATED_DATE_TIME TIMESTAMP,"
+            . "DISTRIBUTOR_ID VARCHAR(200),"
+            . "PRIMARY KEY (PRO_ID)"
+            . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    mysqli_query($con_create_tbl, $sqlCreatePromotionTmp);
 
     return true;
 } else {
