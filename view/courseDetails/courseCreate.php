@@ -246,6 +246,18 @@ if (empty($_SESSION['username'])) {
                                         </div>
                                     </div>
                                     <div class="control-group">
+                                        <label for="promotionName" class="control-label">Promotion:</label>
+                                        <div class="controls">
+                                            <input type="text" name="promotionName" id="promotionName" class="span10"/> 
+                                            <input type="button" onclick="savePromotion()" class="btn btn-gebo" value="Save"> <input type="button" onclick="clearPromotion()" class="btn btn-danger" value="Cancel">
+                                            <br/><br/>
+                                            <span class="alert-danger">*Cannot create promotion over 5 rows</span>
+                                            <div id="promotionTmp"></div>
+                                            <input type="hidden" value="" id="promotionId"/>
+                                            <input type="hidden" value="" id="promotionDateTime"/>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
                                         <label for="descHeaderID" class="control-label">Course Status:</label>
                                         <div class="controls">
                                             <select id="courseStatus" name="courseStatus" class="span9">
@@ -393,6 +405,7 @@ if (empty($_SESSION['username'])) {
                 }
             </style>
             <script type="text/javascript">
+                                        var promotionTempState = "Save";
                                         var saveCourseTempState = "Save";
                                         $(document).ready(function () {
                                             $("#hideMap").hide();
@@ -429,8 +442,8 @@ if (empty($_SESSION['username'])) {
                                                 });
                                                 CKEDITOR.replace('descriptionDetail');
                                                 CKEDITOR.replace('courseDetail');
-//                                            $("#courseDetail,#descriptionDetail").wysiwyg();
                                                 $("#tempCourseTbl").load("tmpCourseTable.php");
+                                                $("#promotionTmp").load("promotionTmp.php");
                                             }
                                         };
                                         function addingDescHeader() {
@@ -677,8 +690,140 @@ if (empty($_SESSION['username'])) {
                                                 }
                                             });
                                         }
+                                        function savePromotion() {
+                                            var promotionName = $("#promotionName").val();
+                                            if (promotionName == "") {
+                                                $("#notificationDialog").modal("show");
+                                                $("#notiDetailDialog").html("Please enter promotion name");
+                                                goToByScroll("#promotionName");
+                                            } else {
+                                                if (promotionTempState == "Save") {
+                                                    $.ajax({
+                                                        url: "../../model/com.gogetrich.function/SavePromotionToTmp.php?promotionName=" + promotionName,
+                                                        type: 'POST',
+                                                        beforeSend: function (xhr) {
+                                                            $("html").addClass("js");
+                                                        },
+                                                        success: function (data, textStatus, jqXHR) {
+                                                            if (data == 200) {
+                                                                $("#promotionTmp").load("promotionTmp.php", function () {
+                                                                    $("html").removeClass("js");
+                                                                    $("#notificationDialog").modal("show");
+                                                                    $("#notiDetailDialog").html("Save promotion success");
+                                                                    $("#promotionName").val("");
+                                                                    goToByScroll("#promotionName");
+                                                                });
+                                                            } else {
+                                                                $("html").removeClass("js");
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html(data);
+                                                                goToByScroll("#promotionName");
+                                                            }
+
+                                                        }
+                                                    });
+                                                    promotionTempState = "Save";
+                                                } else {
+                                                    var proID = $("#promotionId").val();
+                                                    var proDate = $("#promotionDateTime").val();
+                                                    $.ajax({
+                                                        url: "../../model/com.gogetrich.function/UpdatePromotionTmp.php?proName=" + promotionName + "&proID=" + proID + "&proDate=" + proDate,
+                                                        type: 'POST',
+                                                        beforeSend: function (xhr) {
+                                                            $("html").addClass("js");
+                                                        },
+                                                        success: function (data, textStatus, jqXHR) {
+                                                            if (data == 200) {
+                                                                $("#promotionTmp").load("promotionTmp.php", function () {
+                                                                    $("html").removeClass("js");
+                                                                    $("#notificationDialog").modal("show");
+                                                                    $("#notiDetailDialog").html("Update promotion success");
+                                                                    $("#promotionName").val("");
+                                                                    goToByScroll("#promotionName");
+                                                                });
+                                                            } else {
+                                                                $("html").removeClass("js");
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html(data);
+                                                            }
+
+                                                        }
+                                                    });
+                                                    promotionTempState = "Save";
+                                                }
+
+                                            }
+                                        }
+                                        function deletePromotionTmpByID(proID) {
+                                            var r = confirm("Do you want to delete this permanently !");
+                                            if (r == true) {
+                                                $.ajax({
+                                                    url: "../../model/com.gogetrich.function/DeletePromotionByID.php?proID=" + proID,
+                                                    type: 'POST',
+                                                    beforeSend: function (xhr) {
+                                                        $("html").addClass("js");
+                                                    },
+                                                    success: function (data, textStatus, jqXHR) {
+                                                        if (data == 200) {
+                                                            $("#promotionTmp").load("promotionTmp.php", function () {
+                                                                $("html").removeClass("js");
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Delete promotion success");
+                                                                $("#promotionName").val("");
+                                                                goToByScroll("#promotionName");
+                                                            });
+                                                        } else {
+                                                            $("html").removeClass("js");
+                                                            $("#notificationDialog").modal("show");
+                                                            $("#notiDetailDialog").html(data);
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                        function getPromotionTmpByID(proID) {
+                                            $.ajax({
+                                                url: "../../model/com.gogetrich.function/getPromotionTmpByID.php?proID=" + proID,
+                                                type: 'POST',
+                                                beforeSend: function (xhr) {
+                                                    $("html").addClass("js");
+                                                },
+                                                success: function (data, textStatus, jqXHR) {
+                                                    var json = $.parseJSON(data);
+                                                    goToByScroll("#promotionName");
+                                                    $("#promotionId").val(json.PRO_ID);
+                                                    $("#promotionName").val(json.PRO_NAME);
+                                                    $("#promotionDateTime").val(json.PRO_CREATED_DATE_TIME);
+                                                    $("html").removeClass("js");
+                                                }
+                                            });
+                                            promotionTempState = "Edit";
+                                        }
+                                        function goToByScroll(id) {
+                                            $('html,body').animate({
+                                                scrollTop: $(id).offset().top},
+                                            50);
+                                        }
+                                        function clearPromotion() {
+                                            $("#promotionId").val("");
+                                            $("#promotionName").val("");
+                                            $("#promotionDateTime").val("");
+                                            promotionTempState = "Save";
+                                        }
             </script>
 
+        </div>
+        <div class="modal hide fade" id="notificationDialog">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h3>System notification</h3>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-block alert-warning fade in">
+                    <h4 class="alert-heading">System notification!</h4>
+                    <p id="notiDetailDialog"></p>
+                </div>
+            </div>
         </div>
     </body>
 </html>

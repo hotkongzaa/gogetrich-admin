@@ -38,6 +38,19 @@ if ($saveResHeader) {
             mysql_query($delCourseTmp);
         }
     }
+
+    $sqlSelectPromotionTmp = "SELECT * FROM GTRICH_PROMOTION_TMP WHERE DISTRIBUTOR_ID = '" . $_SESSION['userId'] . "'";
+    $resPromotionTmp = mysql_query($sqlSelectPromotionTmp);
+    while ($rowPromotionTmp = mysql_fetch_array($resPromotionTmp)) {
+        $insertIntoPromotion = "INSERT INTO GTRICH_COURSE_PROMOTION (PRO_ID,PRO_NAME,PRO_CREATED_DATE_TIME,REF_COURSE_HEADER_ID)"
+                . " VALUES "
+                . "('" . $rowPromotionTmp['PRO_ID'] . "','" . $rowPromotionTmp['PRO_NAME'] . "','" . $rowPromotionTmp['PRO_CREATED_DATE_TIME'] . "','" . $headaerID . "')";
+        $savePromotion = mysql_query($insertIntoPromotion);
+        if ($savePromotion) {
+            $delPromotionTmp = "DELETE FROM GTRICH_PROMOTION_TMP WHERE PRO_ID = '" . $rowPromotionTmp['PRO_ID'] . "'";
+            mysql_query($delPromotionTmp);
+        }
+    }
     echo 200;
 } else {
     echo mysql_error();

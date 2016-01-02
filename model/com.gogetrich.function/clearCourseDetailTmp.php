@@ -9,9 +9,10 @@ session_start();
 
 require '../../model-db-connection/config.php';
 
-$sql = "DELETE FROM GTRICH_COURSE_DETAIL_TMP";
+$sqlDeleteCourseDetailTmp = "DELETE FROM GTRICH_COURSE_DETAIL_TMP WHERE DISTRIBUTOR_ID='" . $_SESSION['userId'] . "'";
+$sqlDeletePromotionTmp = "DELETE FROM GTRICH_PROMOTION_TMP WHERE DISTRIBUTOR_ID='" . $_SESSION['userId'] . "'";
 
-if (mysql_query($sql)) {
+if (mysql_query($sqlDeleteCourseDetailTmp) && mysql_query($sqlDeletePromotionTmp)) {
     echo 200;
 } else {
     echo mysql_error();
