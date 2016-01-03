@@ -12,7 +12,6 @@ require '../../model-db-connection/config.php';
 
 $courseCategory = $_POST['courseCategory'];
 $courseName = $_POST['courseName'];
-$courseEventDate = $_POST['courseEventDate'];
 $courseStatus = $_POST['courseStatus'];
 $headaerID = $_POST['headerID'];
 $courseAddiDetail = $_POST['courseAddiDetail'];
@@ -24,7 +23,7 @@ $sqlUpdateHeader = "UPDATE GTRICH_COURSE_HEADER "
         . "SET REF_CATE_ID = '" . $courseCategory . "', "
         . "HEADER_NAME = '" . $courseName . "', "
         . "SUB_HEADER_NAME = '" . $subCourseName . "', "
-        . "HEADER_EVENT_DATE = '" . $courseEventDate . "',"
+        . "HEADER_EVENT_DATE = '', "
         . "HEADER_COURSE_STATUS = '" . $courseStatus . "', "
         . "HEADER_DETAIL = '" . $courseAddiDetail . "', "
         . "HEADER_CREATE_DATE_TIME = '" . $courseHeaderTime . "', "
@@ -36,7 +35,9 @@ $saveResHeader = mysql_query($sqlUpdateHeader);
 if ($saveResHeader) {
     $delCourseBeforeUpdate = "DELETE FROM GTRICH_COURSE_DETAIL WHERE REF_COURSE_HEADER_ID ='" . $headaerID . "'";
     $delPromotionBeforeUpdate = "DELETE FROM GTRICH_COURSE_PROMOTION WHERE REF_COURSE_HEADER_ID='" . $headaerID . "'";
-    if (mysql_query($delCourseBeforeUpdate) && mysql_query($delPromotionBeforeUpdate)) {
+    $delCourseEventBeforeUpdate = "DELETE FROM GTRICH_COURSE_EVENT_DATE_TIME WHERE REF_COURSE_HEADER_ID='" . $headaerID . "'";
+    if (mysql_query($delCourseBeforeUpdate) && mysql_query($delPromotionBeforeUpdate) && mysql_query($delCourseEventBeforeUpdate)) {
+        //Manage course detail
         $sqlSelectDetailFromTmp = "SELECT * FROM GTRICH_COURSE_DETAIL_TMP WHERE DISTRIBUTOR_ID = '" . $_SESSION['userId'] . "'";
         $resFromTmp = mysql_query($sqlSelectDetailFromTmp);
         while ($rowFromTmp = mysql_fetch_array($resFromTmp)) {
@@ -50,6 +51,7 @@ if ($saveResHeader) {
             }
         }
 
+        //Manage course promotion
         $sqlSelectPromotionTmp = "SELECT * FROM GTRICH_PROMOTION_TMP WHERE DISTRIBUTOR_ID = '" . $_SESSION['userId'] . "'";
         $resPromotionTmp = mysql_query($sqlSelectPromotionTmp);
         while ($rowPromotionTmp = mysql_fetch_array($resPromotionTmp)) {
@@ -62,6 +64,23 @@ if ($saveResHeader) {
                 mysql_query($delPromotionTmp);
             }
         }
+
+        //Manage course Envent date time
+        $sqlSelectEventDateTmp = "SELECT * FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP WHERE EVENT_DISTRIBUTOR_ID = '" . $_SESSION['userId'] . "'";
+        $resEventDateTmp = mysql_query($sqlSelectEventDateTmp);
+        while ($rowEventDateTmp = mysql_fetch_array($resEventDateTmp)) {
+
+            $inserIntoCourseEvent = "INSERT INTO GTRICH_COURSE_EVENT_DATE_TIME (EVENT_ID,START_EVENT_DATE_TIME,END_EVENT_DATE_TIME,EVENT_CREATED_DATE_TIME,REF_COURSE_HEADER_ID)"
+                    . " VALUES "
+                    . "('" . $rowEventDateTmp['EVENT_ID'] . "','" . $rowEventDateTmp['START_EVENT_DATE_TIME'] . "','" . $rowEventDateTmp['END_EVENT_DATE_TIME'] . "','" . $rowEventDateTmp['EVENT_CREATED_DATE_TIME'] . "','" . $headaerID . "')";
+
+            $saveEventDate = mysql_query($inserIntoCourseEvent);
+            if ($saveEventDate) {
+                $delEventDateTmp = "DELETE FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP WHERE EVENT_ID = '" . $rowEventDateTmp['EVENT_ID'] . "'";
+                mysql_query($delEventDateTmp);
+            }
+        }
+
         echo 200;
     } else {
         echo 'Cannot clear course detail with ' . mysql_error();

@@ -6,7 +6,6 @@ require '../../model-db-connection/config.php';
         <tr>                                                              
             <th>No.</th>
             <th>Course Name</th>
-            <th>Even Date</th>
             <th>Course Category</th>
             <th>Created date time</th>
             <th>Status</th>
@@ -24,7 +23,6 @@ require '../../model-db-connection/config.php';
             <tr>       
                 <td style="text-align: center" width="50px"><?= $id ?></td>
                 <td><?= $row['HEADER_NAME'] ?></td>
-                <td style="text-align: center"><?= $row['HEADER_EVENT_DATE'] ?></td>
                 <td><?= $row['CATE_NAME'] ?></td>
                 <td><?= $row['HEADER_CREATE_DATE_TIME'] ?></td>
                 <td style="text-align: center"><?php

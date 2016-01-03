@@ -12,7 +12,8 @@ $headerID = $_GET['headerID'];
 
 $sqlClearAllTempByUserSession = "DELETE FROM GTRICH_COURSE_DETAIL_TMP WHERE DISTRIBUTOR_ID = '" . $_SESSION['userId'] . "'";
 $sqlClearAllPromotionTmpByUserSession = "DELETE FROM GTRICH_PROMOTION_TMP WHERE DISTRIBUTOR_ID='" . $_SESSION['userId'] . "'";
-if (mysql_query($sqlClearAllTempByUserSession) && mysql_query($sqlClearAllPromotionTmpByUserSession)) {
+$sqlClearAllCourseEventTmpByUserSession = "DELETE FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP WHERE EVENT_DISTRIBUTOR_ID='" . $_SESSION['userId'] . "'";
+if (mysql_query($sqlClearAllTempByUserSession) && mysql_query($sqlClearAllPromotionTmpByUserSession) && mysql_query($sqlClearAllCourseEventTmpByUserSession)) {
     //Manage course detail
     $sqlGetDataInsertTotmp = "SELECT * FROM GTRICH_COURSE_DETAIL WHERE REF_COURSE_HEADER_ID = '" . $headerID . "'";
     $res = mysql_query($sqlGetDataInsertTotmp);
@@ -29,6 +30,16 @@ if (mysql_query($sqlClearAllTempByUserSession) && mysql_query($sqlClearAllPromot
         $sqlSavePromToTmp = "INSERT INTO GTRICH_PROMOTION_TMP (PRO_ID,PRO_NAME,PRO_CREATED_DATE_TIME,DISTRIBUTOR_ID) "
                 . "VALUES ('" . $rowPromotionToTmp['PRO_ID'] . "','" . $rowPromotionToTmp['PRO_NAME'] . "','" . $rowPromotionToTmp['PRO_CREATED_DATE_TIME'] . "','" . $_SESSION['userId'] . "')";
         mysql_query($sqlSavePromToTmp);
+    }
+
+    //Manage Course Event detail
+    $sqlGetCourseEventToTmp = "SELECT * FROM GTRICH_COURSE_EVENT_DATE_TIME WHERE REF_COURSE_HEADER_ID='" . $headerID . "'";
+    $resGetCourseEventToTmp = mysql_query($sqlGetCourseEventToTmp);
+    while ($rowCourseEventToTmp = mysql_fetch_array($resGetCourseEventToTmp)) {
+        $sqlSaveCourseEventToTmp = "INSERT INTO GTRICH_COURSE_EVENT_DATE_TIME_TMP (EVENT_ID,START_EVENT_DATE_TIME,END_EVENT_DATE_TIME,EVENT_CREATED_DATE_TIME,EVENT_DISTRIBUTOR_ID)"
+                . " VALUES"
+                . " ('" . $rowCourseEventToTmp['EVENT_ID'] . "','" . $rowCourseEventToTmp['START_EVENT_DATE_TIME'] . "','" . $rowCourseEventToTmp['END_EVENT_DATE_TIME'] . "','" . $rowCourseEventToTmp['EVENT_CREATED_DATE_TIME'] . "','" . $_SESSION['userId'] . "')";
+        mysql_query($sqlSaveCourseEventToTmp);
     }
     echo 200;
 } else {

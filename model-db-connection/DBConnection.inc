@@ -103,6 +103,26 @@ if (mysqli_query($con, $sql)) {
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
     mysqli_query($con_create_tbl, $sqlCreatePromotionTmp);
 
+    $sqlCreateEventTmp = "CREATE TABLE IF NOT EXISTS GTRICH_COURSE_EVENT_DATE_TIME_TMP ("
+            . "EVENT_ID VARCHAR(100) NOT NULL,"
+            . "START_EVENT_DATE_TIME VARCHAR(255),"
+            . "END_EVENT_DATE_TIME VARCHAR(255),"
+            . "EVENT_CREATED_DATE_TIME TIMESTAMP,"
+            . "EVENT_DISTRIBUTOR_ID VARCHAR(200),"
+            . "PRIMARY KEY (EVENT_ID)"
+            . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    mysqli_query($con_create_tbl, $sqlCreateEventTmp);
+
+    $sqlCreateEventTmp = "CREATE TABLE IF NOT EXISTS GTRICH_COURSE_EVENT_DATE_TIME ("
+            . "EVENT_ID VARCHAR(100) NOT NULL,"
+            . "START_EVENT_DATE_TIME VARCHAR(255),"
+            . "END_EVENT_DATE_TIME VARCHAR(255),"
+            . "EVENT_CREATED_DATE_TIME TIMESTAMP,"
+            . "REF_COURSE_HEADER_ID VARCHAR(200),"
+            . "PRIMARY KEY (EVENT_ID)"
+            . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    mysqli_query($con_create_tbl, $sqlCreateEventTmp);
+
     return true;
 } else {
     echo "Error creating database: " . mysqli_error($con);

@@ -52,6 +52,7 @@ if (empty($_SESSION['username'])) {
 
         <!-- wizard -->
         <link rel="stylesheet" href="../assets/lib/stepy/css/jquery.stepy.css" />
+        <link rel="stylesheet" href="../assets/css/jquery.datetimepicker.css" />
         <!-- Favicon -->
         <link rel="shortcut icon" href="favicon.ico" />
 
@@ -224,8 +225,25 @@ if (empty($_SESSION['username'])) {
                                     <div class="control-group">
                                         <label class="control-label">Course Event Date</label>
                                         <div class="controls">
-                                            <div id="chooseDate"></div><br/>
-                                            <input type="hidden" name="courseEventDate" id="courseEventDate" class="span10"/>
+                                            <div class="input-prepend">
+                                                <span class="add-on">
+                                                    <i class="splashy-calendar_day"></i>
+                                                </span>
+                                                <input class="datetimepicker" type="text" id="startEventDateTime" placeholder="Start Event Date time"/>
+                                            </div>
+                                            <div class="input-prepend">
+                                                <span class="add-on">
+                                                    <i class="splashy-calendar_day"></i>
+                                                </span>
+                                                <input class="datetimepicker" type="text" id="endEventDateTime" placeholder="End Event Date time"/>
+                                            </div>
+                                            <input type="button" onclick="saveEventDateToTmp()" class="btn btn-gebo" value="Save"> 
+                                            <input type="button" onclick="" class="btn btn-danger" value="Cancel">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <div id="courseEventDateTimeDiv"></div>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -303,9 +321,6 @@ if (empty($_SESSION['username'])) {
                                                 <div class="controls">
                                                     <input type="text" id="lng" name="lng"/>
                                                 </div><br/>
-                                                <!--div class="controls">
-                                                    <input type="button" id="previewMap" class="btn" value="Preview map"/>
-                                                </div-->
                                             </div>
                                         </div>
                                     </div>
@@ -384,6 +399,7 @@ if (empty($_SESSION['username'])) {
 
             <!-- wizard functions -->
             <script src="../assets/js/gebo_wizard.js"></script>
+            <script src="../assets/js/jquery.datetimepicker.full.js"></script>
             <style type="text/css">
                 /* begin: jQuery UI Datepicker moving pixels fix */
                 table.ui-datepicker-calendar {border-collapse: separate;}
@@ -398,6 +414,7 @@ if (empty($_SESSION['username'])) {
             </style>
             <script type="text/javascript">
                                         var promotionTempState = "Save";
+                                        var saveEventDateState = "Save";
                                         var saveCourseTempState = "Save";
                                         $(document).ready(function () {
                                             $("#hideMap").hide();
@@ -458,14 +475,19 @@ if (!empty($notFound)) {
                                         course_page = {
                                             initialElement: function () {
                                                 $("html").removeClass("js");
-                                                $("#chooseDate").multiDatesPicker({
-                                                    altField: '#courseEventDate',
-                                                    numberOfMonths: [1, 4]
+                                                $(".datetimepicker").datetimepicker({
+                                                    scrollMonth: false,
+                                                    yearOffset: 543,
+                                                    format: 'd/m/Y H:i',
+                                                    theme: 'default',
+                                                    minDate: 0
                                                 });
+                                                $.datetimepicker.setLocale('th');
                                                 CKEDITOR.replace('descriptionDetail');
                                                 CKEDITOR.replace('courseDetail');
                                                 $("#tempCourseTbl").load("tmpCourseTable.php");
                                                 $("#promotionTmp").load("promotionTmp.php");
+                                                $("#courseEventDateTimeDiv").load("courseEventTmp.php");
                                             }
                                         };
                                         function addingDescHeader() {
@@ -633,7 +655,6 @@ if (!empty($notFound)) {
                                         function submitUpdateCourseProcess() {
                                             var courseCategory = $("#courseCate").val();
                                             var courseName = $("#courseName").val();
-                                            var courseEventDate = $("#courseEventDate").val();
                                             var courseStatus = $("#courseStatus").val();
                                             var headerID = $("#courseHeaderID").val();
                                             var detailOrder = $("#detailOrder").val();
@@ -641,52 +662,50 @@ if (!empty($notFound)) {
                                             var subCourseName = $("#subCourseName").val();
                                             var courseHeaderTime = $("#courseHeaderTime").val();
                                             var courseDuration = $("#courseDuration").val();
-                                            if (courseEventDate == "") {
-                                                alert("Please select Course Event Date");
-                                            } else {
-                                                $.ajax({
-                                                    url: "../../model/com.gogetrich.function/checkCourseDetailCreated.php",
-                                                    type: 'POST',
-                                                    beforeSend: function (xhr) {
-                                                        $("html").addClass("js");
-                                                    },
-                                                    success: function (data, textStatus, jqXHR) {
-                                                        if (data == 200) {
-                                                            $.ajax({
-                                                                url: "../../model/com.gogetrich.function/updateDetailHeaderAndDetail.php",
-                                                                type: 'POST',
-                                                                data: {'courseDuration': courseDuration, 'courseHeaderTime': courseHeaderTime, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
-                                                                success: function (saveHeaderData, textStatus, jqXHR) {
-                                                                    if (saveHeaderData == 200) {
-//                                                                        alert("Update course success");
-                                                                        $("#notificationDialog").modal("show");
-                                                                        $("#notiDetailDialog").html("Update course success");
-                                                                        setTimeout(function () {
-                                                                            window.location.href = "courseDetail";
-                                                                        }, 1000);
 
-                                                                    } else {
-                                                                        $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                                '<a class="close" data-dismiss="alert">×</a>' +
-                                                                                '<strong>Cannot update course !</strong> ' + saveHeaderData + '</div>');
-                                                                        setTimeout(function () {
-                                                                            $("#notificationDetail").empty();
-                                                                        }, 5000);
-                                                                    }
+                                            $.ajax({
+                                                url: "../../model/com.gogetrich.function/checkCourseDetailCreated.php",
+                                                type: 'POST',
+                                                beforeSend: function (xhr) {
+                                                    $("html").addClass("js");
+                                                },
+                                                success: function (data, textStatus, jqXHR) {
+                                                    if (data == 200) {
+                                                        $.ajax({
+                                                            url: "../../model/com.gogetrich.function/updateDetailHeaderAndDetail.php",
+                                                            type: 'POST',
+                                                            data: {'courseDuration': courseDuration, 'courseHeaderTime': courseHeaderTime, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseStatus': courseStatus},
+                                                            success: function (saveHeaderData, textStatus, jqXHR) {
+                                                                if (saveHeaderData == 200) {
+//                                                                        alert("Update course success");
+                                                                    $("#notificationDialog").modal("show");
+                                                                    $("#notiDetailDialog").html("Update course success");
+                                                                    setTimeout(function () {
+                                                                        window.location.href = "courseDetail";
+                                                                    }, 1000);
+
+                                                                } else {
+                                                                    $("#notificationDetail").html('<div class="alert alert-error">' +
+                                                                            '<a class="close" data-dismiss="alert">×</a>' +
+                                                                            '<strong>Cannot update course !</strong> ' + saveHeaderData + '</div>');
+                                                                    setTimeout(function () {
+                                                                        $("#notificationDetail").empty();
+                                                                    }, 5000);
                                                                 }
-                                                            });
-                                                        } else {
-                                                            $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Cannot update course !</strong> ' + data + '</div>');
-                                                            setTimeout(function () {
-                                                                $("#notificationDetail").empty();
-                                                            }, 5000);
-                                                        }
-                                                        $("html").removeClass("js");
+                                                            }
+                                                        });
+                                                    } else {
+                                                        $("#notificationDetail").html('<div class="alert alert-error">' +
+                                                                '<a class="close" data-dismiss="alert">×</a>' +
+                                                                '<strong>Cannot update course !</strong> ' + data + '</div>');
+                                                        setTimeout(function () {
+                                                            $("#notificationDetail").empty();
+                                                        }, 5000);
                                                     }
-                                                });
-                                            }
+                                                    $("html").removeClass("js");
+                                                }
+                                            });
+
                                         }
                                         function getCourseTmpForEdit(courseTmpID) {
                                             saveCourseTempState = "Edit";
@@ -837,6 +856,76 @@ if (!empty($notFound)) {
                                             $("#promotionName").val("");
                                             $("#promotionDateTime").val("");
                                             promotionTempState = "Save";
+                                        }
+                                        function saveEventDateToTmp() {
+                                            var startDate = $("#startEventDateTime").val();
+                                            var endDate = $("#endEventDateTime").val();
+                                            if (startDate == "" || endDate == "") {
+                                                $("#notificationDialog").modal("show");
+                                                $("#notiDetailDialog").html("Please enter Start Date or End Date of Event");
+                                                goToByScroll("#courseCate");
+                                            } else {
+                                                if (saveEventDateState == "Save") {
+                                                    $.ajax({
+                                                        url: "../../model/com.gogetrich.function/SaveEventDateToTmp.php?startDate=" + startDate + "&endDate=" + endDate,
+                                                        type: 'POST',
+                                                        beforeSend: function (xhr) {
+                                                            $("html").addClass("js");
+                                                        },
+                                                        success: function (data, textStatus, jqXHR) {
+                                                            if (data == 200) {
+                                                                $("#courseEventDateTimeDiv").load("courseEventTmp.php", function () {
+                                                                    $("html").removeClass("js");
+                                                                    $("#notificationDialog").modal("show");
+                                                                    $("#notiDetailDialog").html("Save Event date time success");
+                                                                    $("#startEventDateTime").val("");
+                                                                    $("#endEventDateTime").val("");
+                                                                    goToByScroll("#courseCate");
+                                                                });
+                                                            } else {
+                                                                $("html").removeClass("js");
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html(data);
+                                                                goToByScroll("#courseCate");
+                                                            }
+
+                                                        }
+                                                    });
+                                                    promotionTempState = "Save";
+                                                } else {
+                                                    alert("Not implement yet");
+                                                    promotionTempState = "Save";
+                                                }
+
+                                            }
+                                        }
+                                        function deleteEventDateTime(eID) {
+                                            var r = confirm("Do you want to delete this permanently !");
+                                            if (r == true) {
+                                                $.ajax({
+                                                    url: "../../model/com.gogetrich.function/DeleteEventDateTimeByID.php?eID=" + eID,
+                                                    type: 'POST',
+                                                    beforeSend: function (xhr) {
+                                                        $("html").addClass("js");
+                                                    },
+                                                    success: function (data, textStatus, jqXHR) {
+                                                        if (data == 200) {
+                                                            $("#courseEventDateTimeDiv").load("courseEventTmp.php", function () {
+                                                                $("html").removeClass("js");
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Delete promotion success");
+                                                                $("#startEventDateTime").val("");
+                                                                $("#endEventDateTime").val("");
+                                                                goToByScroll("#courseCate");
+                                                            });
+                                                        } else {
+                                                            $("html").removeClass("js");
+                                                            $("#notificationDialog").modal("show");
+                                                            $("#notiDetailDialog").html(data);
+                                                        }
+                                                    }
+                                                });
+                                            }
                                         }
 
             </script>
