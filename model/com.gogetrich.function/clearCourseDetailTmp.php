@@ -11,8 +11,9 @@ require '../../model-db-connection/config.php';
 
 $sqlDeleteCourseDetailTmp = "DELETE FROM GTRICH_COURSE_DETAIL_TMP WHERE DISTRIBUTOR_ID='" . $_SESSION['userId'] . "'";
 $sqlDeletePromotionTmp = "DELETE FROM GTRICH_PROMOTION_TMP WHERE DISTRIBUTOR_ID='" . $_SESSION['userId'] . "'";
+$sqlDeleteEventDate = "DELETE FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP WHERE EVENT_DISTRIBUTOR_ID='" . $_SESSION['userId'] . "'";
 
-if (mysql_query($sqlDeleteCourseDetailTmp) && mysql_query($sqlDeletePromotionTmp)) {
+if (mysql_query($sqlDeleteCourseDetailTmp) && mysql_query($sqlDeletePromotionTmp) && mysql_query($sqlDeleteEventDate)) {
     echo 200;
 } else {
     echo mysql_error();

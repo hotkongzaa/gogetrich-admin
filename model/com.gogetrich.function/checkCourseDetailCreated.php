@@ -13,8 +13,15 @@ $sql = "SELECT COUNT(*) AS CHE FROM GTRICH_COURSE_DETAIL_TMP WHERE DISTRIBUTOR_I
 $res = mysql_query($sql);
 $row = mysql_fetch_assoc($res);
 
-if ($row['CHE'] > 0) {
-    echo 200;
+$sqlCheckSchedule = "SELECT COUNT(*) AS counts FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP WHERE EVENT_DISTRIBUTOR_ID = '" . $_SESSION['userId'] . "'";
+$resCheckScehdule = mysql_query($sqlCheckSchedule);
+$rowCheckSchedule = mysql_fetch_assoc($resCheckScehdule);
+if ($row['CHE'] <= 0) {
+    echo 111;
+//    echo "Please add course detail before submit course";
+} else if ($rowCheckSchedule['counts'] <= 0) {
+    echo 100;
+//    echo "Please add Course Event Date before submit course";
 } else {
-    echo "Please add course detail before submit course";
+    echo 200;
 }

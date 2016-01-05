@@ -223,7 +223,7 @@ if (empty($_SESSION['username'])) {
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label">Course Event Date</label>
+                                        <label class="control-label">Course Event Date*</label>
                                         <div class="controls">
                                             <div class="input-prepend">
                                                 <span class="add-on">
@@ -247,7 +247,7 @@ if (empty($_SESSION['username'])) {
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label">Course Duration (days): </label>
+                                        <label class="control-label">Course Duration (days)* </label>
                                         <div class="controls">
                                             <input type="number" min="1" max="100" name="courseDuration" id="courseDuration" class="span10"/>
                                         </div>
@@ -272,7 +272,7 @@ if (empty($_SESSION['username'])) {
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="descHeaderID" class="control-label">Course Status:</label>
+                                        <label for="descHeaderID" class="control-label">Course Status*</label>
                                         <div class="controls">
                                             <select id="courseStatus" name="courseStatus" class="span9">
                                                 <option value="">== Select Course Status ===</option>
@@ -286,63 +286,70 @@ if (empty($_SESSION['username'])) {
                                     <legend class="hide">Course Detail&hellip;</legend>
                                     <div id="notificationDetail"></div>
                                     <div class="control-group">
-                                        <label for="descHeaderID" class="control-label">Description Header*:</label>
-                                        <div class="controls">
-                                            <select id="descHeaderID" name="descHeaderID" class="span9">
-                                                <option value="">== Please select description header == </option>
-                                                <?php
-                                                $sqlGetCate = "SELECT * "
-                                                        . "FROM GTRICH_DESCRIPTION_HEADER";
-                                                $res = mysql_query($sqlGetCate);
-                                                while ($row = mysql_fetch_array($res)) {
-                                                    ?>
-                                                    <option value="<?= $row['DESC_HEADER_ID'] ?>"><?= $row['DESC_HEADER_NAME'] ?></option>
+                                        <a href="#" id="addDetailClick" style="margin-top: 10px;" class="btn btn-default pull-left">
+                                            <i class="icon-plus"></i> <span id="iconName">Add Detail</span>
+                                        </a>                                        
+                                    </div>
+                                    <div id="formCourseCreate">
+                                        <div class="control-group">
+                                            <label for="descHeaderID" class="control-label">Description Header*:</label>
+                                            <div class="controls">
+                                                <select id="descHeaderID" name="descHeaderID" class="span9">
+                                                    <option value="">== Please select description header == </option>
                                                     <?php
-                                                }
-                                                ?>
-                                            </select><span style="margin-left: 10px;cursor: pointer;" onclick="addingDescHeader()"><i class="splashy-application_windows_add"></i></span>
+                                                    $sqlGetCate = "SELECT * "
+                                                            . "FROM GTRICH_DESCRIPTION_HEADER";
+                                                    $res = mysql_query($sqlGetCate);
+                                                    while ($row = mysql_fetch_array($res)) {
+                                                        ?>
+                                                        <option value="<?= $row['DESC_HEADER_ID'] ?>"><?= $row['DESC_HEADER_NAME'] ?></option>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </select><span style="margin-left: 10px;cursor: pointer;" onclick="addingDescHeader()"><i class="splashy-application_windows_add"></i></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label for="detailOrder" class="control-label">Detail order*:</label>
-                                        <div class="controls">
-                                            <input type="number" min="1" max="100" name="detailOrder" id="detailOrder"/>
+                                        <div class="control-group">
+                                            <label for="detailOrder" class="control-label">Detail order*:</label>
+                                            <div class="controls">
+                                                <input type="number" min="1" max="100" name="detailOrder" id="detailOrder"/>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            <label><input type="checkbox" id="useMap" value="map"/> Using Google Map API <i class="splashy-map"></i></label><br/>
-                                            <div class="control-group" id="hideMap">
-                                                <label for="lat" class="control-label">Latitude*:</label>
-                                                <div class="controls">
-                                                    <input type="text" id="lat" name="lat"/>
-                                                </div><br/>
-                                                <label for="lng" class="control-label">Longitude*:</label>
-                                                <div class="controls">
-                                                    <input type="text" id="lng" name="lng"/>
-                                                </div><br/>
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <label><input type="checkbox" id="useMap" value="map"/> Using Google Map API <i class="splashy-map"></i></label><br/>
+                                                <div class="control-group" id="hideMap">
+                                                    <label for="lat" class="control-label">Latitude*:</label>
+                                                    <div class="controls">
+                                                        <input type="text" id="lat" name="lat"/>
+                                                    </div><br/>
+                                                    <label for="lng" class="control-label">Longitude*:</label>
+                                                    <div class="controls">
+                                                        <input type="text" id="lng" name="lng"/>
+                                                    </div><br/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group" id="ifChooseMap">
+                                            <label for="descHeaderID" class="control-label">Course Detail*:</label>
+                                            <div class="controls">
+                                                <textarea name="descriptionDetail" id="descriptionDetail" class="span9"></textarea>
+                                            </div>
+                                        </div>                                    
+                                        <div class="control-group" id="ifChooseMap">
+                                            <label for="saveToTmpBtn" class="control-label"></label>
+                                            <div class="controls">
+                                                <button type="button" onclick="clearHeaderDetailField()" id="saveToTmpBtn" class="btn btn-primary pull-left">
+                                                    <i class="icon-refresh icon-white"></i> Reset
+                                                </button>&nbsp;
+                                                <button type="button" onclick="saveCourseToTmp()" style="margin-left: 10px;" id="saveToTmpBtn" class="btn btn-primary pull-left">
+                                                    <i class="icon-bullhorn icon-white"></i> Save Description
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="control-group" id="ifChooseMap">
-                                        <label for="descHeaderID" class="control-label">Course Detail*:</label>
-                                        <div class="controls">
-                                            <textarea name="descriptionDetail" id="descriptionDetail" class="span9"></textarea>
-                                        </div>
-                                    </div>                                    
-                                    <div class="control-group" id="ifChooseMap">
-                                        <label for="saveToTmpBtn" class="control-label"></label>
-                                        <div class="controls">
-                                            <button type="button" onclick="clearHeaderDetailField()" id="saveToTmpBtn" class="btn btn-primary pull-left">
-                                                <i class="icon-refresh icon-white"></i> Reset
-                                            </button>&nbsp;
-                                            <button type="button" onclick="saveCourseToTmp()" style="margin-left: 10px;" id="saveToTmpBtn" class="btn btn-primary pull-left">
-                                                <i class="icon-bullhorn icon-white"></i> Save Description
-                                            </button>
-                                        </div>
-                                    </div>
                                     <div class="control-group">
-                                        <div id="tempCourseTbl" style="margin-top: 50px;"></div>
+                                        <div id="tempCourseTbl" style="margin-top: 20px;"></div>
                                     </div>
                                     <button type="button" class="finish btn btn-primary" onclick="submitUpdateCourseProcess()">
                                         <i class="icon-ok icon-white"></i> Submit Course
@@ -417,6 +424,15 @@ if (empty($_SESSION['username'])) {
                                         var saveEventDateState = "Save";
                                         var saveCourseTempState = "Save";
                                         $(document).ready(function () {
+                                            $("#addDetailClick").click(function () {
+                                                $("#formCourseCreate").toggle("fast");
+                                                if ($("#iconName").html() == "Add Detail") {
+                                                    $("#iconName").html("Hide Detail");
+                                                } else {
+                                                    $("#iconName").html("Add Detail");
+                                                }
+
+                                            });
                                             $("#hideMap").hide();
                                             //Inital Page Element
                                             course_page.initialElement();
@@ -435,18 +451,18 @@ if (empty($_SESSION['username'])) {
                                                     CKEDITOR.instances.descriptionDetail.setData('');
                                                 }
                                             });
-                                            $("#previewMap").click(function () {
-                                                var lat = $("#lat").val();
-                                                var lng = $("#lng").val();
-                                                $("#mapUsingDialog").modal("show");
-                                            });
 <?php
 if (!empty($notFound)) {
     ?>
-                                                $("#notificationHeader").html('<div class="alert alert-error">' +
-                                                        '<a class="close" data-dismiss="alert">×</a>' +
-                                                        '<strong>Course not found !</strong> Cannot found this course</div>');
-                                                $("#courseCate, #courseName, #courseStatus, #courseDetailForm-next-0").prop("disabled", "true");
+                                                $('#courseDetailForm').stepy('step', 1);
+                                                $("#closeNoti").empty();
+                                                setTimeout(function () {
+                                                    $("#notificationDialog").modal({
+                                                        backdrop: 'static',
+                                                        keyboard: false
+                                                    });
+                                                    $("#notiDetailDialog").html("Course detail not found !, Cannot found this course <br/><br/><input type='button' class='btn btn-default' onclick=window.location.href='courseDetail' value='Back'/>");
+                                                }, 100);
     <?php
 }
 ?>
@@ -458,7 +474,6 @@ if (!empty($notFound)) {
                                             $("#subCourseName").val('<?= $rowHeader['SUB_HEADER_NAME'] ?>');
                                             $("#courseHeaderTime").val('<?= $rowHeader['HEADER_CREATE_DATE_TIME'] ?>');
                                             $("#courseDuration").val('<?= $rowHeader['HEADER_COURSE_DURATION'] ?>');
-
 
 
                                             var date = '<?= $rowHeader['HEADER_EVENT_DATE'] ?>'.split(",");
@@ -475,9 +490,9 @@ if (!empty($notFound)) {
                                         course_page = {
                                             initialElement: function () {
                                                 $("html").removeClass("js");
+                                                $("#formCourseCreate").hide();
                                                 $(".datetimepicker").datetimepicker({
                                                     scrollMonth: false,
-                                                    yearOffset: 543,
                                                     format: 'd/m/Y H:i',
                                                     theme: 'default',
                                                     minDate: 0
@@ -529,7 +544,6 @@ if (!empty($notFound)) {
                                             var lng = $("#lng").val();
                                             var courseDetail = CKEDITOR.instances.descriptionDetail.getData();
                                             var detailOrder = $("#detailOrder").val();
-//                                        var courseDetail = $("#descriptionDetail").val();
                                             if (descHeaderId == "") {
                                                 alert("Please select Description Header");
                                             } else if ($("#detailOrder").val() == "") {
@@ -557,20 +571,24 @@ if (!empty($notFound)) {
                                                     },
                                                     success: function (data, textStatus, jqXHR) {
                                                         if (data == 200) {
-                                                            $("#notificationDetail").html('<div class="alert alert-success">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Save course success !</strong> All course detail have been saved but you have to submit course to complete process</div>');
+
+                                                            $('#courseDetailForm').stepy('step', 2);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Save course success, All course detail have been saved but you have to submit course to complete process");
+                                                            }, 100);
+
                                                             clearHeaderDetailField();
                                                             $("#tempCourseTbl").load("tmpCourseTable.php", function () {
                                                                 $("html").removeClass("js");
                                                             });
-                                                            setTimeout(function () {
-                                                                $("#notificationDetail").empty();
-                                                            }, 5000);
                                                         } else {
-                                                            $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Cannot save course !</strong> ' + data + '</div>');
+
+                                                            $('#courseDetailForm').stepy('step', 2);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Cannot save course !, " + data);
+                                                            }, 100);
                                                         }
                                                     }
                                                 });
@@ -587,20 +605,24 @@ if (!empty($notFound)) {
                                                     },
                                                     success: function (data, textStatus, jqXHR) {
                                                         if (data == 200) {
-                                                            $("#notificationDetail").html('<div class="alert alert-success">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Update course success !</strong> All course detail have been updated but you have to submit course to complete process</div>');
+
+                                                            $('#courseDetailForm').stepy('step', 2);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Update course success !, All course detail have been updated but you have to submit course to complete process");
+                                                            }, 100);
+
                                                             clearHeaderDetailField();
                                                             $("#tempCourseTbl").load("tmpCourseTable.php", function () {
                                                                 $("html").removeClass("js");
                                                             });
-                                                            setTimeout(function () {
-                                                                $("#notificationDetail").empty();
-                                                            }, 5000);
                                                         } else {
-                                                            $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Cannot save course !</strong> ' + data + '</div>');
+                                                            $('#courseDetailForm').stepy('step', 2);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Cannot update course !, " + data);
+                                                            }, 100);
+
                                                         }
                                                     }
                                                 });
@@ -629,22 +651,24 @@ if (!empty($notFound)) {
                                                     },
                                                     success: function (data, textStatus, jqXHR) {
                                                         if (data == 200) {
-                                                            $("#notificationDetail").html('<div class="alert alert-success">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Delete course success !</strong> Delete course detail complete</div>');
+
+                                                            $('#courseDetailForm').stepy('step', 2);
                                                             setTimeout(function () {
-                                                                $("#notificationDetail").empty();
-                                                            }, 5000);
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Delete course success, Delete course detail complete");
+                                                            }, 100);
+
                                                             $("#tempCourseTbl").load("tmpCourseTable.php", function () {
                                                                 $("html").removeClass("js");
                                                             });
                                                         } else {
-                                                            $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Cannot save course !</strong> ' + data + '</div>');
+
+                                                            $('#courseDetailForm').stepy('step', 2);
                                                             setTimeout(function () {
-                                                                $("#notificationDetail").empty();
-                                                            }, 5000);
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Cannot delete course, " + data);
+                                                            }, 100);
+
                                                             $("html").removeClass("js");
                                                         }
                                                     }
@@ -677,7 +701,6 @@ if (!empty($notFound)) {
                                                             data: {'courseDuration': courseDuration, 'courseHeaderTime': courseHeaderTime, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseStatus': courseStatus},
                                                             success: function (saveHeaderData, textStatus, jqXHR) {
                                                                 if (saveHeaderData == 200) {
-//                                                                        alert("Update course success");
                                                                     $("#notificationDialog").modal("show");
                                                                     $("#notiDetailDialog").html("Update course success");
                                                                     setTimeout(function () {
@@ -685,22 +708,29 @@ if (!empty($notFound)) {
                                                                     }, 1000);
 
                                                                 } else {
-                                                                    $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                            '<a class="close" data-dismiss="alert">×</a>' +
-                                                                            '<strong>Cannot update course !</strong> ' + saveHeaderData + '</div>');
+                                                                    $('#courseDetailForm').stepy('step', 2);
                                                                     setTimeout(function () {
-                                                                        $("#notificationDetail").empty();
-                                                                    }, 5000);
+                                                                        $("#notificationDialog").modal("show");
+                                                                        $("#notiDetailDialog").html("Cannot update course, " + saveHeaderData);
+                                                                    }, 100);
                                                                 }
                                                             }
                                                         });
                                                     } else {
-                                                        $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                '<a class="close" data-dismiss="alert">×</a>' +
-                                                                '<strong>Cannot update course !</strong> ' + data + '</div>');
-                                                        setTimeout(function () {
-                                                            $("#notificationDetail").empty();
-                                                        }, 5000);
+                                                        if (data == 111) {
+                                                            $('#courseDetailForm').stepy('step', 2);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Cannot update course, Please add course detail before submit course");
+                                                            }, 100);
+                                                        }
+                                                        if (data == 100) {
+                                                            $('#courseDetailForm').stepy('step', 1);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Cannot update course, Please add Course Event Date before submit course");
+                                                            }, 100);
+                                                        }
                                                     }
                                                     $("html").removeClass("js");
                                                 }
@@ -939,7 +969,7 @@ if (!empty($notFound)) {
                                                             $("#courseEventDateTimeDiv").load("courseEventTmp.php", function () {
                                                                 $("html").removeClass("js");
                                                                 $("#notificationDialog").modal("show");
-                                                                $("#notiDetailDialog").html("Delete promotion success");
+                                                                $("#notiDetailDialog").html("Delete event date success");
                                                                 $("#startEventDateTime").val("");
                                                                 $("#endEventDateTime").val("");
                                                                 goToByScroll("#courseCate");
@@ -983,7 +1013,7 @@ if (!empty($notFound)) {
         </div>       
         <div class="modal hide" id="notificationDialog">
             <div class="modal-header">
-                <button class="close" data-dismiss="modal">×</button>
+                <button class="close" data-dismiss="modal" id="closeNoti">×</button>
                 <h3>System notification</h3>
             </div>
             <div class="modal-body">

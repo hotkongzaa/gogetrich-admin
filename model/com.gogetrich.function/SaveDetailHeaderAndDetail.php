@@ -12,7 +12,6 @@ require '../../model-db-connection/config.php';
 
 $courseCategory = $_POST['courseCategory'];
 $courseName = $_POST['courseName'];
-$courseEventDate = $_POST['courseEventDate'];
 $courseStatus = $_POST['courseStatus'];
 $headaerID = md5(date("h:i:sa"));
 $courseAddiDetail = $_POST['courseAddiDetail'];
@@ -21,7 +20,7 @@ $courseDuration = $_POST['courseDuration'];
 
 $sqlSaveHeader = "INSERT INTO GTRICH_COURSE_HEADER (HEADER_ID,HEADER_NAME,SUB_HEADER_NAME,HEADER_EVENT_DATE,HEADER_DETAIL,HEADER_CREATE_DATE_TIME,HEADER_COURSE_STATUS,HEADER_COURSE_DURATION,REF_CATE_ID) "
         . "VALUES "
-        . "('" . $headaerID . "','" . $courseName . "','" . $subCourseName . "','" . $courseEventDate . "','" . $courseAddiDetail . "',NOW(),'" . $courseStatus . "','" . $courseDuration . "','" . $courseCategory . "')";
+        . "('" . $headaerID . "','" . $courseName . "','" . $subCourseName . "','','" . $courseAddiDetail . "',NOW(),'" . $courseStatus . "','" . $courseDuration . "','" . $courseCategory . "')";
 $saveResHeader = mysql_query($sqlSaveHeader);
 
 if ($saveResHeader) {
@@ -49,6 +48,22 @@ if ($saveResHeader) {
         if ($savePromotion) {
             $delPromotionTmp = "DELETE FROM GTRICH_PROMOTION_TMP WHERE PRO_ID = '" . $rowPromotionTmp['PRO_ID'] . "'";
             mysql_query($delPromotionTmp);
+        }
+    }
+
+    //Manage course Envent date time
+    $sqlSelectEventDateTmp = "SELECT * FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP WHERE EVENT_DISTRIBUTOR_ID = '" . $_SESSION['userId'] . "'";
+    $resEventDateTmp = mysql_query($sqlSelectEventDateTmp);
+    while ($rowEventDateTmp = mysql_fetch_array($resEventDateTmp)) {
+
+        $inserIntoCourseEvent = "INSERT INTO GTRICH_COURSE_EVENT_DATE_TIME (EVENT_ID,START_EVENT_DATE_TIME,END_EVENT_DATE_TIME,EVENT_CREATED_DATE_TIME,REF_COURSE_HEADER_ID)"
+                . " VALUES "
+                . "('" . $rowEventDateTmp['EVENT_ID'] . "','" . $rowEventDateTmp['START_EVENT_DATE_TIME'] . "','" . $rowEventDateTmp['END_EVENT_DATE_TIME'] . "','" . $rowEventDateTmp['EVENT_CREATED_DATE_TIME'] . "','" . $headaerID . "')";
+
+        $saveEventDate = mysql_query($inserIntoCourseEvent);
+        if ($saveEventDate) {
+            $delEventDateTmp = "DELETE FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP WHERE EVENT_ID = '" . $rowEventDateTmp['EVENT_ID'] . "'";
+            mysql_query($delEventDateTmp);
         }
     }
     echo 200;

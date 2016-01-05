@@ -46,6 +46,7 @@ if (empty($_SESSION['username'])) {
 
         <!-- wizard -->
         <link rel="stylesheet" href="../assets/lib/stepy/css/jquery.stepy.css" />
+        <link rel="stylesheet" href="../assets/css/jquery.datetimepicker.css" />
         <!-- Favicon -->
         <link rel="shortcut icon" href="favicon.ico" />
 
@@ -129,7 +130,7 @@ if (empty($_SESSION['username'])) {
                         </div>
                     </div>
                 </div>                
-                <div class="modal hide fade" id="descHeaderModal">
+                <div class="modal hide" id="descHeaderModal">
                     <div class="modal-header">
                         <button class="close" data-dismiss="modal">×</button>
                         <h3>Create Description Header</h3>
@@ -149,7 +150,7 @@ if (empty($_SESSION['username'])) {
                         </form>
                     </div>
                 </div>
-                <div class="modal hide fade" id="mapUsingDialog">
+                <div class="modal hide" id="mapUsingDialog">
                     <div class="modal-header">
                         <button class="close" data-dismiss="modal">×</button>
                         <h3>Google Map Preview</h3>
@@ -228,8 +229,25 @@ if (empty($_SESSION['username'])) {
                                     <div class="control-group">
                                         <label class="control-label">Course Event Date</label>
                                         <div class="controls">
-                                            <div id="chooseDate"></div><br/>
-                                            <input type="hidden" name="courseEventDate" id="courseEventDate" class="span10"/>
+                                            <div class="input-prepend">
+                                                <span class="add-on">
+                                                    <i class="splashy-calendar_day"></i>
+                                                </span>
+                                                <input class="datetimepicker" type="text" id="startEventDateTime" placeholder="Start Event Date time"/>
+                                            </div>
+                                            <div class="input-prepend">
+                                                <span class="add-on">
+                                                    <i class="splashy-calendar_day"></i>
+                                                </span>
+                                                <input class="datetimepicker" type="text" id="endEventDateTime" placeholder="End Event Date time"/>
+                                            </div>
+                                            <input type="button" onclick="saveEventDateToTmp()" class="btn btn-gebo" value="Save"> 
+                                            <input type="button" onclick="cancelEventDateToTmp()" class="btn btn-danger" value="Cancel">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <div id="courseEventDateTimeDiv"></div>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -383,7 +401,7 @@ if (empty($_SESSION['username'])) {
             <script src="../assets/ckeditor/ckeditor.js"></script>
             <!-- wizard -->
             <script src="../assets/lib/stepy/js/jquery.stepy.min.js"></script>
-
+            <script src="../assets/js/jquery.datetimepicker.full.js"></script>
             <!-- wizard functions -->
             <script src="../assets/js/gebo_wizard.js"></script>
             <style type="text/css">
@@ -406,6 +424,7 @@ if (empty($_SESSION['username'])) {
             </style>
             <script type="text/javascript">
                                         var promotionTempState = "Save";
+                                        var saveEventDateState = "Save";
                                         var saveCourseTempState = "Save";
                                         $(document).ready(function () {
                                             $("#hideMap").hide();
@@ -436,14 +455,17 @@ if (empty($_SESSION['username'])) {
                                         course_page = {
                                             initialElement: function () {
                                                 $("html").removeClass("js");
-                                                $("#chooseDate").multiDatesPicker({
-                                                    altField: '#courseEventDate',
-                                                    numberOfMonths: [1, 4]
+                                                $(".datetimepicker").datetimepicker({
+                                                    scrollMonth: false,
+                                                    format: 'd/m/Y H:i',
+                                                    theme: 'default',
+                                                    minDate: 0
                                                 });
                                                 CKEDITOR.replace('descriptionDetail');
                                                 CKEDITOR.replace('courseDetail');
                                                 $("#tempCourseTbl").load("tmpCourseTable.php");
                                                 $("#promotionTmp").load("promotionTmp.php");
+                                                $("#courseEventDateTimeDiv").load("courseEventTmp.php");
                                             }
                                         };
                                         function addingDescHeader() {
@@ -611,52 +633,52 @@ if (empty($_SESSION['username'])) {
                                         function submitCreateCourseProcess() {
                                             var courseCategory = $("#courseCate").val();
                                             var courseName = $("#courseName").val();
-                                            var courseEventDate = $("#courseEventDate").val();
                                             var courseStatus = $("#courseStatus").val();
                                             var courseAddiDetail = CKEDITOR.instances.courseDetail.getData();
                                             var subCourseName = $("#subCourseName").val();
                                             var courseDuration = $("#courseDuration").val();
-                                            if (courseEventDate == "") {
-                                                alert("Please select Course Event Date");
-                                            } else {
-                                                $.ajax({
-                                                    url: "../../model/com.gogetrich.function/checkCourseDetailCreated.php",
-                                                    type: 'POST',
-                                                    beforeSend: function (xhr) {
-                                                        $("html").addClass("js");
-                                                    },
-                                                    success: function (data, textStatus, jqXHR) {
-                                                        if (data == 200) {
-                                                            $.ajax({
-                                                                url: "../../model/com.gogetrich.function/SaveDetailHeaderAndDetail.php",
-                                                                type: 'POST',
-                                                                data: {'courseDuration': courseDuration, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'courseCategory': courseCategory, 'courseName': courseName, 'courseEventDate': courseEventDate, 'courseStatus': courseStatus},
-                                                                success: function (saveHeaderData, textStatus, jqXHR) {
-                                                                    if (saveHeaderData == 200) {
-                                                                        alert("Save course success");
+
+                                            $.ajax({
+                                                url: "../../model/com.gogetrich.function/checkCourseDetailCreated.php",
+                                                type: 'POST',
+                                                beforeSend: function (xhr) {
+                                                    $("html").addClass("js");
+                                                },
+                                                success: function (data, textStatus, jqXHR) {
+                                                    if (data == 200) {
+                                                        $.ajax({
+                                                            url: "../../model/com.gogetrich.function/SaveDetailHeaderAndDetail.php",
+                                                            type: 'POST',
+                                                            data: {'courseDuration': courseDuration, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'courseCategory': courseCategory, 'courseName': courseName, 'courseStatus': courseStatus},
+                                                            success: function (saveHeaderData, textStatus, jqXHR) {
+                                                                if (saveHeaderData == 200) {
+                                                                    //alert("Save course success");
+                                                                    $("#notificationDialog").modal("show");
+                                                                    $("#notiDetailDialog").html("Save course success");
+                                                                    setTimeout(function () {
                                                                         window.location.href = "courseDetail";
-                                                                    } else {
-                                                                        $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                                '<a class="close" data-dismiss="alert">×</a>' +
-                                                                                '<strong>Cannot sumit course !</strong> ' + saveHeaderData + '</div>');
-                                                                        setTimeout(function () {
-                                                                            $("#notificationDetail").empty();
-                                                                        }, 5000);
-                                                                    }
+                                                                    }, 1000);
+                                                                } else {
+                                                                    $("#notificationDetail").html('<div class="alert alert-error">' +
+                                                                            '<a class="close" data-dismiss="alert">×</a>' +
+                                                                            '<strong>Cannot sumit course !</strong> ' + saveHeaderData + '</div>');
+                                                                    setTimeout(function () {
+                                                                        $("#notificationDetail").empty();
+                                                                    }, 5000);
                                                                 }
-                                                            });
-                                                        } else {
-                                                            $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Cannot sumit course !</strong> ' + data + '</div>');
-                                                            setTimeout(function () {
-                                                                $("#notificationDetail").empty();
-                                                            }, 5000);
-                                                        }
-                                                        $("html").removeClass("js");
+                                                            }
+                                                        });
+                                                    } else {
+                                                        $("#notificationDetail").html('<div class="alert alert-error">' +
+                                                                '<a class="close" data-dismiss="alert">×</a>' +
+                                                                '<strong>Cannot sumit course !</strong> ' + data + '</div>');
+                                                        setTimeout(function () {
+                                                            $("#notificationDetail").empty();
+                                                        }, 5000);
                                                     }
-                                                });
-                                            }
+                                                    $("html").removeClass("js");
+                                                }
+                                            });
 
                                         }
                                         function getCourseTmpForEdit(courseTmpID) {
@@ -810,10 +832,131 @@ if (empty($_SESSION['username'])) {
                                             $("#promotionDateTime").val("");
                                             promotionTempState = "Save";
                                         }
+                                        function saveEventDateToTmp() {
+                                            var startDate = $("#startEventDateTime").val();
+                                            var endDate = $("#endEventDateTime").val();
+                                            if (startDate == "" || endDate == "") {
+                                                $("#notificationDialog").modal("show");
+                                                $("#notiDetailDialog").html("Please enter Start Date or End Date of Event");
+                                                goToByScroll("#courseCate");
+                                            } else {
+                                                if (saveEventDateState == "Save") {
+                                                    $.ajax({
+                                                        url: "../../model/com.gogetrich.function/SaveEventDateToTmp.php?startDate=" + startDate + "&endDate=" + endDate,
+                                                        type: 'POST',
+                                                        beforeSend: function (xhr) {
+                                                            $("html").addClass("js");
+                                                        },
+                                                        success: function (data, textStatus, jqXHR) {
+                                                            if (data == 200) {
+                                                                $("#courseEventDateTimeDiv").load("courseEventTmp.php", function () {
+                                                                    $("html").removeClass("js");
+                                                                    $("#notificationDialog").modal("show");
+                                                                    $("#notiDetailDialog").html("Save Event date time success");
+                                                                    $("#startEventDateTime").val("");
+                                                                    $("#endEventDateTime").val("");
+                                                                    goToByScroll("#courseCate");
+                                                                });
+                                                            } else {
+                                                                $("html").removeClass("js");
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html(data);
+                                                                goToByScroll("#courseCate");
+                                                            }
+
+                                                        }
+                                                    });
+                                                    promotionTempState = "Save";
+                                                } else {
+                                                    var eID = $("#eventDateTimeID").val();
+                                                    var eDate = $("#eventDateTimeDate").val();
+                                                    $.ajax({
+                                                        url: "../../model/com.gogetrich.function/UpdateEventDateTimeTmp.php?startDate=" + startDate + "&endDate=" + endDate + "&eID=" + eID + "&eDate=" + eDate,
+                                                        type: 'POST',
+                                                        beforeSend: function (xhr) {
+                                                            $("html").addClass("js");
+                                                        },
+                                                        success: function (data, textStatus, jqXHR) {
+                                                            if (data == 200) {
+                                                                $("#courseEventDateTimeDiv").load("courseEventTmp.php", function () {
+                                                                    $("html").removeClass("js");
+                                                                    $("#notificationDialog").modal("show");
+                                                                    $("#notiDetailDialog").html("Update Event date time success");
+                                                                    $("#startEventDateTime").val("");
+                                                                    $("#endEventDateTime").val("");
+                                                                    goToByScroll("#courseCate");
+                                                                });
+                                                            } else {
+                                                                $("html").removeClass("js");
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html(data);
+                                                                goToByScroll("#courseCate");
+                                                            }
+
+                                                        }
+                                                    });
+                                                    promotionTempState = "Save";
+                                                }
+
+                                            }
+                                        }
+                                        function deleteEventDateTime(eID) {
+                                            var r = confirm("Do you want to delete this permanently !");
+                                            if (r == true) {
+                                                $.ajax({
+                                                    url: "../../model/com.gogetrich.function/DeleteEventDateTimeByID.php?eID=" + eID,
+                                                    type: 'POST',
+                                                    beforeSend: function (xhr) {
+                                                        $("html").addClass("js");
+                                                    },
+                                                    success: function (data, textStatus, jqXHR) {
+                                                        if (data == 200) {
+                                                            $("#courseEventDateTimeDiv").load("courseEventTmp.php", function () {
+                                                                $("html").removeClass("js");
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Delete event date success");
+                                                                $("#startEventDateTime").val("");
+                                                                $("#endEventDateTime").val("");
+                                                                goToByScroll("#courseCate");
+                                                            });
+                                                        } else {
+                                                            $("html").removeClass("js");
+                                                            $("#notificationDialog").modal("show");
+                                                            $("#notiDetailDialog").html(data);
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                        function getEventDateByID(eID) {
+                                            $.ajax({
+                                                url: "../../model/com.gogetrich.function/getEventDateTimeByID.php?eID=" + eID,
+                                                type: 'POST',
+                                                beforeSend: function (xhr) {
+                                                    $("html").addClass("js");
+                                                },
+                                                success: function (data, textStatus, jqXHR) {
+                                                    var json = $.parseJSON(data);
+                                                    $("#startEventDateTime").val(json.START_EVENT_DATE_TIME);
+                                                    $("#endEventDateTime").val(json.END_EVENT_DATE_TIME);
+                                                    $("#eventDateTimeID").val(json.EVENT_ID);
+                                                    $("#eventDateTimeDate").val(json.EVENT_CREATED_DATE_TIME);
+                                                    $("html").removeClass("js");
+                                                }
+                                            });
+                                            saveEventDateState = "Edit";
+                                        }
+                                        function cancelEventDateToTmp() {
+                                            $("#startEventDateTime").val("");
+                                            $("#endEventDateTime").val("");
+                                            $("#eventDateTimeID").val("");
+                                            $("#eventDateTimeDate").val("");
+                                            saveEventDateState = "Save";
+                                        }
             </script>
 
         </div>
-        <div class="modal hide fade" id="notificationDialog">
+        <div class="modal hide" id="notificationDialog">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">×</button>
                 <h3>System notification</h3>
@@ -825,5 +968,7 @@ if (empty($_SESSION['username'])) {
                 </div>
             </div>
         </div>
+        <input type="hidden" id="eventDateTimeID"/>
+        <input type="hidden" id="eventDateTimeDate"/>
     </body>
 </html>
