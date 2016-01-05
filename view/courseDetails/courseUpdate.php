@@ -136,7 +136,7 @@ if (empty($_SESSION['username'])) {
                         </div>
                     </div>
                 </div>                
-                <div class="modal hide fade" id="descHeaderModal">
+                <div class="modal hide" id="descHeaderModal">
                     <div class="modal-header">
                         <button class="close" data-dismiss="modal">×</button>
                         <h3>Create Description Header</h3>
@@ -160,7 +160,7 @@ if (empty($_SESSION['username'])) {
 
             <!-- main content -->
             <div id="contentwrapper">
-                <div class="main_content" style="margin-left: 0px !important; height:700px !important;">
+                <div class="main_content" style="margin-left: 0px !important;">
                     <nav>
                         <div id="jCrumbs" class="breadCrumb module">
                             <ul>
@@ -238,7 +238,7 @@ if (empty($_SESSION['username'])) {
                                                 <input class="datetimepicker" type="text" id="endEventDateTime" placeholder="End Event Date time"/>
                                             </div>
                                             <input type="button" onclick="saveEventDateToTmp()" class="btn btn-gebo" value="Save"> 
-                                            <input type="button" onclick="" class="btn btn-danger" value="Cancel">
+                                            <input type="button" onclick="cancelEventDateToTmp()" class="btn btn-danger" value="Cancel">
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -262,7 +262,7 @@ if (empty($_SESSION['username'])) {
                                     <div class="control-group">
                                         <label for="promotionName" class="control-label">Promotion:</label>
                                         <div class="controls">
-                                            <input type="text" name="promotionName" id="promotionName" class="span10"/> 
+                                            <input type="text" name="promotionName" placeholder="Promotion Name" id="promotionName" class="span10"/> 
                                             <input type="button" onclick="savePromotion()" class="btn btn-gebo" value="Save"> <input type="button" onclick="clearPromotion()" class="btn btn-danger" value="Cancel">
                                             <br/><br/>
                                             <span class="alert-danger">*Cannot create promotion over 5 rows</span>
@@ -893,7 +893,33 @@ if (!empty($notFound)) {
                                                     });
                                                     promotionTempState = "Save";
                                                 } else {
-                                                    alert("Not implement yet");
+                                                    var eID = $("#eventDateTimeID").val();
+                                                    var eDate = $("#eventDateTimeDate").val();
+                                                    $.ajax({
+                                                        url: "../../model/com.gogetrich.function/UpdateEventDateTimeTmp.php?startDate=" + startDate + "&endDate=" + endDate + "&eID=" + eID + "&eDate=" + eDate,
+                                                        type: 'POST',
+                                                        beforeSend: function (xhr) {
+                                                            $("html").addClass("js");
+                                                        },
+                                                        success: function (data, textStatus, jqXHR) {
+                                                            if (data == 200) {
+                                                                $("#courseEventDateTimeDiv").load("courseEventTmp.php", function () {
+                                                                    $("html").removeClass("js");
+                                                                    $("#notificationDialog").modal("show");
+                                                                    $("#notiDetailDialog").html("Update Event date time success");
+                                                                    $("#startEventDateTime").val("");
+                                                                    $("#endEventDateTime").val("");
+                                                                    goToByScroll("#courseCate");
+                                                                });
+                                                            } else {
+                                                                $("html").removeClass("js");
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html(data);
+                                                                goToByScroll("#courseCate");
+                                                            }
+
+                                                        }
+                                                    });
                                                     promotionTempState = "Save";
                                                 }
 
@@ -927,11 +953,35 @@ if (!empty($notFound)) {
                                                 });
                                             }
                                         }
+                                        function getEventDateByID(eID) {
+                                            $.ajax({
+                                                url: "../../model/com.gogetrich.function/getEventDateTimeByID.php?eID=" + eID,
+                                                type: 'POST',
+                                                beforeSend: function (xhr) {
+                                                    $("html").addClass("js");
+                                                },
+                                                success: function (data, textStatus, jqXHR) {
+                                                    var json = $.parseJSON(data);
+                                                    $("#startEventDateTime").val(json.START_EVENT_DATE_TIME);
+                                                    $("#endEventDateTime").val(json.END_EVENT_DATE_TIME);
+                                                    $("#eventDateTimeID").val(json.EVENT_ID);
+                                                    $("#eventDateTimeDate").val(json.EVENT_CREATED_DATE_TIME);
+                                                    $("html").removeClass("js");
+                                                }
+                                            });
+                                            saveEventDateState = "Edit";
+                                        }
+                                        function cancelEventDateToTmp() {
+                                            $("#startEventDateTime").val("");
+                                            $("#endEventDateTime").val("");
+                                            $("#eventDateTimeID").val("");
+                                            $("#eventDateTimeDate").val("");
+                                            saveEventDateState = "Save";
+                                        }
 
             </script>
-
-        </div>
-        <div class="modal hide fade" id="notificationDialog">
+        </div>       
+        <div class="modal hide" id="notificationDialog">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">×</button>
                 <h3>System notification</h3>
@@ -943,5 +993,8 @@ if (!empty($notFound)) {
                 </div>
             </div>
         </div>
+
+        <input type="hidden" id="eventDateTimeID"/>
+        <input type="hidden" id="eventDateTimeDate"/>
     </body>
 </html>

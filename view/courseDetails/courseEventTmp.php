@@ -29,7 +29,7 @@ require '../../model-db-connection/config.php';
                     <td><?= $row['END_EVENT_DATE_TIME'] ?></td>
                     <td><?= $row['EVENT_CREATED_DATE_TIME'] ?></td>
                     <td style="text-align: center">                        
-                        <a href="#" class="btn btn-small" title="Edit" >
+                        <a href="#" class="btn btn-small" title="Edit" onclick="getEventDateByID('<?= $row['EVENT_ID'] ?>')" >
                             <i class="icon-adt_atach"></i> Edit
                         </a>
                         <a href="#" class="btn btn-small" title="Delete" onclick="deleteEventDateTime('<?= $row['EVENT_ID'] ?>')">

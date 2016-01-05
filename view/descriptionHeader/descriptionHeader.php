@@ -93,7 +93,7 @@ if (empty($_SESSION['username'])) {
                                                     <a href="form_elements.html">View All Users</a>
                                                 </li>
                                                 <li>
-                                                    <a href="form_elements.html">View User Enroll</a>
+                                                    <a href="../dashboard">View User Enroll</a>
                                                 </li>
                                             </ul>
                                         </li>
