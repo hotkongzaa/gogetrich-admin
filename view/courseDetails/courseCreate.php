@@ -290,62 +290,69 @@ if (empty($_SESSION['username'])) {
                                     <legend class="hide">Course Detail&hellip;</legend>
                                     <div id="notificationDetail"></div>
                                     <div class="control-group">
-                                        <label for="descHeaderID" class="control-label">Description Header*:</label>
-                                        <div class="controls">
-                                            <select id="descHeaderID" name="descHeaderID" class="span9">
-                                                <option value="">== Please select description header == </option>
-                                                <?php
-                                                $sqlGetCate = "SELECT * "
-                                                        . "FROM GTRICH_DESCRIPTION_HEADER";
-                                                $res = mysql_query($sqlGetCate);
-                                                while ($row = mysql_fetch_array($res)) {
-                                                    ?>
-                                                    <option value="<?= $row['DESC_HEADER_ID'] ?>"><?= $row['DESC_HEADER_NAME'] ?></option>
+                                        <a href="#" id="addDetailClick" style="margin-top: 10px;" class="btn btn-default pull-left">
+                                            <i class="icon-plus" id="iconIcon"></i> <span id="iconName">Add Detail</span>
+                                        </a>                                        
+                                    </div>
+                                    <div id="formCourseCreate">
+                                        <div class="control-group">
+                                            <label for="descHeaderID" class="control-label">Description Header*:</label>
+                                            <div class="controls">
+                                                <select id="descHeaderID" name="descHeaderID" class="span9">
+                                                    <option value="">== Please select description header == </option>
                                                     <?php
-                                                }
-                                                ?>
-                                            </select><span style="margin-left: 10px;cursor: pointer;" onclick="addingDescHeader()"><i class="splashy-application_windows_add"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label for="detailOrder" class="control-label">Detail order:</label>
-                                        <div class="controls">
-                                            <input type="number" min="1" max="100" name="detailOrder" id="detailOrder"/>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            <label><input type="checkbox" id="useMap" value="map"/> Using Google Map API <i class="splashy-map"></i></label><br/>
-                                            <div class="control-group" id="hideMap">
-                                                <label for="lat" class="control-label">Latitude*:</label>
-                                                <div class="controls">
-                                                    <input type="text" id="lat" name="lat"/>
-                                                </div><br/>
-                                                <label for="lng" class="control-label">Longitude*:</label>
-                                                <div class="controls">
-                                                    <input type="text" id="lng" name="lng"/>
-                                                </div><br/>
-                                                <!--div class="controls">
-                                                    <input type="button" id="previewMap" class="btn" value="Preview map"/>
-                                                </div-->
+                                                    $sqlGetCate = "SELECT * "
+                                                            . "FROM GTRICH_DESCRIPTION_HEADER";
+                                                    $res = mysql_query($sqlGetCate);
+                                                    while ($row = mysql_fetch_array($res)) {
+                                                        ?>
+                                                        <option value="<?= $row['DESC_HEADER_ID'] ?>"><?= $row['DESC_HEADER_NAME'] ?></option>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </select><span style="margin-left: 10px;cursor: pointer;" onclick="addingDescHeader()"><i class="splashy-application_windows_add"></i></span>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="control-group" id="ifChooseMap">
-                                        <label for="descHeaderID" class="control-label">Course Detail*:</label>
-                                        <div class="controls">
-                                            <textarea name="descriptionDetail" id="descriptionDetail" class="span9"></textarea>
+                                        <div class="control-group">
+                                            <label for="detailOrder" class="control-label">Detail order:</label>
+                                            <div class="controls">
+                                                <input type="number" min="1" max="100" name="detailOrder" id="detailOrder"/>
+                                            </div>
                                         </div>
-                                    </div>                                    
-                                    <div class="control-group" id="ifChooseMap">
-                                        <label for="saveToTmpBtn" class="control-label"></label>
-                                        <div class="controls">
-                                            <button type="button" onclick="clearHeaderDetailField()" id="saveToTmpBtn" class="btn btn-primary pull-left">
-                                                <i class="icon-refresh icon-white"></i> Reset
-                                            </button>&nbsp;
-                                            <button type="button" onclick="saveCourseToTmp()" style="margin-left: 10px;" id="saveToTmpBtn" class="btn btn-primary pull-left">
-                                                <i class="icon-bullhorn icon-white"></i> Save Description
-                                            </button>
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <label><input type="checkbox" id="useMap" value="map"/> Using Google Map API <i class="splashy-map"></i></label><br/>
+                                                <div class="control-group" id="hideMap">
+                                                    <label for="lat" class="control-label">Latitude*:</label>
+                                                    <div class="controls">
+                                                        <input type="text" id="lat" name="lat"/>
+                                                    </div><br/>
+                                                    <label for="lng" class="control-label">Longitude*:</label>
+                                                    <div class="controls">
+                                                        <input type="text" id="lng" name="lng"/>
+                                                    </div><br/>
+                                                    <!--div class="controls">
+                                                        <input type="button" id="previewMap" class="btn" value="Preview map"/>
+                                                    </div-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group" id="ifChooseMap">
+                                            <label for="descHeaderID" class="control-label">Course Detail*:</label>
+                                            <div class="controls">
+                                                <textarea name="descriptionDetail" id="descriptionDetail" class="span9"></textarea>
+                                            </div>
+                                        </div>                                    
+                                        <div class="control-group" id="ifChooseMap">
+                                            <label for="saveToTmpBtn" class="control-label"></label>
+                                            <div class="controls">
+                                                <button type="button" onclick="clearHeaderDetailField()" id="saveToTmpBtn" class="btn btn-primary pull-left">
+                                                    <i class="icon-refresh icon-white"></i> Reset
+                                                </button>&nbsp;
+                                                <button type="button" onclick="saveCourseToTmp()" style="margin-left: 10px;" id="saveToTmpBtn" class="btn btn-primary pull-left">
+                                                    <i class="icon-bullhorn icon-white"></i> Save Description
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -427,6 +434,15 @@ if (empty($_SESSION['username'])) {
                                         var saveEventDateState = "Save";
                                         var saveCourseTempState = "Save";
                                         $(document).ready(function () {
+                                            $("#addDetailClick").click(function () {
+                                                $("#formCourseCreate").toggle("fast");
+                                                if ($("#iconName").html() == "Add Detail") {
+                                                    $("#iconName").html("Hide Detail");
+                                                } else {
+                                                    $("#iconName").html("Add Detail");
+                                                }
+
+                                            });
                                             $("#hideMap").hide();
                                             //Inital Page Element
                                             course_page.initialElement();
@@ -455,6 +471,7 @@ if (empty($_SESSION['username'])) {
                                         course_page = {
                                             initialElement: function () {
                                                 $("html").removeClass("js");
+                                                $("#formCourseCreate").hide();
                                                 $(".datetimepicker").datetimepicker({
                                                     scrollMonth: false,
                                                     format: 'd/m/Y H:i',
@@ -535,20 +552,23 @@ if (empty($_SESSION['username'])) {
                                                     },
                                                     success: function (data, textStatus, jqXHR) {
                                                         if (data == 200) {
-                                                            $("#notificationDetail").html('<div class="alert alert-success">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Save course success !</strong> All course detail have been saved but you have to submit course to complete process</div>');
+
+                                                            $('#courseDetailForm').stepy('step', 2);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Save course success, All course detail have been saved but you have to submit course to complete process");
+                                                            }, 100);
+
                                                             clearHeaderDetailField();
                                                             $("#tempCourseTbl").load("tmpCourseTable.php", function () {
                                                                 $("html").removeClass("js");
                                                             });
-                                                            setTimeout(function () {
-                                                                $("#notificationDetail").empty();
-                                                            }, 5000);
                                                         } else {
-                                                            $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Cannot save course !</strong> ' + data + '</div>');
+                                                            $('#courseDetailForm').stepy('step', 2);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Cannot save course !, " + data);
+                                                            }, 100);
                                                         }
                                                     }
                                                 });
@@ -565,20 +585,24 @@ if (empty($_SESSION['username'])) {
                                                     },
                                                     success: function (data, textStatus, jqXHR) {
                                                         if (data == 200) {
-                                                            $("#notificationDetail").html('<div class="alert alert-success">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Update course success !</strong> All course detail have been updated but you have to submit course to complete process</div>');
+
+                                                            $('#courseDetailForm').stepy('step', 2);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Update course success !, All course detail have been updated but you have to submit course to complete process");
+                                                            }, 100);
+
                                                             clearHeaderDetailField();
                                                             $("#tempCourseTbl").load("tmpCourseTable.php", function () {
                                                                 $("html").removeClass("js");
                                                             });
-                                                            setTimeout(function () {
-                                                                $("#notificationDetail").empty();
-                                                            }, 5000);
                                                         } else {
-                                                            $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Cannot save course !</strong> ' + data + '</div>');
+                                                            $('#courseDetailForm').stepy('step', 2);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Canmnot update course !, " + data);
+                                                            }, 100);
+
                                                         }
                                                     }
                                                 });
@@ -607,22 +631,24 @@ if (empty($_SESSION['username'])) {
                                                     },
                                                     success: function (data, textStatus, jqXHR) {
                                                         if (data == 200) {
-                                                            $("#notificationDetail").html('<div class="alert alert-success">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Delete course success !</strong> Delete course detail complete</div>');
+
+                                                            $('#courseDetailForm').stepy('step', 2);
                                                             setTimeout(function () {
-                                                                $("#notificationDetail").empty();
-                                                            }, 5000);
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Delete course success !, Delete course detail complete");
+                                                            }, 100);
+
                                                             $("#tempCourseTbl").load("tmpCourseTable.php", function () {
                                                                 $("html").removeClass("js");
                                                             });
                                                         } else {
-                                                            $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                    '<a class="close" data-dismiss="alert">×</a>' +
-                                                                    '<strong>Cannot save course !</strong> ' + data + '</div>');
+
+                                                            $('#courseDetailForm').stepy('step', 2);
                                                             setTimeout(function () {
-                                                                $("#notificationDetail").empty();
-                                                            }, 5000);
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Cannot delete course !, " + data);
+                                                            }, 100);
+
                                                             $("html").removeClass("js");
                                                         }
                                                     }
@@ -659,22 +685,29 @@ if (empty($_SESSION['username'])) {
                                                                         window.location.href = "courseDetail";
                                                                     }, 1000);
                                                                 } else {
-                                                                    $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                            '<a class="close" data-dismiss="alert">×</a>' +
-                                                                            '<strong>Cannot sumit course !</strong> ' + saveHeaderData + '</div>');
+                                                                    $('#courseDetailForm').stepy('step', 2);
                                                                     setTimeout(function () {
-                                                                        $("#notificationDetail").empty();
-                                                                    }, 5000);
+                                                                        $("#notificationDialog").modal("show");
+                                                                        $("#notiDetailDialog").html("Cannot update course, " + saveHeaderData);
+                                                                    }, 100);
                                                                 }
                                                             }
                                                         });
                                                     } else {
-                                                        $("#notificationDetail").html('<div class="alert alert-error">' +
-                                                                '<a class="close" data-dismiss="alert">×</a>' +
-                                                                '<strong>Cannot sumit course !</strong> ' + data + '</div>');
-                                                        setTimeout(function () {
-                                                            $("#notificationDetail").empty();
-                                                        }, 5000);
+                                                        if (data == 111) {
+                                                            $('#courseDetailForm').stepy('step', 2);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Cannot save course, Please add course detail before submit course");
+                                                            }, 100);
+                                                        }
+                                                        if (data == 100) {
+                                                            $('#courseDetailForm').stepy('step', 1);
+                                                            setTimeout(function () {
+                                                                $("#notificationDialog").modal("show");
+                                                                $("#notiDetailDialog").html("Cannot save course, Please add Course Event Date before submit course");
+                                                            }, 100);
+                                                        }
                                                     }
                                                     $("html").removeClass("js");
                                                 }

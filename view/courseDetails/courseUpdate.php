@@ -427,7 +427,7 @@ if (empty($_SESSION['username'])) {
                                             $("#addDetailClick").click(function () {
                                                 $("#formCourseCreate").toggle("fast");
                                                 if ($("#iconName").html() == "Add Detail") {
-                                                    $("#iconName").html("Hide Detail");
+                                                    $("#iconName").html("Hide Detail");                                                   
                                                 } else {
                                                     $("#iconName").html("Add Detail");
                                                 }
