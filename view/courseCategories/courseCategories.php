@@ -106,9 +106,9 @@ if (empty($_SESSION['username'])) {
                                                 <li class="dropdown">
                                                     <a href="#"><i class="icon-calendar"></i> Course Schedule <b class="caret-right"></b></a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="courseCategories/courseCategories">Course Categories</a></li>
-                                                        <li><a href="descriptionHeader/descriptionHeader">Course Description Header</a></li>   
-                                                        <li><a href="courseDetails/courseDetail">Course Detail</a></li>                                                       
+                                                        <li><a href="courseCategories">Course Categories</a></li>
+                                                        <li><a href="../descriptionHeader/descriptionHeader">Course Description Header</a></li>   
+                                                        <li><a href="../courseDetails/courseDetail">Course Detail</a></li>                                                       
                                                     </ul>
                                                 </li>
                                                 <li class="dropdown">
