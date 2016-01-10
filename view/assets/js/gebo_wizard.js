@@ -26,7 +26,28 @@ gebo_wizard = {
             errorImage: true,
             titleClick: true,
             validate: true,
-            finishButton: false
+            finishButton: false,
+            next: function () {
+                $.ajax({
+                    url: "../../model/com.gogetrich.function/checkCourseDetailCreated.php",
+                    type: 'POST',
+                    beforeSend: function (xhr) {
+                        $("html").addClass("js");
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        if (data == 100) {
+                            $('#courseDetailForm').stepy('step', 1);
+                            setTimeout(function () {
+                                $("#notificationDialog").modal("show");
+                                $("#notiDetailDialog").html("Please choose course event date time");
+                            }, 100);
+
+
+                        }
+                        $("html").removeClass("js");
+                    }
+                });
+            }
         });
         stepy_validation = $('#courseDetailForm').validate({
             onfocusout: false,

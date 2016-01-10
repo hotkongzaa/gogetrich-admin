@@ -253,7 +253,7 @@ if (empty($_SESSION['username'])) {
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label">Additional Course Header Detail</label>
+                                        <label class="control-label">Fee (THB)</label>
                                         <div class="controls">
                                             <span class="alert-danger">*This element will shown in OUR TRAINING / SCHEDULE table column</span>
                                             <textarea name="courseDetail" id="courseDetail" class="span10"><?= $rowHeader['HEADER_DETAIL'] ?></textarea>
