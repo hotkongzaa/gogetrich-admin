@@ -1,16 +1,22 @@
 <?php
 session_start();
-if (empty($_SESSION['username'])) {
+require '../model/com.gogetrich.function/CredentialValidationService.php';
+$dbConf = require '../model-db-connection/config.php';
+$serviceCheck = new CredentialValidationService();
+if (!isset($_SESSION['token'])) {
     echo '<script type="text/javascript">window.location.href="../index.php";</script>';
+} else if ($serviceCheck->checkIsTokenValid($_SESSION['token']) == 409) {
+    echo '<script type="text/javascript">window.location.href="loginError?rc=' . md5(409) . '&aRed=true";</script>';
 } else {
     $now = time();
-    if ($now > $_SESSION['expire']) {
-        session_destroy();
-        echo '<script type="text/javascript">var r=confirm("Session expire (30 mins)!"); if(r==true){window.location.href="../index.php";}else{window.location.href="index.php";}</script>';
-    } else {
-        
+    if ($now > isset($_SESSION['expire'])) {
+        $timeOut = $serviceCheck->invalidToken($_SESSION['token']);
+        if ($timeOut == 200) {
+            echo '<script type="text/javascript">'
+            . 'window.location.href="loginError?rc=' . md5(409) . '&aRed=true";" '
+            . '</script>';
+        }
     }
-    require '../model-db-connection/config.php';
 }
 ?>
 <!DOCTYPE html>
@@ -139,6 +145,18 @@ if (empty($_SESSION['username'])) {
             $(document).ready(function () {
                 dashboard.initialElement();
 
+                setInterval(function () {
+                    $.ajax({
+                        url: "../model/com.gogetrich.function/SessionCheck.php",
+                        type: 'POST',
+                        success: function (data, textStatus, jqXHR) {
+                            if (data == 409) {
+                                //session expired
+                                window.location.href = "loginError?rc=<?= md5(409) ?>&aRed=true";
+                            }
+                        }
+                    });
+                }, 3000);
             });
             dashboard = {
                 initialElement: function () {
@@ -149,6 +167,6 @@ if (empty($_SESSION['username'])) {
             };
             </script>
 
-        </div>
+        </div>        
     </body>
 </html>

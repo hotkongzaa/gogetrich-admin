@@ -15,6 +15,15 @@ if (mysqli_query($con, $sql)) {
     $con_create_tbl = mysqli_connect($config_properties['domain'], $config_properties['username'], $config_properties['password'], $config_properties['databasename']);
     mysqli_set_charset($con_create_tbl, $config_properties['msg_encode']);
 
+    $sqlCreateTokenTbl = "CREATE TABLE IF NOT EXISTS RICH_SECURITY_TOKEN ("
+            . "TOKEN VARCHAR(100) NOT NULL,"
+            . "USERID VARCHAR(255),"
+            . "STATUS VARCHAR(10),"
+            . "LOGINDATETIME TIMESTAMP,"
+            . "PRIMARY KEY (TOKEN)"
+            . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    mysqli_query($con_create_tbl, $sqlCreateTokenTbl);
+
     $sqlCreateCustomerDetail = "CREATE TABLE IF NOT EXISTS GTRICH_AD_USER ("
             . "AD_ID VARCHAR(100) NOT NULL,"
             . "AD_USERNAME VARCHAR(255),"

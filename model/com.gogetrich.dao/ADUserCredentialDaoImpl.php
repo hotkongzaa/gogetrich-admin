@@ -59,7 +59,7 @@ class ADUserCredentialDaoImpl implements ADUserCredentialDao {
             if (!empty($adUserId)) {
                 return "200:" . $adUserId . ":" . $adUsername;
             } else {
-                return 503;
+                return 401;
             }
             $stmt->close();
         }

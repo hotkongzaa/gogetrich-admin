@@ -6,5 +6,10 @@
  * and open the template in the editor.
  */
 session_start();
-session_destroy();
-header("Location: ../../view/login");
+require '../com.gogetrich.function/CredentialValidationService.php';
+$service = new CredentialValidationService();
+$result = $service->invalidToken($_SESSION['token']);
+if ($result == 200) {
+    unset($_SESSION['token']);
+    header("Location: ../../view/login");
+}

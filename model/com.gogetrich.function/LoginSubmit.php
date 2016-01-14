@@ -10,24 +10,25 @@ session_start();
 require '../../model/com.gogetrich.dao/ADUserCredentialDaoImpl.php';
 require '../../model/com.gogetrich.service/ADUserService.php';
 require '../../model/com.gogetrich.model/ADUserVO.php';
+require 'CredentialValidationService.php';
 
 $adUserDao = new ADUserCredentialDaoImpl();
 $adUserService = new ADUserService($adUserDao);
 $result = $adUserService->verfyAdUsernameAndPassword($_POST['username'], $_POST['password']);
 
-
-if ($result == 503) {
+if ($result == 401) {
     header("Location: ../../view/loginError?rc=" . md5(401) . "&aRed=true");
     die();
 } else {
     if (explode(":", $result)[0] == 200) {
-        $config = require '../../model-db-connection/GoGetRighconf.properties.php';
-        $_SESSION['expire'] = time() + (60 * $config['application_timeout']);
-        $_SESSION['userId'] = explode(":", $result)[1];
-        $_SESSION['username'] = explode(":", $result)[2];
-
-        header("Location: ../../view/dashboard");
+        $service = new CredentialValidationService();
+        if ($service->submitToken(explode(":", $result)[2], explode(":", $result)[1]) == 200) {
+            header("Location: ../../view/dashboard");
+        } else {
+            header("Location: ../../view/loginError?rc=" . md5(503) . "&aRed=true");
+        }
     } else {
-        
+        header("Location: ../../view/loginError?rc=" . md5(503) . "&aRed=true");
+        die();
     }
 }

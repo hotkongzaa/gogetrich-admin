@@ -42,6 +42,9 @@
                         case md5(503):
                             echo 'Service unavailable, Please try again or contact administrator';
                             break;
+                        case md5(409):
+                            echo 'The session has been time out, Please re-login again';
+                            break;
                         default:
                             echo 'Unknown error,Please try again or contact administrator';
                     }

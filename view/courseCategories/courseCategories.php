@@ -1,12 +1,15 @@
 <?php
 session_start();
-if (empty($_SESSION['username'])) {
+$prop = require '../../model-db-connection/GoGetRighconf.properties.php';
+if (!isset($_SESSION['userId'])) {
     echo '<script type="text/javascript">window.location.href="../../index.php";</script>';
+} else if ($_SESSION['jSessionID'] != md5($_SESSION['userId'] . $_SESSION['username'])) {
+    echo '<script type="text/javascript">window.location.href="loginError?rc=' . md5(409) . '&aRed=true";</script>';
 } else {
     $now = time();
-    if ($now > $_SESSION['expire']) {
+    if ($now > isset($_SESSION['expire'])) {
         session_destroy();
-        echo '<script type="text/javascript">var r=confirm("Session expire (30 mins)!"); if(r==true){window.location.href="../../index.php";}else{window.location.href="../../index.php";}</script>';
+        echo '<script type="text/javascript">var r=confirm("Session expire (' . $prop['application_timeout'] . ' mins)!"); if(r==true){window.location.href="../../index.php";}else{window.location.href="../../index.php";}</script>';
     } else {
         require '../../model-db-connection/config.php';
     }
@@ -75,7 +78,7 @@ if (empty($_SESSION['username'])) {
                                     <ul class="dropdown-menu">
                                         <li><a href="#">My Profile</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="../model/com.gogetrich.function/Logout.php">Log Out</a></li>
+                                        <li><a href="../../model/com.gogetrich.function/Logout.php">Log Out</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -221,6 +224,24 @@ if (empty($_SESSION['username'])) {
                         var saveState = "Save";
                         $(document).ready(function () {
                             $("#alertCate").hide();
+
+                            setInterval(function () {
+                                $.ajax({
+                                    url: "../../model/com.gogetrich.function/SessionCheck.php",
+                                    type: 'POST',
+                                    success: function (data, textStatus, jqXHR) {
+                                        if (data == 409) {
+                                            //session expired
+                                            var r = confirm("Session expire (<?= $prop['application_timeout'] ?> mins)!");
+                                            if (r == true) {
+                                                window.location.href = "../login";
+                                            } else {
+                                                window.location.href = "../login";
+                                            }
+                                        }
+                                    }
+                                });
+                            }, 3000);
 
                             $("#courseCateTbl").load("courseCateTable.php", function () {
                                 $("html").removeClass("js");

@@ -10,6 +10,7 @@ if (empty($_SESSION['username'])) {
     } else {
         
     }
+    $prop = require '../model-db-connection/GoGetRighconf.properties.php';
     require '../model-db-connection/config.php';
     $sqlGetCusInfo = "SELECT * "
             . "FROM RICH_CUSTOMER WHERE CUS_ID = '" . $_GET['uID'] . "'";
@@ -364,6 +365,23 @@ if (empty($_SESSION['username'])) {
             <script>
             $(document).ready(function () {
                 setTimeout('$("html").removeClass("js")', 500);
+                setInterval(function () {
+                    $.ajax({
+                        url: "../model/com.gogetrich.function/SessionCheck.php",
+                        type: 'POST',
+                        success: function (data, textStatus, jqXHR) {
+                            if (data == 409) {
+                                //session expired
+                                var r = confirm("Session expire (<?= $prop['application_timeout'] ?> mins)!");
+                                if (r == true) {
+                                    window.location.href = "login";
+                                } else {
+                                    window.location.href = "login";
+                                }
+                            }
+                        }
+                    });
+                }, 3000);
             });
             </script>
 
