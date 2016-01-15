@@ -1,6 +1,10 @@
 <?php
 session_start();
 require '../../model-db-connection/config.php';
+require '../../model/com.gogetrich.function/CredentialValidationService.php';
+$serviceCheck = new CredentialValidationService();
+$jsonObj = $serviceCheck->getTokenDetail($_SESSION['token']);
+$jsonValue = json_decode($jsonObj, true);
 ?>
 <table class="table table-bordered table-striped table_vam" id="dt_gal">
     <thead>
@@ -19,7 +23,7 @@ require '../../model-db-connection/config.php';
         $id = 1;
         $sqlSelectCate = "SELECT * FROM GTRICH_COURSE_DETAIL_TMP GCDT "
                 . "LEFT JOIN GTRICH_DESCRIPTION_HEADER GDH ON GCDT.REF_COURSE_HEADER_ID = GDH.DESC_HEADER_ID "
-                . "WHERE DISTRIBUTOR_ID LIKE '" . $_SESSION['userId'] . "'";
+                . "WHERE DISTRIBUTOR_ID LIKE '" . $jsonValue['USERID'] . "'";
         $res = mysql_query($sqlSelectCate);
         while ($row = mysql_fetch_array($res)) {
             ?>

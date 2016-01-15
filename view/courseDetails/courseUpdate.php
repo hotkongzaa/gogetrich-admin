@@ -1,14 +1,25 @@
 <?php
 session_start();
-if (empty($_SESSION['username'])) {
+require '../../model/com.gogetrich.function/CredentialValidationService.php';
+require '../../model-db-connection/config.php';
+$serviceCheck = new CredentialValidationService();
+if (!isset($_SESSION['token'])) {
     echo '<script type="text/javascript">window.location.href="../../index.php";</script>';
+} else if ($serviceCheck->checkIsTokenValid($_SESSION['token']) == 409) {
+    echo '<script type="text/javascript">window.location.href="../loginError?rc=' . md5(409) . '&aRed=true";</script>';
 } else {
     $now = time();
-    if ($now > $_SESSION['expire']) {
-        session_destroy();
-        echo '<script type="text/javascript">var r=confirm("Session expire (30 mins)!"); if(r==true){window.location.href="../../index.php";}else{window.location.href="../../index.php";}</script>';
+    if ($now > isset($_SESSION['expire'])) {
+        $timeOut = $serviceCheck->invalidToken($_SESSION['token']);
+        if ($timeOut == 200) {
+            echo '<script type="text/javascript">'
+            . 'window.location.href="../loginError?rc=' . md5(409) . '&aRed=true";" '
+            . '</script>';
+        }
     } else {
-        require '../../model-db-connection/config.php';
+        $jsonObj = $serviceCheck->getTokenDetail($_SESSION['token']);
+        $jsonValue = json_decode($jsonObj, true);
+
         //Manage course header
         $sqlGetHeaderToShow = "SELECT * FROM GTRICH_COURSE_HEADER WHERE HEADER_ID = '" . $_GET['hId'] . "'";
         $resHeader = mysql_query($sqlGetHeaderToShow);
@@ -80,7 +91,7 @@ if (empty($_SESSION['username'])) {
                             <ul class="nav user_menu pull-right">                             
                                 <li class="divider-vertical hidden-phone hidden-tablet"></li>
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= $_SESSION['username']; ?> <b class="caret"></b></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= $jsonValue['USERNAME']; ?> <b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#">My Profile</a></li>
                                         <li class="divider"></li>
@@ -292,11 +303,11 @@ if (empty($_SESSION['username'])) {
                                 <fieldset title="Course Detail">
                                     <legend class="hide">Course Detail&hellip;</legend>
                                     <div id="notificationDetail"></div>
-                                    <div class="control-group">
+                                    <!--div class="control-group">
                                         <a href="#" id="addDetailClick" style="margin-top: 10px;" class="btn btn-default pull-left">
                                             <i class="icon-plus"></i> <span id="iconName">Add Detail</span>
                                         </a>                                        
-                                    </div>
+                                    </div-->
                                     <div id="formCourseCreate">
                                         <div class="control-group">
                                             <label for="descHeaderID" class="control-label">Description Header*:</label>
@@ -431,6 +442,20 @@ if (empty($_SESSION['username'])) {
                                         var saveEventDateState = "Save";
                                         var saveCourseTempState = "Save";
                                         $(document).ready(function () {
+
+                                            setInterval(function () {
+                                                $.ajax({
+                                                    url: "../../model/com.gogetrich.function/SessionCheck.php",
+                                                    type: 'POST',
+                                                    success: function (data, textStatus, jqXHR) {
+                                                        if (data == 409) {
+                                                            //session expired
+                                                            window.location.href = "../loginError?rc=<?= md5(409) ?>&aRed=true";
+                                                        }
+                                                    }
+                                                });
+                                            }, 3000);
+
                                             $("#addDetailClick").click(function () {
                                                 $("#formCourseCreate").toggle("fast");
                                                 if ($("#iconName").html() == "Add Detail") {
@@ -494,7 +519,7 @@ if (!empty($notFound)) {
                                         course_page = {
                                             initialElement: function () {
                                                 $("html").removeClass("js");
-                                                $("#formCourseCreate").hide();
+//                                                $("#formCourseCreate").hide();
                                                 $(".datetimepicker").datetimepicker({
                                                     scrollMonth: false,
                                                     timepicker: false,

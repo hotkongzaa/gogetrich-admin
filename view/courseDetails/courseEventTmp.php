@@ -1,6 +1,10 @@
 <?php
 session_start();
 require '../../model-db-connection/config.php';
+require '../../model/com.gogetrich.function/CredentialValidationService.php';
+$serviceCheck = new CredentialValidationService();
+$jsonObj = $serviceCheck->getTokenDetail($_SESSION['token']);
+$jsonValue = json_decode($jsonObj, true);
 ?>
 <table class="table table-bordered table-striped table_vam" id="promotionTmpTbl">
     <thead>
@@ -15,9 +19,9 @@ require '../../model-db-connection/config.php';
     <tbody>
         <?php
         $id = 1;
-        $sqlSelectCate = "SELECT * FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP GCH WHERE EVENT_DISTRIBUTOR_ID = '" . $_SESSION['userId'] . "' ORDER BY EVENT_CREATED_DATE_TIME DESC";
+        $sqlSelectCate = "SELECT * FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP GCH WHERE EVENT_DISTRIBUTOR_ID = '" . $jsonValue['USERID'] . "' ORDER BY EVENT_CREATED_DATE_TIME DESC";
         $res = mysql_query($sqlSelectCate);
-        $sqlCheck = "SELECT COUNT(*) AS CHECKNUM FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP WHERE EVENT_DISTRIBUTOR_ID = '" . $_SESSION['userId'] . "'";
+        $sqlCheck = "SELECT COUNT(*) AS CHECKNUM FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP WHERE EVENT_DISTRIBUTOR_ID = '" . $jsonValue['USERID'] . "'";
         $resCheck = mysql_query($sqlCheck);
         $rowCheck = mysql_fetch_assoc($resCheck);
         if ($rowCheck['CHECKNUM'] > 0) {
