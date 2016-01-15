@@ -237,20 +237,28 @@ if (!isset($_SESSION['token'])) {
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label">Course Event Date</label>
+                                        <label class="control-label">Course Event Date*</label>
                                         <div class="controls">
                                             <div class="input-prepend">
                                                 <span class="add-on">
                                                     <i class="splashy-calendar_day"></i>
                                                 </span>
-                                                <input class="datetimepicker" type="text" id="startEventDateTime" placeholder="Start Event Date time"/>
+                                                <input class="datetimepicker" type="text" id="startEventDateTime" placeholder="Start Event Date"/>
                                             </div>
+                                            <input class="timePicker" type="text" id="startTimePickerFromFirstDate" placeholder="Start Time" style="width:100px;"/> -
+                                            <input class="timePicker" type="text" id="endTimePickerFromFirstDate" placeholder="End Time" style="width:100px;"/>
+                                            <br/>
+                                            <br/>
                                             <div class="input-prepend">
                                                 <span class="add-on">
                                                     <i class="splashy-calendar_day"></i>
                                                 </span>
-                                                <input class="datetimepicker" type="text" id="endEventDateTime" placeholder="End Event Date time"/>
+                                                <input class="datetimepicker" type="text" id="endEventDateTime" placeholder="End Event Date"/>
                                             </div>
+                                            <input class="timePicker" type="text" id="startTimePickerFromSecondDate" placeholder="Start Time" style="width:100px;"/> -
+                                            <input class="timePicker" type="text" id="endTimePickerFromSecondDate" placeholder="End Time" style="width:100px;"/>
+                                            <br/>
+                                            <br/>
                                             <input type="button" onclick="saveEventDateToTmp()" class="btn btn-gebo" value="Save"> 
                                             <input type="button" onclick="cancelEventDateToTmp()" class="btn btn-danger" value="Cancel">
                                         </div>
@@ -495,9 +503,14 @@ if (!isset($_SESSION['token'])) {
 //                                                $("#formCourseCreate").hide();
                                                 $(".datetimepicker").datetimepicker({
                                                     scrollMonth: false,
-                                                    format: 'd/m/Y H:i',
+                                                    timepicker: false,
+                                                    format: 'm/d/Y',
                                                     theme: 'default',
                                                     minDate: 0
+                                                });
+                                                $(".timePicker").datetimepicker({
+                                                    datepicker: false,
+                                                    format: 'H:i'
                                                 });
                                                 CKEDITOR.replace('descriptionDetail');
                                                 CKEDITOR.replace('courseDetail');
@@ -888,15 +901,41 @@ if (!isset($_SESSION['token'])) {
                                         }
                                         function saveEventDateToTmp() {
                                             var startDate = $("#startEventDateTime").val();
+                                            var startTimeForFirstDate = $("#startTimePickerFromFirstDate").val();
+                                            var endTimeForFirstDate = $("#endTimePickerFromFirstDate").val();
                                             var endDate = $("#endEventDateTime").val();
+                                            var startTimeForSecondDate = $("#startTimePickerFromSecondDate").val();
+                                            var endTimeForSecondDate = $("#endTimePickerFromSecondDate").val();
+                                            var startDateTime = new Date(startDate);
+                                            var endDateTime = new Date(endDate);
                                             if (startDate == "" || endDate == "") {
                                                 $("#notificationDialog").modal("show");
                                                 $("#notiDetailDialog").html("Please enter Start Date or End Date of Event");
                                                 goToByScroll("#courseCate");
+                                            } else if (startTimeForFirstDate == "" || endTimeForFirstDate == "") {
+                                                $("#notificationDialog").modal("show");
+                                                $("#notiDetailDialog").html("Please select start time or end time of start event date");
+                                                goToByScroll("#courseCate");
+                                            } else if (startTimeForSecondDate == "" || endTimeForSecondDate == "") {
+                                                $("#notificationDialog").modal("show");
+                                                $("#notiDetailDialog").html("Please select start time or end time of end event date");
+                                                goToByScroll("#courseCate");
+                                            } else if (endDateTime.getTime() < startDateTime.getTime()) {
+                                                $("#notificationDialog").modal("show");
+                                                $("#notiDetailDialog").html("Please select end date grater than start date");
+                                                goToByScroll("#courseCate");
+                                            } else if (endTimeForFirstDate.split(":")[0] < startTimeForFirstDate.split(":")[0]) {
+                                                $("#notificationDialog").modal("show");
+                                                $("#notiDetailDialog").html("Please enter end time grater thatn start time of start event date");
+                                                goToByScroll("#courseCate");
+                                            } else if (endTimeForSecondDate.split(":")[0] < startTimeForSecondDate.split(":")[0]) {
+                                                $("#notificationDialog").modal("show");
+                                                $("#notiDetailDialog").html("Please enter end time grater thatn start time of end event date");
+                                                goToByScroll("#courseCate");
                                             } else {
                                                 if (saveEventDateState == "Save") {
                                                     $.ajax({
-                                                        url: "../../model/com.gogetrich.function/SaveEventDateToTmp.php?startDate=" + startDate + "&endDate=" + endDate,
+                                                        url: "../../model/com.gogetrich.function/SaveEventDateToTmp.php?startDate=" + startDate + "&endDate=" + endDate + "&stTimeFirst=" + startTimeForFirstDate + "&edTimeFirst=" + endTimeForFirstDate + "&stTimeSnd=" + startTimeForSecondDate + "&edTimeSnd=" + endTimeForSecondDate,
                                                         type: 'POST',
                                                         beforeSend: function (xhr) {
                                                             $("html").addClass("js");
@@ -907,8 +946,14 @@ if (!isset($_SESSION['token'])) {
                                                                     $("html").removeClass("js");
                                                                     $("#notificationDialog").modal("show");
                                                                     $("#notiDetailDialog").html("Save Event date time success");
+
                                                                     $("#startEventDateTime").val("");
                                                                     $("#endEventDateTime").val("");
+                                                                    $("#startTimePickerFromFirstDate").val("");
+                                                                    $("#startTimePickerFromSecondDate").val("");
+                                                                    $("#endTimePickerFromFirstDate").val("");
+                                                                    $("#endTimePickerFromSecondDate").val("");
+
                                                                     goToByScroll("#courseCate");
                                                                 });
                                                             } else {
@@ -925,7 +970,7 @@ if (!isset($_SESSION['token'])) {
                                                     var eID = $("#eventDateTimeID").val();
                                                     var eDate = $("#eventDateTimeDate").val();
                                                     $.ajax({
-                                                        url: "../../model/com.gogetrich.function/UpdateEventDateTimeTmp.php?startDate=" + startDate + "&endDate=" + endDate + "&eID=" + eID + "&eDate=" + eDate,
+                                                        url: "../../model/com.gogetrich.function/UpdateEventDateTimeTmp.php?startDate=" + startDate + "&endDate=" + endDate + "&eID=" + eID + "&eDate=" + eDate + "&stTimeFirst=" + startTimeForFirstDate + "&edTimeFirst=" + endTimeForFirstDate + "&stTimeSnd=" + startTimeForSecondDate + "&edTimeSnd=" + endTimeForSecondDate,
                                                         type: 'POST',
                                                         beforeSend: function (xhr) {
                                                             $("html").addClass("js");
@@ -936,8 +981,14 @@ if (!isset($_SESSION['token'])) {
                                                                     $("html").removeClass("js");
                                                                     $("#notificationDialog").modal("show");
                                                                     $("#notiDetailDialog").html("Update Event date time success");
+
                                                                     $("#startEventDateTime").val("");
                                                                     $("#endEventDateTime").val("");
+                                                                    $("#startTimePickerFromFirstDate").val("");
+                                                                    $("#startTimePickerFromSecondDate").val("");
+                                                                    $("#endTimePickerFromFirstDate").val("");
+                                                                    $("#endTimePickerFromSecondDate").val("");
+
                                                                     goToByScroll("#courseCate");
                                                                 });
                                                             } else {
@@ -991,8 +1042,23 @@ if (!isset($_SESSION['token'])) {
                                                 },
                                                 success: function (data, textStatus, jqXHR) {
                                                     var json = $.parseJSON(data);
-                                                    $("#startEventDateTime").val(json.START_EVENT_DATE_TIME);
-                                                    $("#endEventDateTime").val(json.END_EVENT_DATE_TIME);
+
+                                                    var startEventDate = json.START_EVENT_DATE_TIME.split(" ")[0];
+                                                    var startTime = json.START_EVENT_DATE_TIME.split(" ")[1].split("-")[0];
+                                                    var endTime = json.START_EVENT_DATE_TIME.split(" ")[1].split("-")[1];
+
+                                                    var endEventDate = json.END_EVENT_DATE_TIME.split(" ")[0];
+                                                    var startTimeEnd = json.END_EVENT_DATE_TIME.split(" ")[1].split("-")[0];
+                                                    var endTimeEnd = json.END_EVENT_DATE_TIME.split(" ")[1].split("-")[1];
+
+
+                                                    $("#startEventDateTime").val(startEventDate);
+                                                    $("#endEventDateTime").val(endEventDate);
+                                                    $("#startTimePickerFromFirstDate").val(startTime);
+                                                    $("#startTimePickerFromSecondDate").val(startTimeEnd);
+                                                    $("#endTimePickerFromFirstDate").val(endTime);
+                                                    $("#endTimePickerFromSecondDate").val(endTimeEnd);
+
                                                     $("#eventDateTimeID").val(json.EVENT_ID);
                                                     $("#eventDateTimeDate").val(json.EVENT_CREATED_DATE_TIME);
                                                     $("html").removeClass("js");
@@ -1005,6 +1071,10 @@ if (!isset($_SESSION['token'])) {
                                             $("#endEventDateTime").val("");
                                             $("#eventDateTimeID").val("");
                                             $("#eventDateTimeDate").val("");
+                                            $("#startTimePickerFromFirstDate").val("");
+                                            $("#startTimePickerFromSecondDate").val("");
+                                            $("#endTimePickerFromFirstDate").val("");
+                                            $("#endTimePickerFromSecondDate").val("");
                                             saveEventDateState = "Save";
                                         }
             </script>
