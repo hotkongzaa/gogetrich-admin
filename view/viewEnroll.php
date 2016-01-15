@@ -1,21 +1,29 @@
 <?php
 session_start();
-if (empty($_SESSION['username'])) {
+require '../model/com.gogetrich.function/CredentialValidationService.php';
+require '../model-db-connection/config.php';
+$serviceCheck = new CredentialValidationService();
+if (!isset($_SESSION['token'])) {
     echo '<script type="text/javascript">window.location.href="../index.php";</script>';
+} else if ($serviceCheck->checkIsTokenValid($_SESSION['token']) == 409) {
+    echo '<script type="text/javascript">window.location.href="loginError?rc=' . md5(409) . '&aRed=true";</script>';
 } else {
     $now = time();
-    if ($now > $_SESSION['expire']) {
-        session_destroy();
-        echo '<script type="text/javascript">var r=confirm("Session expire (30 mins)!"); if(r==true){window.location.href="../index.php";}else{window.location.href="index.php";}</script>';
+    if ($now > isset($_SESSION['expire'])) {
+        $timeOut = $serviceCheck->invalidToken($_SESSION['token']);
+        if ($timeOut == 200) {
+            echo '<script type="text/javascript">'
+            . 'window.location.href="loginError?rc=' . md5(409) . '&aRed=true";" '
+            . '</script>';
+        }
     } else {
-        
+        $jsonObj = $serviceCheck->getTokenDetail($_SESSION['token']);
+        $jsonValue = json_decode($jsonObj, true);
+
+        $sqlGetCusInfo = "SELECT * FROM RICH_CUSTOMER WHERE CUS_ID = '" . $_GET['uID'] . "'";
+        $resGetCusInfo = mysql_query($sqlGetCusInfo);
+        $rowGetCusInfo = mysql_fetch_assoc($resGetCusInfo);
     }
-    $prop = require '../model-db-connection/GoGetRighconf.properties.php';
-    require '../model-db-connection/config.php';
-    $sqlGetCusInfo = "SELECT * "
-            . "FROM RICH_CUSTOMER WHERE CUS_ID = '" . $_GET['uID'] . "'";
-    $resGetCusInfo = mysql_query($sqlGetCusInfo);
-    $rowGetCusInfo = mysql_fetch_assoc($resGetCusInfo);
 }
 ?>
 <!DOCTYPE html>
@@ -372,12 +380,7 @@ if (empty($_SESSION['username'])) {
                         success: function (data, textStatus, jqXHR) {
                             if (data == 409) {
                                 //session expired
-                                var r = confirm("Session expire (<?= $prop['application_timeout'] ?> mins)!");
-                                if (r == true) {
-                                    window.location.href = "login";
-                                } else {
-                                    window.location.href = "login";
-                                }
+                                window.location.href = "loginError?rc=<?= md5(409) ?>&aRed=true";
                             }
                         }
                     });

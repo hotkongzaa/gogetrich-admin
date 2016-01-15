@@ -22,13 +22,11 @@ class CredentialValidationService {
         $conn = new mysqli($config['domain'], $config['username'], $config['password'], $config['databasename']);
 
         $tokenID = md5(date("h:i:sa") . $username . $userID);
-        $stmt = $conn->prepare("INSERT INTO RICH_SECURITY_TOKEN (TOKEN, USERID,STATUS,LOGINDATETIME) VALUES (?, ?,1, NOW())");
-        $stmt->bind_param("ss", $tokenID, $userID);
+        $stmt = $conn->prepare("INSERT INTO RICH_SECURITY_TOKEN (TOKEN, USERID,STATUS,LOGINDATETIME,USERNAME) VALUES (?, ?,1, NOW(),?)");
+        $stmt->bind_param("sss", $tokenID, $userID, $username);
         if ($stmt->execute()) {
             $_SESSION['token'] = $tokenID;
             $_SESSION['expire'] = time() + (60 * $config['application_timeout']);
-            $_SESSION['userId'] = $userID;
-            $_SESSION['username'] = $username;
             return 200;
         } else {
             return mysql_error();

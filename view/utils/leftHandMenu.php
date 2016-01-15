@@ -6,7 +6,7 @@
 
                 <li class="divider-vertical hidden-phone hidden-tablet"></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= $_SESSION['username']; ?> <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= $jsonValue['USERNAME']; ?> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">My Profile</a></li>
                         <li class="divider"></li>

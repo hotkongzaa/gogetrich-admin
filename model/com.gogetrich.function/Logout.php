@@ -10,6 +10,7 @@ require '../com.gogetrich.function/CredentialValidationService.php';
 $service = new CredentialValidationService();
 $result = $service->invalidToken($_SESSION['token']);
 if ($result == 200) {
+    unset($_SESSION['expire']);
     unset($_SESSION['token']);
     header("Location: ../../view/login");
 }

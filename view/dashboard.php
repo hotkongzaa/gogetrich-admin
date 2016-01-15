@@ -1,7 +1,7 @@
 <?php
 session_start();
 require '../model/com.gogetrich.function/CredentialValidationService.php';
-$dbConf = require '../model-db-connection/config.php';
+require '../model-db-connection/config.php';
 $serviceCheck = new CredentialValidationService();
 if (!isset($_SESSION['token'])) {
     echo '<script type="text/javascript">window.location.href="../index.php";</script>';
@@ -16,6 +16,9 @@ if (!isset($_SESSION['token'])) {
             . 'window.location.href="loginError?rc=' . md5(409) . '&aRed=true";" '
             . '</script>';
         }
+    } else {
+        $jsonObj = $serviceCheck->getTokenDetail($_SESSION['token']);
+        $jsonValue = json_decode($jsonObj, true);
     }
 }
 ?>

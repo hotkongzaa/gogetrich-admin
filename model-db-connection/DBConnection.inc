@@ -20,6 +20,7 @@ if (mysqli_query($con, $sql)) {
             . "USERID VARCHAR(255),"
             . "STATUS VARCHAR(10),"
             . "LOGINDATETIME TIMESTAMP,"
+            . "USERNAME VARCHAR(255),"
             . "PRIMARY KEY (TOKEN)"
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
     mysqli_query($con_create_tbl, $sqlCreateTokenTbl);

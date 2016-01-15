@@ -1,17 +1,24 @@
 <?php
 session_start();
-$prop = require '../../model-db-connection/GoGetRighconf.properties.php';
-if (!isset($_SESSION['userId'])) {
+require '../../model/com.gogetrich.function/CredentialValidationService.php';
+require '../../model-db-connection/config.php';
+$serviceCheck = new CredentialValidationService();
+if (!isset($_SESSION['token'])) {
     echo '<script type="text/javascript">window.location.href="../../index.php";</script>';
-} else if ($_SESSION['jSessionID'] != md5($_SESSION['userId'] . $_SESSION['username'])) {
-    echo '<script type="text/javascript">window.location.href="loginError?rc=' . md5(409) . '&aRed=true";</script>';
+} else if ($serviceCheck->checkIsTokenValid($_SESSION['token']) == 409) {
+    echo '<script type="text/javascript">window.location.href="../loginError?rc=' . md5(409) . '&aRed=true";</script>';
 } else {
     $now = time();
     if ($now > isset($_SESSION['expire'])) {
-        session_destroy();
-        echo '<script type="text/javascript">var r=confirm("Session expire (' . $prop['application_timeout'] . ' mins)!"); if(r==true){window.location.href="../../index.php";}else{window.location.href="../../index.php";}</script>';
+        $timeOut = $serviceCheck->invalidToken($_SESSION['token']);
+        if ($timeOut == 200) {
+            echo '<script type="text/javascript">'
+            . 'window.location.href="../loginError?rc=' . md5(409) . '&aRed=true";" '
+            . '</script>';
+        }
     } else {
-        require '../../model-db-connection/config.php';
+        $jsonObj = $serviceCheck->getTokenDetail($_SESSION['token']);
+        $jsonValue = json_decode($jsonObj, true);
     }
 }
 ?>
@@ -74,7 +81,7 @@ if (!isset($_SESSION['userId'])) {
 
                                 <li class="divider-vertical hidden-phone hidden-tablet"></li>
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= $_SESSION['username']; ?> <b class="caret"></b></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= $jsonValue['USERNAME']; ?> <b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#">My Profile</a></li>
                                         <li class="divider"></li>
@@ -232,12 +239,7 @@ if (!isset($_SESSION['userId'])) {
                                     success: function (data, textStatus, jqXHR) {
                                         if (data == 409) {
                                             //session expired
-                                            var r = confirm("Session expire (<?= $prop['application_timeout'] ?> mins)!");
-                                            if (r == true) {
-                                                window.location.href = "../login";
-                                            } else {
-                                                window.location.href = "../login";
-                                            }
+                                            window.location.href = "../loginError?rc=<?= md5(409) ?>&aRed=true";
                                         }
                                     }
                                 });
