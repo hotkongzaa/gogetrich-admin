@@ -14,14 +14,15 @@ $jsonObj = $serviceCheck->getTokenDetail($_SESSION['token']);
 $jsonValue = json_decode($jsonObj, true);
 
 
-$courseCategory = $_POST['courseCategory'];
-$courseName = $_POST['courseName'];
-$courseStatus = $_POST['courseStatus'];
-$headaerID = $_POST['headerID'];
-$courseAddiDetail = $_POST['courseAddiDetail'];
-$subCourseName = $_POST['subCourseName'];
-$courseHeaderTime = $_POST['courseHeaderTime'];
-$courseDuration = $_POST['courseDuration'];
+$courseCategory = (string) filter_input(INPUT_POST, 'courseCategory');
+$courseName = (string) filter_input(INPUT_POST, 'courseName');
+$courseStatus = (string) filter_input(INPUT_POST, 'courseStatus');
+$headaerID = (string) filter_input(INPUT_POST, 'headerID');
+$courseAddiDetail = (string) filter_input(INPUT_POST, 'courseAddiDetail');
+$subCourseName = (string) filter_input(INPUT_POST, 'subCourseName');
+$courseHeaderTime = (string) filter_input(INPUT_POST, 'courseHeaderTime');
+$courseDuration = (string) filter_input(INPUT_POST, 'courseDuration');
+$availableSeat = (string) filter_input(INPUT_POST, 'availableSeat');
 
 $sqlUpdateHeader = "UPDATE GTRICH_COURSE_HEADER "
         . "SET REF_CATE_ID = '" . $courseCategory . "', "
@@ -31,7 +32,8 @@ $sqlUpdateHeader = "UPDATE GTRICH_COURSE_HEADER "
         . "HEADER_COURSE_STATUS = '" . $courseStatus . "', "
         . "HEADER_DETAIL = '" . $courseAddiDetail . "', "
         . "HEADER_CREATE_DATE_TIME = '" . $courseHeaderTime . "', "
-        . "HEADER_COURSE_DURATION ='" . $courseDuration . "' "
+        . "HEADER_COURSE_DURATION ='" . $courseDuration . "', "
+        . "AVAILABLE_SEATS ='" . $availableSeat . "' "
         . "WHERE HEADER_ID = '" . $headaerID . "'";
 
 $saveResHeader = mysql_query($sqlUpdateHeader);

@@ -43,8 +43,12 @@
                             echo 'Service unavailable, Please try again or contact administrator';
                             break;
                         case md5(409):
-                            unset($_SESSION['expire']);
-                            unset($_SESSION['token']);
+                            //$_SESSION['expire']
+                            $expire = isset($_SESSION['expire']) ? $_SESSION['expire'] : null;
+                            unset($expire);
+                            //$_SESSION['token']
+                            $token = isset($_SESSION['token']) ? $_SESSION['token'] : null;
+                            unset($token);
                             echo 'The session has been time out, Please re-login again';
                             break;
                         default:

@@ -233,6 +233,12 @@ if (!isset($_SESSION['token'])) {
                                         </div>
                                     </div>
                                     <div class="control-group">
+                                        <label class="control-label" for="availableSeat">Available (Seats)*</label>
+                                        <div class="controls">
+                                            <input type="number" name="availableSeat" id="availableSeat" class="span10"/>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
                                         <label class="control-label">Course Event Date*</label>
                                         <div class="controls">
                                             <div class="input-prepend">
@@ -506,6 +512,7 @@ if (!empty($notFound)) {
                                             $("#subCourseName").val('<?= $rowHeader['SUB_HEADER_NAME'] ?>');
                                             $("#courseHeaderTime").val('<?= $rowHeader['HEADER_CREATE_DATE_TIME'] ?>');
                                             $("#courseDuration").val('<?= $rowHeader['HEADER_COURSE_DURATION'] ?>');
+                                            $("#availableSeat").val('<?= $rowHeader['AVAILABLE_SEATS'] ?>');
                                             var date = '<?= $rowHeader['HEADER_EVENT_DATE'] ?>'.split(",");
                                             var resultDate = new Array();
                                             for (var i = 0; i < date.length; i++) {
@@ -715,6 +722,7 @@ if (!empty($notFound)) {
                                             var subCourseName = $("#subCourseName").val();
                                             var courseHeaderTime = $("#courseHeaderTime").val();
                                             var courseDuration = $("#courseDuration").val();
+                                            var availableSeat = $("#availableSeat").val();
                                             $.ajax({
                                                 url: "../../model/com.gogetrich.function/checkCourseDetailCreated.php",
                                                 type: 'POST',
@@ -726,7 +734,7 @@ if (!empty($notFound)) {
                                                         $.ajax({
                                                             url: "../../model/com.gogetrich.function/updateDetailHeaderAndDetail.php",
                                                             type: 'POST',
-                                                            data: {'courseDuration': courseDuration, 'courseHeaderTime': courseHeaderTime, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseStatus': courseStatus},
+                                                            data: {'availableSeat': availableSeat, 'courseDuration': courseDuration, 'courseHeaderTime': courseHeaderTime, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseStatus': courseStatus},
                                                             success: function (saveHeaderData, textStatus, jqXHR) {
                                                                 if (saveHeaderData == 200) {
                                                                     $("#notificationDialog").modal("show");

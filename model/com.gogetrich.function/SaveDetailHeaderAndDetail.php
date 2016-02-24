@@ -14,17 +14,18 @@ $serviceCheck = new CredentialValidationService();
 $jsonObj = $serviceCheck->getTokenDetail($_SESSION['token']);
 $jsonValue = json_decode($jsonObj, true);
 
-$courseCategory = $_POST['courseCategory'];
-$courseName = $_POST['courseName'];
-$courseStatus = $_POST['courseStatus'];
+$courseCategory = (string) filter_input(INPUT_POST, 'courseCategory');
+$courseName = (string) filter_input(INPUT_POST, 'courseName');
+$courseStatus = (string) filter_input(INPUT_POST, 'courseStatus');
 $headaerID = md5(date("h:i:sa"));
-$courseAddiDetail = $_POST['courseAddiDetail'];
-$subCourseName = $_POST['subCourseName'];
-$courseDuration = $_POST['courseDuration'];
+$courseAddiDetail = (string) filter_input(INPUT_POST, 'courseAddiDetail');
+$subCourseName = (string) filter_input(INPUT_POST, 'subCourseName');
+$courseDuration = (string) filter_input(INPUT_POST, 'courseDuration');
+$availableSeat = (string) filter_input(INPUT_POST, 'availableSeat');
 
-$sqlSaveHeader = "INSERT INTO GTRICH_COURSE_HEADER (HEADER_ID,HEADER_NAME,SUB_HEADER_NAME,HEADER_EVENT_DATE,HEADER_DETAIL,HEADER_CREATE_DATE_TIME,HEADER_COURSE_STATUS,HEADER_COURSE_DURATION,REF_CATE_ID) "
+$sqlSaveHeader = "INSERT INTO GTRICH_COURSE_HEADER (HEADER_ID,HEADER_NAME,SUB_HEADER_NAME,HEADER_EVENT_DATE,HEADER_DETAIL,HEADER_CREATE_DATE_TIME,HEADER_COURSE_STATUS,HEADER_COURSE_DURATION,REF_CATE_ID,AVAILABLE_SEATS,BOOKING_SEATS) "
         . "VALUES "
-        . "('" . $headaerID . "','" . $courseName . "','" . $subCourseName . "','','" . $courseAddiDetail . "',NOW(),'" . $courseStatus . "','" . $courseDuration . "','" . $courseCategory . "')";
+        . "('" . $headaerID . "','" . $courseName . "','" . $subCourseName . "','','" . $courseAddiDetail . "',NOW(),'" . $courseStatus . "','" . $courseDuration . "','" . $courseCategory . "','" . $availableSeat . "','0')";
 $saveResHeader = mysql_query($sqlSaveHeader);
 
 if ($saveResHeader) {

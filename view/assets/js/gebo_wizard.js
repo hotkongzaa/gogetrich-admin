@@ -71,12 +71,14 @@ gebo_wizard = {
                 'courseCate': 'required',
                 'courseName': 'required',
                 'courseStatus': 'required',
-                'courseDuration': 'required'
+                'courseDuration': 'required',
+                'availableSeat': 'required'
             }, messages: {
                 'courseCate': {required: 'Please select category!'},
                 'courseName': {required: 'Course Name field is required!'},
                 'courseStatus': {required: 'Course Status field is required!'},
-                'courseDuration': {required: 'Please fill course duration (days)'}
+                'courseDuration': {required: 'Please fill course duration (days)'},
+                'availableSeat': {required: 'Please fill available seats'}
             },
             ignore: ':hidden'
         });
