@@ -168,6 +168,39 @@ if (!isset($_SESSION['token'])) {
                     });
                 }
             };
+            function changePaymentStatus(enrollID, status) {
+
+                $.ajax({
+                    url: "../model/com.gogetrich.function/changePaymentStatus.php?enrollId=" + enrollID + "&status=" + status,
+                    type: 'POST',
+                    beforeSend: function (xhr) {
+                        $("html").addClass("js");
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        $("#customerEnroll").load("dashboard_tbl.php", function () {
+                            $("html").removeClass("js");
+                        });
+                    }
+                });
+            }
+            function deleteEnrollment(enrollID) {
+                var r = confirm("Do you want to delete this item?");
+                if (r == true) {
+                    $.ajax({
+                        url: "../model/com.gogetrich.function/deleteEnrollment.php?enrollId=" + enrollID,
+                        type: 'POST',
+                        beforeSend: function (xhr) {
+                            $("html").addClass("js");
+                        },
+                        success: function (data, textStatus, jqXHR) {
+                            $("#customerEnroll").load("dashboard_tbl.php", function () {
+                                $("html").removeClass("js");
+                            });
+                        }
+                    });
+                }
+
+            }
             </script>
 
         </div>        

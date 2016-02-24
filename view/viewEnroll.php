@@ -20,7 +20,9 @@ if (!isset($_SESSION['token'])) {
         $jsonObj = $serviceCheck->getTokenDetail($_SESSION['token']);
         $jsonValue = json_decode($jsonObj, true);
 
-        $sqlGetCusInfo = "SELECT * FROM RICH_CUSTOMER WHERE CUS_ID = '" . $_GET['uID'] . "'";
+        $userId = (string) filter_input(INPUT_GET, 'uID');
+
+        $sqlGetCusInfo = "SELECT * FROM RICH_CUSTOMER WHERE CUS_ID = '" . $userId . "'";
         $resGetCusInfo = mysql_query($sqlGetCusInfo);
         $rowGetCusInfo = mysql_fetch_assoc($resGetCusInfo);
     }
@@ -228,45 +230,10 @@ if (!isset($_SESSION['token'])) {
                                                                                 <?php
                                                                             }
                                                                             ?>
-                                                                        </ul>
-                                                                        <li><strong>ผู้แนะนำ: </strong><?= $rowGetRegisDetailByID['ENROLL_INVITESUGGEST'] ?></li>
-                                                                        <li><strong>ความรู้ไปเพื่อประโยชน์: </strong></li>
-                                                                        <ul>
-                                                                            <?php
-                                                                            $disArray = explode("||", $rowGetRegisDetailByID['ENROLL_KNOWLEDGE_FOR_REASON']);
-                                                                            for ($i = 0; $i < sizeof($disArray) - 1; $i++) {
-                                                                                ?>
-                                                                                <li><?= $disArray[$i] == "อื่นๆ" ? "อื่นๆ: " . $rowGetRegisDetailByID['ENROLL_OTHER_KNOWLEDGE_FOR_REASON'] : $disArray[$i] ?></li>
-                                                                                <?php
-                                                                            }
-                                                                            ?>
-                                                                        </ul>
-                                                                        <li><strong>ข่าวสารจากแหล่งข้อมูล: </strong></li>
-                                                                        <ul>
-                                                                            <?php
-                                                                            $disArray = explode("||", $rowGetRegisDetailByID['ENROLL_NEWSFROM']);
-                                                                            for ($i = 0; $i < sizeof($disArray) - 1; $i++) {
-                                                                                ?>
-                                                                                <li><?= $disArray[$i] ?></li>
-                                                                                <?php
-                                                                            }
-                                                                            ?>
-                                                                        </ul>
+                                                                        </ul>                                                                        
                                                                         <li>
                                                                             <strong>ลงทะเบียนเมื่อ: </strong> <?= $rowGetRegisDetailByID['CREATED_DATE_TIME'] ?>
                                                                         </li>
-                                                                        <li><strong>Multi-registration user: </strong></li>
-                                                                        <ul>
-                                                                            <?php
-                                                                            $disArray = explode("||", $rowGetRegisDetailByID['ADDITIONAL_ENROLL_CUS_NAME']);
-                                                                            for ($i = 0; $i < sizeof($disArray) - 1; $i++) {
-                                                                                $arrayMulti = explode(",", $disArray[$i]);
-                                                                                ?>
-                                                                                <li>Name: <?= $arrayMulti[0] ?> <br/>Email: <?= $arrayMulti[1] ?> <br/>Phone: <?= $arrayMulti[2] ?></li>
-                                                                                <?php
-                                                                            }
-                                                                            ?>
-                                                                        </ul>
                                                                     </div>
                                                                 </div>
                                                             </div>                                                        
