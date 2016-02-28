@@ -510,7 +510,7 @@ if (!isset($_SESSION['token'])) {
                                                 $(".datetimepicker").datetimepicker({
                                                     scrollMonth: false,
                                                     timepicker: false,
-                                                    format: 'm/d/Y',
+                                                    format: 'd/m/Y',
                                                     theme: 'default',
                                                     minDate: 0
                                                 });
