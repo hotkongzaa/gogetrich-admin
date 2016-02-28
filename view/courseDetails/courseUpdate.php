@@ -538,7 +538,7 @@ if (!empty($notFound)) {
                                                     datepicker: false,
                                                     format: 'H:i'
                                                 });
-                                                $.datetimepicker.setLocale('th');
+                                                //$.datetimepicker.setLocale('th');
                                                 CKEDITOR.replace('descriptionDetail');
                                                 CKEDITOR.replace('courseDetail');
                                                 $("#tempCourseTbl").load("tmpCourseTable.php");
