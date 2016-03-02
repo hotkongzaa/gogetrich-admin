@@ -156,7 +156,7 @@ if (!isset($_SESSION['token'])) {
                         <div class="span8">
                             <div class="heading clearfix">
                                 <h3 class="pull-left">Customer Enroll</h3>          
-                                <span class="pull-right btn"><img src="assets/img/Excel-icon.png" width="30px" height="30px"/> Export to Excel</span>
+                                <span class="pull-right btn" onclick="exportExcel()"><img src="assets/img/Excel-icon.png" width="30px" height="30px"/></span>
                             </div>
                             <div id="customerEnroll"></div>
                         </div>                        
@@ -215,101 +215,116 @@ if (!isset($_SESSION['token'])) {
 
 
             <script>
-                                            $(document).ready(function () {
-                                                dashboard.initialElement();
+                                    $(document).ready(function () {
+                                        dashboard.initialElement();
 
-                                                setInterval(function () {
-                                                    $.ajax({
-                                                        url: "../model/com.gogetrich.function/SessionCheck.php",
-                                                        type: 'POST',
-                                                        success: function (data, textStatus, jqXHR) {
-                                                            if (data == 409) {
-                                                                //session expired
-                                                                window.location.href = "loginError?rc=<?= md5(409) ?>&aRed=true";
-                                                            }
-                                                        }
-                                                    });
-                                                }, 3000);
-
-                                                $("#searchEnrolByCriteria").click(function () {
-
-                                                    var customerFName = $("#customerFName").val();
-                                                    var customerLName = $("#customerLName").val();
-                                                    var paymentStatus = $("#paymentStatus").val();
-                                                    var regisFromDate = $("#regisFromDate").val();
-                                                    var regisToDate = $("#regisToDate").val();
-                                                    var courseHeaderId = $("#courseHeaderId").val();
-                                                    var searchCriteria = "all";
-                                                    if (regisFromDate == "" && regisToDate != "") {
-                                                        alert("Please enter from date");
-                                                    } else if (regisToDate == "" && regisFromDate != "") {
-                                                        alert("Please enter to date");
-                                                    } else {
-                                                        if (customerLName == "" && customerFName == "" && paymentStatus == 0 && regisFromDate == "" && regisToDate == "" && courseHeaderId == "0") {
-                                                            searchCriteria = "searchCriteria=all";
-                                                        } else {
-                                                            searchCriteria = "customerLName=" + customerLName + "&customerFName=" + customerFName + "&paymentStatus=" + paymentStatus + "&regisFromDate=" + regisFromDate + "&regisToDate=" + regisToDate + "&courseHeaderId=" + courseHeaderId;
-                                                        }
-                                                        $.ajax({
-                                                            url: "dashboard_tbl.php?searchCriteria=condition&" + searchCriteria,
-                                                            type: 'POST',
-                                                            beforeSend: function (xhr) {
-                                                                $("html").addClass("js");
-                                                            }, success: function (data, textStatus, jqXHR) {
-                                                                $("html").removeClass("js");
-                                                                $("#customerEnroll").html(data);
-                                                            }
-                                                        });
+                                        setInterval(function () {
+                                            $.ajax({
+                                                url: "../model/com.gogetrich.function/SessionCheck.php",
+                                                type: 'POST',
+                                                success: function (data, textStatus, jqXHR) {
+                                                    if (data == 409) {
+                                                        //session expired
+                                                        window.location.href = "loginError?rc=<?= md5(409) ?>&aRed=true";
                                                     }
-
-                                                });
-                                            });
-                                            dashboard = {
-                                                initialElement: function () {
-                                                    $("#customerEnroll").load("dashboard_tbl.php", function () {
-                                                        $("html").removeClass("js");
-                                                    });
-                                                    $(".datetimepicker").datetimepicker({
-                                                        scrollMonth: false,
-                                                        timepicker: false,
-                                                        format: 'Y-m-d',
-                                                        theme: 'default'
-                                                    });
                                                 }
-                                            };
-                                            function changePaymentStatus(enrollID, status) {
+                                            });
+                                        }, 3000);
 
+                                        $("#searchEnrolByCriteria").click(function () {
+
+                                            var customerFName = $("#customerFName").val();
+                                            var customerLName = $("#customerLName").val();
+                                            var paymentStatus = $("#paymentStatus").val();
+                                            var regisFromDate = $("#regisFromDate").val();
+                                            var regisToDate = $("#regisToDate").val();
+                                            var courseHeaderId = $("#courseHeaderId").val();
+                                            var searchCriteria = "";
+                                            if (regisFromDate == "" && regisToDate != "") {
+                                                alert("Please enter from date");
+                                            } else if (regisToDate == "" && regisFromDate != "") {
+                                                alert("Please enter to date");
+                                            } else {
+                                                if (customerLName == "" && customerFName == "" && paymentStatus == 0 && regisFromDate == "" && regisToDate == "" && courseHeaderId == "0") {
+                                                    searchCriteria = "searchCriteria=all";
+                                                } else {
+                                                    searchCriteria = "searchCriteria=condition&customerLName=" + customerLName + "&customerFName=" + customerFName + "&paymentStatus=" + paymentStatus + "&regisFromDate=" + regisFromDate + "&regisToDate=" + regisToDate + "&courseHeaderId=" + courseHeaderId;
+                                                }
                                                 $.ajax({
-                                                    url: "../model/com.gogetrich.function/changePaymentStatus.php?enrollId=" + enrollID + "&status=" + status,
+                                                    url: "dashboard_tbl.php?" + searchCriteria,
                                                     type: 'POST',
                                                     beforeSend: function (xhr) {
                                                         $("html").addClass("js");
-                                                    },
-                                                    success: function (data, textStatus, jqXHR) {
-                                                        $("#customerEnroll").load("dashboard_tbl.php", function () {
-                                                            $("html").removeClass("js");
-                                                        });
+                                                    }, success: function (data, textStatus, jqXHR) {
+                                                        $("html").removeClass("js");
+                                                        $("#customerEnroll").html(data);
                                                     }
                                                 });
                                             }
-                                            function deleteEnrollment(enrollID) {
-                                                var r = confirm("Do you want to delete this item?");
-                                                if (r == true) {
-                                                    $.ajax({
-                                                        url: "../model/com.gogetrich.function/deleteEnrollment.php?enrollId=" + enrollID,
-                                                        type: 'POST',
-                                                        beforeSend: function (xhr) {
-                                                            $("html").addClass("js");
-                                                        },
-                                                        success: function (data, textStatus, jqXHR) {
-                                                            $("#customerEnroll").load("dashboard_tbl.php", function () {
-                                                                $("html").removeClass("js");
-                                                            });
-                                                        }
+
+                                        });
+                                    });
+                                    dashboard = {
+                                        initialElement: function () {
+                                            $("#customerEnroll").load("dashboard_tbl.php", function () {
+                                                $("html").removeClass("js");
+                                            });
+                                            $(".datetimepicker").datetimepicker({
+                                                scrollMonth: false,
+                                                timepicker: false,
+                                                format: 'Y-m-d',
+                                                theme: 'default'
+                                            });
+                                        }
+                                    };
+                                    function changePaymentStatus(enrollID, status) {
+
+                                        $.ajax({
+                                            url: "../model/com.gogetrich.function/changePaymentStatus.php?enrollId=" + enrollID + "&status=" + status,
+                                            type: 'POST',
+                                            beforeSend: function (xhr) {
+                                                $("html").addClass("js");
+                                            },
+                                            success: function (data, textStatus, jqXHR) {
+                                                $("#customerEnroll").load("dashboard_tbl.php", function () {
+                                                    $("html").removeClass("js");
+                                                });
+                                            }
+                                        });
+                                    }
+                                    function deleteEnrollment(enrollID) {
+                                        var r = confirm("Do you want to delete this item?");
+                                        if (r == true) {
+                                            $.ajax({
+                                                url: "../model/com.gogetrich.function/deleteEnrollment.php?enrollId=" + enrollID,
+                                                type: 'POST',
+                                                beforeSend: function (xhr) {
+                                                    $("html").addClass("js");
+                                                },
+                                                success: function (data, textStatus, jqXHR) {
+                                                    $("#customerEnroll").load("dashboard_tbl.php", function () {
+                                                        $("html").removeClass("js");
                                                     });
                                                 }
+                                            });
+                                        }
 
-                                            }
+                                    }
+                                    function exportExcel() {
+                                        var customerFName = $("#customerFName").val();
+                                        var customerLName = $("#customerLName").val();
+                                        var paymentStatus = $("#paymentStatus").val();
+                                        var regisFromDate = $("#regisFromDate").val();
+                                        var regisToDate = $("#regisToDate").val();
+                                        var courseHeaderId = $("#courseHeaderId").val();
+                                        var searchCriteria = "";
+                                        if (customerLName == "" && customerFName == "" && paymentStatus == 0 && regisFromDate == "" && regisToDate == "" && courseHeaderId == "0") {
+                                            searchCriteria = "searchCriteria=all";
+                                        } else {
+                                            searchCriteria = "searchCriteria=condition&customerLName=" + customerLName + "&customerFName=" + customerFName + "&paymentStatus=" + paymentStatus + "&regisFromDate=" + regisFromDate + "&regisToDate=" + regisToDate + "&courseHeaderId=" + courseHeaderId;
+                                        }
+                                        window.location.href = "download/enrollmentDownload.php?" + searchCriteria;
+                                    }
             </script>
 
         </div>        

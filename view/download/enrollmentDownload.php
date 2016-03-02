@@ -1,7 +1,10 @@
 <?php
-require '../model-db-connection/config.php';
-?>                       
-<table class="table table-bordered table-striped table_vam" id="dt_gal">
+require '../../model-db-connection/config.php';
+header('Content-Type: application/vnd.ms-excel');
+header('Content-Disposition: attachment;filename="enrollment_sheet_data.xls"');
+header('Cache-Control: max-age=0');
+?>                  
+<table class="table table-bordered table-striped table_vam" border="1">
     <thead>
         <tr>
             <th>No.</th>
@@ -10,7 +13,7 @@ require '../model-db-connection/config.php';
             <th>Phone number</th>
             <th>Register Date</th>
             <th>Course Name</th>
-            <th></th>
+            <th>Remark</th>
         </tr>
     </thead>
     <tbody>
@@ -52,7 +55,7 @@ require '../model-db-connection/config.php';
                     . $conditionaDate
                     . "ORDER BY RCE.CREATED_DATE_TIME DESC";
         }
-        
+
         $resGetUserEnroll = mysql_query($sqlGetUserEnroll);
         $no = 1;
         while ($rowGetUserEnroll = mysql_fetch_array($resGetUserEnroll)) {
@@ -63,33 +66,20 @@ require '../model-db-connection/config.php';
                 <td>
                     <?php
                     if ($rowGetUserEnroll['PAYMENT_STATUS'] == "PENDING") {
-                        echo '<i class="splashy-box_locked"></i> ' . $rowGetUserEnroll['PAYMENT_STATUS'];
+                        echo '<i class="splashy-box_locked"></i>: ' . $rowGetUserEnroll['PAYMENT_STATUS'];
                     } else if ($rowGetUserEnroll['PAYMENT_STATUS'] == "COMPLETE") {
-                        echo '<i class="splashy-box_okay"></i> ' . $rowGetUserEnroll['PAYMENT_STATUS'];
+                        echo '<i class="splashy-box_okay"></i>: ' . $rowGetUserEnroll['PAYMENT_STATUS'];
                     } else if ($rowGetUserEnroll['PAYMENT_STATUS'] == "REJECT") {
-                        echo '<i class="splashy-box_remove"></i> ' . $rowGetUserEnroll['PAYMENT_STATUS'];
+                        echo '<i class="splashy-box_remove"></i>: ' . $rowGetUserEnroll['PAYMENT_STATUS'];
                     } else {
-                        echo '<i class="splashy-box_locked"></i> ' . $rowGetUserEnroll['PAYMENT_STATUS'];
+                        echo '<i class="splashy-box_locked"></i>: ' . $rowGetUserEnroll['PAYMENT_STATUS'];
                     }
                     ?>
                 </td>
-                <td><i class="splashy-comment_reply"></i> <?= $rowGetUserEnroll['CUS_PHONE_NUMBER'] ?></td>
-                <td><i class="splashy-calendar_week"></i> <?= $rowGetUserEnroll['CREATED_DATE_TIME'] ?></td>
-                <td><i class="splashy-mail_light_stuffed"></i>: <?= $rowGetUserEnroll['HEADER_NAME'] ?></td>
-                <td>
-                    <div class="btn-group">
-                        <button data-toggle="dropdown" class="btn dropdown-toggle">Action <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="viewEnroll?enID=<?= $rowGetUserEnroll['ENROLL_ID'] ?>&uID=<?= $rowGetUserEnroll['CUS_ID'] ?>&cName=<?= $rowGetUserEnroll['HEADER_NAME'] ?>&pT=<?= md5($rowGetUserEnroll['PAYMENT_STATUS']) ?>"><i class="splashy-application_windows_share"></i> View Enroll</a></li>
-                            <li><a href="#"><i class="splashy-application_windows_edit"></i> Edit Enroll</a>
-                            <li><a href="#" onclick="deleteEnrollment('<?= $rowGetUserEnroll['ENROLL_ID'] ?>')"><i class="splashy-application_windows_remove"></i> Delete Enroll</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#" onclick="changePaymentStatus('<?= $rowGetUserEnroll['ENROLL_ID'] ?>', 'COMPLETE')"><i class="splashy-box_okay"></i> Complete payment</a></li>
-                            <li><a href="#" onclick="changePaymentStatus('<?= $rowGetUserEnroll['ENROLL_ID'] ?>', 'PENDING')"><i class="splashy-box_locked"></i> Pending payment</a></li>
-                            <li><a href="#" onclick="changePaymentStatus('<?= $rowGetUserEnroll['ENROLL_ID'] ?>', 'REJECT')"><i class="splashy-box_remove"></i> Reject payment</a></li>
-                        </ul>
-                    </div>
-                </td>
+                <td> <?= $rowGetUserEnroll['CUS_PHONE_NUMBER'] ?></td>
+                <td> <?= $rowGetUserEnroll['CREATED_DATE_TIME'] ?></td>
+                <td> <?= $rowGetUserEnroll['HEADER_NAME'] ?></td>
+                <td></td>
             </tr>
             <?php
             $no++;
@@ -103,8 +93,3 @@ require '../model-db-connection/config.php';
         "sPaginationType": "bootstrap"
     });
 </script>
-<style type="text/css">
-    #dt_gal_wrapper{
-        overflow: visible !important
-    }
-</style>
