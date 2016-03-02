@@ -55,7 +55,7 @@ if (!isset($_SESSION['token'])) {
         <link rel="stylesheet" href="assets/css/style.css" />
 
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans" />
-
+        <link rel="stylesheet" href="assets/css/jquery.datetimepicker.css" />
         <!-- Favicon -->
         <link rel="shortcut icon" href="favicon.ico" />
 
@@ -82,13 +82,81 @@ if (!isset($_SESSION['token'])) {
 
             <!-- main content -->
             <div id="contentwrapper">
-                <div class="main_content" style="margin-left: 0px !important; height:600px !important;">
+                <div class="main_content" style="margin-left: 0px !important; height: 800px !important;">
 
                     <div class="row-fluid">
-                        <div class="span12">
+                        <div class="span4">
+                            <div class="heading clearfix">
+                                <h3 class="pull-left">Search Customer Enroll</h3>          
+                                <!--span class="pull-right btn" onclick="createCate();"><i class="icon-plus"></i> Create Category</span-->
+                            </div>
+                            <div>
+                                <div class="control-group">
+                                    <label class="control-label">Customer First Name</label>
+                                    <div class="controls">
+                                        <input type="text" name="customerFName" id="customerFName" class="span12" placeholder="select all"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Customer Last Name</label>
+                                    <div class="controls">
+                                        <input type="text" name="customerLName" id="customerLName" class="span12" placeholder="select all"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Payment status</label>
+                                    <div class="controls">
+                                        <select id="paymentStatus" name="paymentStatus" class="span12">
+                                            <option value="0">-- Select all --</option>
+                                            <option value="PENDING">PENDING</option>
+                                            <option value="COMPLETE">COMPLETE</option>
+                                            <option value="REJECT">REJECT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="availableSeat">Registration from Date</label>
+                                    <div class="controls">
+                                        <input type="text" name="regisFromDate" id="regisFromDate" class="span12 datetimepicker" placeholder="select all" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="availableSeat">Registration to Date</label>
+                                    <div class="controls">
+                                        <input type="text" name="regisToDate" id="regisToDate" class="span12 datetimepicker" placeholder="select all"/>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="courseHeaderId">Course Name</label>
+                                    <div class="controls">
+                                        <select id="courseHeaderId" class="span12">
+                                            <option value="0">-- Select all --</option>
+                                            <?php
+                                            $sqlGetCourseHeaderDetail = "SELECT * "
+                                                    . "FROM GTRICH_COURSE_HEADER "
+                                                    . "WHERE HEADER_COURSE_STATUS = 0";
+                                            $res = mysql_query($sqlGetCourseHeaderDetail);
+                                            while ($row = mysql_fetch_array($res)) {
+                                                ?>
+                                                <option value="<?= $row['HEADER_ID'] ?>"><?= $row['HEADER_NAME'] ?></option>
+                                                <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input type="button" class="pull-right btn btn-primary" id="searchEnrolByCriteria" value="Search"/>
+                                        <input type="button" class="pull-right btn btn-primary" onclick="window.location.href = 'dashboard'" value="Reset" style="margin-right: 10px"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="span8">
                             <div class="heading clearfix">
                                 <h3 class="pull-left">Customer Enroll</h3>          
-                                <!--span class="pull-right btn" onclick="createCate();"><i class="icon-plus"></i> Create Category</span-->
+                                <span class="pull-right btn"><img src="assets/img/Excel-icon.png" width="30px" height="30px"/> Export to Excel</span>
                             </div>
                             <div id="customerEnroll"></div>
                         </div>                        
@@ -141,66 +209,107 @@ if (!isset($_SESSION['token'])) {
             <!-- sortable/filterable list -->
             <script src="assets/lib/list_js/list.min.js"></script>
             <script src="assets/lib/list_js/plugins/paging/list.paging.min.js"></script>
+            <script src="assets/js/jquery.datetimepicker.full.js"></script>
             <!-- dashboard functions -->
             <script src="assets/js/gebo_dashboard.js"></script>
 
+
             <script>
-            $(document).ready(function () {
-                dashboard.initialElement();
+                                            $(document).ready(function () {
+                                                dashboard.initialElement();
 
-                setInterval(function () {
-                    $.ajax({
-                        url: "../model/com.gogetrich.function/SessionCheck.php",
-                        type: 'POST',
-                        success: function (data, textStatus, jqXHR) {
-                            if (data == 409) {
-                                //session expired
-                                window.location.href = "loginError?rc=<?= md5(409) ?>&aRed=true";
-                            }
-                        }
-                    });
-                }, 3000);
-            });
-            dashboard = {
-                initialElement: function () {
-                    $("#customerEnroll").load("dashboard_tbl.php", function () {
-                        $("html").removeClass("js");
-                    });
-                }
-            };
-            function changePaymentStatus(enrollID, status) {
+                                                setInterval(function () {
+                                                    $.ajax({
+                                                        url: "../model/com.gogetrich.function/SessionCheck.php",
+                                                        type: 'POST',
+                                                        success: function (data, textStatus, jqXHR) {
+                                                            if (data == 409) {
+                                                                //session expired
+                                                                window.location.href = "loginError?rc=<?= md5(409) ?>&aRed=true";
+                                                            }
+                                                        }
+                                                    });
+                                                }, 3000);
 
-                $.ajax({
-                    url: "../model/com.gogetrich.function/changePaymentStatus.php?enrollId=" + enrollID + "&status=" + status,
-                    type: 'POST',
-                    beforeSend: function (xhr) {
-                        $("html").addClass("js");
-                    },
-                    success: function (data, textStatus, jqXHR) {
-                        $("#customerEnroll").load("dashboard_tbl.php", function () {
-                            $("html").removeClass("js");
-                        });
-                    }
-                });
-            }
-            function deleteEnrollment(enrollID) {
-                var r = confirm("Do you want to delete this item?");
-                if (r == true) {
-                    $.ajax({
-                        url: "../model/com.gogetrich.function/deleteEnrollment.php?enrollId=" + enrollID,
-                        type: 'POST',
-                        beforeSend: function (xhr) {
-                            $("html").addClass("js");
-                        },
-                        success: function (data, textStatus, jqXHR) {
-                            $("#customerEnroll").load("dashboard_tbl.php", function () {
-                                $("html").removeClass("js");
-                            });
-                        }
-                    });
-                }
+                                                $("#searchEnrolByCriteria").click(function () {
 
-            }
+                                                    var customerFName = $("#customerFName").val();
+                                                    var customerLName = $("#customerLName").val();
+                                                    var paymentStatus = $("#paymentStatus").val();
+                                                    var regisFromDate = $("#regisFromDate").val();
+                                                    var regisToDate = $("#regisToDate").val();
+                                                    var courseHeaderId = $("#courseHeaderId").val();
+                                                    var searchCriteria = "all";
+                                                    if (regisFromDate == "" && regisToDate != "") {
+                                                        alert("Please enter from date");
+                                                    } else if (regisToDate == "" && regisFromDate != "") {
+                                                        alert("Please enter to date");
+                                                    } else {
+                                                        if (customerLName == "" && customerFName == "" && paymentStatus == 0 && regisFromDate == "" && regisToDate == "" && courseHeaderId == "0") {
+                                                            searchCriteria = "searchCriteria=all";
+                                                        } else {
+                                                            searchCriteria = "customerLName=" + customerLName + "&customerFName=" + customerFName + "&paymentStatus=" + paymentStatus + "&regisFromDate=" + regisFromDate + "&regisToDate=" + regisToDate + "&courseHeaderId=" + courseHeaderId;
+                                                        }
+                                                        $.ajax({
+                                                            url: "dashboard_tbl.php?searchCriteria=condition&" + searchCriteria,
+                                                            type: 'POST',
+                                                            beforeSend: function (xhr) {
+                                                                $("html").addClass("js");
+                                                            }, success: function (data, textStatus, jqXHR) {
+                                                                $("html").removeClass("js");
+                                                                $("#customerEnroll").html(data);
+                                                            }
+                                                        });
+                                                    }
+
+                                                });
+                                            });
+                                            dashboard = {
+                                                initialElement: function () {
+                                                    $("#customerEnroll").load("dashboard_tbl.php", function () {
+                                                        $("html").removeClass("js");
+                                                    });
+                                                    $(".datetimepicker").datetimepicker({
+                                                        scrollMonth: false,
+                                                        timepicker: false,
+                                                        format: 'Y-m-d',
+                                                        theme: 'default'
+                                                    });
+                                                }
+                                            };
+                                            function changePaymentStatus(enrollID, status) {
+
+                                                $.ajax({
+                                                    url: "../model/com.gogetrich.function/changePaymentStatus.php?enrollId=" + enrollID + "&status=" + status,
+                                                    type: 'POST',
+                                                    beforeSend: function (xhr) {
+                                                        $("html").addClass("js");
+                                                    },
+                                                    success: function (data, textStatus, jqXHR) {
+                                                        $("#customerEnroll").load("dashboard_tbl.php", function () {
+                                                            $("html").removeClass("js");
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                            function deleteEnrollment(enrollID) {
+                                                var r = confirm("Do you want to delete this item?");
+                                                if (r == true) {
+                                                    $.ajax({
+                                                        url: "../model/com.gogetrich.function/deleteEnrollment.php?enrollId=" + enrollID,
+                                                        type: 'POST',
+                                                        beforeSend: function (xhr) {
+                                                            $("html").addClass("js");
+                                                        },
+                                                        success: function (data, textStatus, jqXHR) {
+                                                            $("#customerEnroll").load("dashboard_tbl.php", function () {
+                                                                $("html").removeClass("js");
+                                                            });
+                                                        }
+                                                    });
+                                                }
+
+                                            }
             </script>
 
         </div>        

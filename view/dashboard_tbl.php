@@ -15,10 +15,44 @@ require '../model-db-connection/config.php';
     </thead>
     <tbody>
         <?php
-        $sqlGetUserEnroll = "SELECT * FROM RICH_CUSTOMER_ENROLL RCE "
-                . "LEFT JOIN RICH_CUSTOMER RC ON RC.CUS_ID = RCE.ENROLL_CUS_ID "
-                . "LEFT JOIN GTRICH_COURSE_HEADER GCH ON RCE.ENROLL_COURSE_ID = GCH.HEADER_ID "
-                . "ORDER BY RCE.CREATED_DATE_TIME DESC";
+        $searchCriteria = (string) filter_input(INPUT_GET, 'searchCriteria');
+        if ($searchCriteria == "all") {
+            $sqlGetUserEnroll = "SELECT * FROM RICH_CUSTOMER_ENROLL RCE "
+                    . "LEFT JOIN RICH_CUSTOMER RC ON RC.CUS_ID = RCE.ENROLL_CUS_ID "
+                    . "LEFT JOIN GTRICH_COURSE_HEADER GCH ON RCE.ENROLL_COURSE_ID = GCH.HEADER_ID "
+                    . "ORDER BY RCE.CREATED_DATE_TIME DESC";
+        } else {
+            $customerFName = (string) filter_input(INPUT_GET, 'customerFName');
+            $customerLName = (string) filter_input(INPUT_GET, 'customerLName');
+            $regisFromDate = (string) filter_input(INPUT_GET, 'regisFromDate');
+            $regisToDate = (string) filter_input(INPUT_GET, 'regisToDate');
+            $courseHeaderId = (string) filter_input(INPUT_GET, 'courseHeaderId');
+            $paymentStatus = (string) filter_input(INPUT_GET, 'paymentStatus');
+
+            $conditaionCustomerFName = $customerFName == "" ? "" : "AND RC.CUS_FIRST_NAME LIKE '%" . $customerFName . "%' ";
+            $conditaionCustomerLName = $customerLName == "" ? "" : "AND RC.CUS_LAST_NAME LIKE '%" . $customerLName . "%' ";
+            $conditioncourseHeaderId = $courseHeaderId == 0 ? "" : "AND GCH.HEADER_ID LIKE '" . $courseHeaderId . "' ";
+            $conditionPaymentStatus = "";
+            if (!empty($paymentStatus) || $paymentStatus != 0) {
+                $conditionPaymentStatus = "AND RCE.PAYMENT_STATUS LIKE '" . $paymentStatus . "' ";
+            }
+            $conditionaDate = "";
+            if (!empty($regisFromDate) && !empty($regisToDate)) {
+                $conditionaDate = "AND RCE.CREATED_DATE_TIME BETWEEN '" . $regisFromDate . "' AND '" . $regisToDate . "' ";
+            }
+
+            $sqlGetUserEnroll = "SELECT * FROM RICH_CUSTOMER_ENROLL RCE "
+                    . "LEFT JOIN RICH_CUSTOMER RC ON RC.CUS_ID = RCE.ENROLL_CUS_ID "
+                    . "LEFT JOIN GTRICH_COURSE_HEADER GCH ON RCE.ENROLL_COURSE_ID = GCH.HEADER_ID "
+                    . "WHERE 1=1 "
+                    . $conditaionCustomerFName
+                    . $conditaionCustomerLName
+                    . $conditioncourseHeaderId
+                    . $conditionPaymentStatus
+                    . $conditionaDate
+                    . "ORDER BY RCE.CREATED_DATE_TIME DESC";
+        }
+        
         $resGetUserEnroll = mysql_query($sqlGetUserEnroll);
         $no = 1;
         while ($rowGetUserEnroll = mysql_fetch_array($resGetUserEnroll)) {
