@@ -309,16 +309,11 @@ if (!isset($_SESSION['token'])) {
                                 <fieldset title="Course Detail">
                                     <legend class="hide">Course Detail&hellip;</legend>
                                     <div id="notificationDetail"></div>
-                                    <!--div class="control-group">
-                                        <a href="#" id="addDetailClick" style="margin-top: 10px;" class="btn btn-default pull-left">
-                                            <i class="icon-plus"></i> <span id="iconName">Add Detail</span>
-                                        </a>                                        
-                                    </div-->
                                     <div id="formCourseCreate">
                                         <div class="control-group">
                                             <label for="descHeaderID" class="control-label">Description Header*:</label>
                                             <div class="controls">
-                                                <select id="descHeaderID" name="descHeaderID" class="span9">
+                                                <select id="descHeaderID" name="descHeaderID" class="span6">
                                                     <option value="">== Please select description header == </option>
                                                     <?php
                                                     $sqlGetCate = "SELECT * "
@@ -336,7 +331,7 @@ if (!isset($_SESSION['token'])) {
                                         <div class="control-group">
                                             <label for="detailOrder" class="control-label">Detail order*:</label>
                                             <div class="controls">
-                                                <input type="number" min="1" max="100" name="detailOrder" id="detailOrder"/>
+                                                <input type="number" min="1" max="100" name="detailOrder" id="detailOrder" class="span6"/>
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -345,11 +340,11 @@ if (!isset($_SESSION['token'])) {
                                                 <div class="control-group" id="hideMap">
                                                     <label for="lat" class="control-label">Latitude*:</label>
                                                     <div class="controls">
-                                                        <input type="text" id="lat" name="lat"/>
+                                                        <input type="text" id="lat" name="lat" class="span5"/>
                                                     </div><br/>
                                                     <label for="lng" class="control-label">Longitude*:</label>
                                                     <div class="controls">
-                                                        <input type="text" id="lng" name="lng"/>
+                                                        <input type="text" id="lng" name="lng" class="span5"/>
                                                     </div><br/>
                                                 </div>
                                             </div>
