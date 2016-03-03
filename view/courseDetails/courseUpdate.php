@@ -232,12 +232,12 @@ if (!isset($_SESSION['token'])) {
                                             <input type="text" name="subCourseName" id="subCourseName" class="span10"/>
                                         </div>
                                     </div>
-                                    <div class="control-group">
+                                    <!--div class="control-group">
                                         <label class="control-label" for="availableSeat">Available (Seats)*</label>
                                         <div class="controls">
                                             <input type="number" name="availableSeat" id="availableSeat" class="span10"/>
                                         </div>
-                                    </div>
+                                    </div-->
                                     <div class="control-group">
                                         <label class="control-label">Course Event Date*</label>
                                         <div class="controls">
@@ -476,17 +476,17 @@ if (!isset($_SESSION['token'])) {
                                             course_page.initialElement();
                                             $("#useMap").click(function () {
                                                 if ($("#useMap").is(':checked')) {
-                                                    $("#hideMap").show(); // checked
-                                                    $("#ifChooseMap").hide();
+                                                    $("#hideMap").show();
+//                                                    $("#ifChooseMap").hide();
                                                     $("#lat").val("");
                                                     $("#lng").val("");
-                                                    CKEDITOR.instances.descriptionDetail.setData('');
+//                                                    CKEDITOR.instances.descriptionDetail.setData('');
                                                 } else {
                                                     $("#lat").val("");
                                                     $("#lng").val("");
                                                     $("#hideMap").hide();
                                                     $("#ifChooseMap").show();
-                                                    CKEDITOR.instances.descriptionDetail.setData('');
+//                                                    CKEDITOR.instances.descriptionDetail.setData('');
                                                 }
                                             });
 <?php
@@ -512,7 +512,7 @@ if (!empty($notFound)) {
                                             $("#subCourseName").val('<?= $rowHeader['SUB_HEADER_NAME'] ?>');
                                             $("#courseHeaderTime").val('<?= $rowHeader['HEADER_CREATE_DATE_TIME'] ?>');
                                             $("#courseDuration").val('<?= $rowHeader['HEADER_COURSE_DURATION'] ?>');
-                                            $("#availableSeat").val('<?= $rowHeader['AVAILABLE_SEATS'] ?>');
+                                            //$("#availableSeat").val('<?= $rowHeader['AVAILABLE_SEATS'] ?>');
                                             var date = '<?= $rowHeader['HEADER_EVENT_DATE'] ?>'.split(",");
                                             var resultDate = new Array();
                                             for (var i = 0; i < date.length; i++) {
@@ -722,7 +722,7 @@ if (!empty($notFound)) {
                                             var subCourseName = $("#subCourseName").val();
                                             var courseHeaderTime = $("#courseHeaderTime").val();
                                             var courseDuration = $("#courseDuration").val();
-                                            var availableSeat = $("#availableSeat").val();
+//                                            var availableSeat = $("#availableSeat").val();
                                             $.ajax({
                                                 url: "../../model/com.gogetrich.function/checkCourseDetailCreated.php",
                                                 type: 'POST',
@@ -734,7 +734,7 @@ if (!empty($notFound)) {
                                                         $.ajax({
                                                             url: "../../model/com.gogetrich.function/updateDetailHeaderAndDetail.php",
                                                             type: 'POST',
-                                                            data: {'availableSeat': availableSeat, 'courseDuration': courseDuration, 'courseHeaderTime': courseHeaderTime, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseStatus': courseStatus},
+                                                            data: {'availableSeat': '', 'courseDuration': courseDuration, 'courseHeaderTime': courseHeaderTime, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'detailOrder': detailOrder, 'headerID': headerID, 'courseCategory': courseCategory, 'courseName': courseName, 'courseStatus': courseStatus},
                                                             success: function (saveHeaderData, textStatus, jqXHR) {
                                                                 if (saveHeaderData == 200) {
                                                                     $("#notificationDialog").modal("show");
@@ -786,7 +786,7 @@ if (!empty($notFound)) {
                                                     if (json.DETAIL_LAT != "") {
                                                         $('#useMap').attr('checked', true);
                                                         $("#hideMap").show();
-                                                        $("#ifChooseMap").hide();
+//                                                        $("#ifChooseMap").hide();
                                                         $("#lat").val(json.DETAIL_LAT);
                                                         $("#lng").val(json.DETAIL_LNG);
                                                     } else {
@@ -913,7 +913,7 @@ if (!empty($notFound)) {
                                         function goToByScroll(id) {
                                             $('html,body').animate({
                                                 scrollTop: $(id).offset().top},
-                                            50);
+                                                    50);
                                         }
                                         function clearPromotion() {
                                             $("#promotionId").val("");

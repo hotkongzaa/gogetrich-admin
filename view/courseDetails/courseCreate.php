@@ -236,12 +236,12 @@ if (!isset($_SESSION['token'])) {
                                             <input type="text" name="subCourseName" id="subCourseName" class="span10"/>
                                         </div>
                                     </div>
-                                    <div class="control-group">
+                                    <!--div class="control-group">
                                         <label class="control-label" for="availableSeat">Available (Seats)*</label>
                                         <div class="controls">
                                             <input type="number" name="availableSeat" id="availableSeat" class="span10"/>
                                         </div>
-                                    </div>
+                                    </div-->
                                     <div class="control-group">
                                         <label class="control-label">Course Event Date*</label>
                                         <div class="controls">
@@ -484,7 +484,7 @@ if (!isset($_SESSION['token'])) {
                                             $("#useMap").click(function () {
                                                 if ($("#useMap").is(':checked')) {
                                                     $("#hideMap").show();  // checked
-                                                    $("#ifChooseMap").hide();
+//                                                    $("#ifChooseMap").hide();
                                                     $("#lat").val("");
                                                     $("#lng").val("");
                                                     CKEDITOR.instances.descriptionDetail.setData('');
@@ -716,7 +716,7 @@ if (!isset($_SESSION['token'])) {
                                                         $.ajax({
                                                             url: "../../model/com.gogetrich.function/SaveDetailHeaderAndDetail.php",
                                                             type: 'POST',
-                                                            data: {'availableSeat': availableSeat, 'courseDuration': courseDuration, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'courseCategory': courseCategory, 'courseName': courseName, 'courseStatus': courseStatus},
+                                                            data: {'availableSeat': '', 'courseDuration': courseDuration, 'subCourseName': subCourseName, 'courseAddiDetail': courseAddiDetail, 'courseCategory': courseCategory, 'courseName': courseName, 'courseStatus': courseStatus},
                                                             success: function (saveHeaderData, textStatus, jqXHR) {
                                                                 if (saveHeaderData == 200) {
                                                                     //alert("Save course success");
@@ -770,7 +770,7 @@ if (!isset($_SESSION['token'])) {
                                                     if (json.DETAIL_LAT != "") {
                                                         $('#useMap').attr('checked', true);
                                                         $("#hideMap").show();
-                                                        $("#ifChooseMap").hide();
+//                                                        $("#ifChooseMap").hide();
                                                         $("#lat").val(json.DETAIL_LAT);
                                                         $("#lng").val(json.DETAIL_LNG);
                                                     } else {
@@ -898,7 +898,7 @@ if (!isset($_SESSION['token'])) {
                                         function goToByScroll(id) {
                                             $('html,body').animate({
                                                 scrollTop: $(id).offset().top},
-                                            50);
+                                                    50);
                                         }
                                         function clearPromotion() {
                                             $("#promotionId").val("");
