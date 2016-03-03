@@ -31,10 +31,13 @@ require '../model-db-connection/config.php';
 
             $conditaionCustomerFName = $customerFName == "" ? "" : "AND RC.CUS_FIRST_NAME LIKE '%" . $customerFName . "%' ";
             $conditaionCustomerLName = $customerLName == "" ? "" : "AND RC.CUS_LAST_NAME LIKE '%" . $customerLName . "%' ";
-            $conditioncourseHeaderId = $courseHeaderId == 0 ? "" : "AND GCH.HEADER_ID LIKE '" . $courseHeaderId . "' ";
             $conditionPaymentStatus = "";
             if (!empty($paymentStatus) || $paymentStatus != 0) {
                 $conditionPaymentStatus = "AND RCE.PAYMENT_STATUS LIKE '" . $paymentStatus . "' ";
+            }
+			$conditioncourseHeaderId = "";
+			if (!empty($courseHeaderId) || $courseHeaderId != 0) {
+                $conditioncourseHeaderId = "AND GCH.HEADER_ID LIKE '" . $courseHeaderId . "' ";
             }
             $conditionaDate = "";
             if (!empty($regisFromDate) && !empty($regisToDate)) {
@@ -51,6 +54,7 @@ require '../model-db-connection/config.php';
                     . $conditionPaymentStatus
                     . $conditionaDate
                     . "ORDER BY RCE.CREATED_DATE_TIME DESC";
+										
         }
         
         $resGetUserEnroll = mysql_query($sqlGetUserEnroll);
