@@ -343,7 +343,55 @@ if (!isset($_SESSION['token'])) {
                                                 <input type="number" min="1" max="100" name="detailOrder" id="detailOrder"/>
                                             </div>
                                         </div>
-                                        <div class="control-group">
+
+                                        <div class="control-group span11">
+                                            <div class="tabbable tabs-left">
+                                                <ul class="nav nav-tabs">
+                                                    <li id="normalContentTabHeader">
+                                                        <a href="#normalContentTab" data-toggle="tab">Content Normal</a>
+                                                    </li>
+                                                    <li id="galleryContentTabHeader">
+                                                        <a href="#galleryContentTab" data-toggle="tab">Content Gallery</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane" id="normalContentTab">
+                                                        <p>
+                                                            <label>
+                                                                <input type="checkbox" id="useMap" value="map"/> Using Google Map API <i class="splashy-map"></i>
+                                                            </label>
+                                                            <br/>
+                                                        <div class="control-group" id="hideMap">
+                                                            <label for="lat" class="control-label">Latitude*:</label>
+                                                            <div class="controls">
+                                                                <input type="text" id="lat" name="lat" class="span5"/>
+                                                            </div><br/>
+                                                            <label for="lng" class="control-label">Longitude*:</label>
+                                                            <div class="controls">
+                                                                <input type="text" id="lng" name="lng" class="span5"/>
+                                                            </div><br/>
+                                                        </div>
+                                                        <div id="ifChooseMap">                                                            
+                                                            <textarea name="descriptionDetail" id="descriptionDetail" class="span9"></textarea>
+                                                        </div>      
+                                                        </p>
+                                                    </div>
+                                                    <div class="tab-pane" id="galleryContentTab">
+                                                        <p>
+                                                        <form role="form" id="new_product_form" enctype="multipart/form-data">           
+                                                            <div class="well well-sm">
+                                                                <input type="file" id="productImage" name="productImage">
+                                                            </div>
+                                                        </form>
+
+                                                        <div id="show_image_tbl"></div>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--div class="control-group">
                                             <div class="controls">
                                                 <label><input type="checkbox" id="useMap" value="map"/> Using Google Map API <i class="splashy-map"></i></label><br/>
                                                 <div class="control-group" id="hideMap">
@@ -355,9 +403,6 @@ if (!isset($_SESSION['token'])) {
                                                     <div class="controls">
                                                         <input type="text" id="lng" name="lng"/>
                                                     </div><br/>
-                                                    <!--div class="controls">
-                                                        <input type="button" id="previewMap" class="btn" value="Preview map"/>
-                                                    </div-->
                                                 </div>
                                             </div>
                                         </div>
@@ -366,7 +411,9 @@ if (!isset($_SESSION['token'])) {
                                             <div class="controls">
                                                 <textarea name="descriptionDetail" id="descriptionDetail" class="span9"></textarea>
                                             </div>
-                                        </div>                                    
+                                        </div-->             
+
+
                                         <div class="control-group" id="ifChooseMap">
                                             <label for="saveToTmpBtn" class="control-label"></label>
                                             <div class="controls">
@@ -457,7 +504,53 @@ if (!isset($_SESSION['token'])) {
                                         var promotionTempState = "Save";
                                         var saveEventDateState = "Save";
                                         var saveCourseTempState = "Save";
+                                        var tabState = "normal";
                                         $(document).ready(function () {
+
+                                            //initial tab content
+                                            $("#normalContentTab").addClass("active");
+                                            $("#normalContentTabHeader").addClass("active");
+                                            //Tab change state
+                                            $("#normalContentTabHeader").click(function () {
+                                                tabState = "normal";
+                                                $("#show_image_tbl").empty();
+                                            });
+                                            $("#galleryContentTabHeader").click(function () {
+                                                tabState = "gallery";
+                                                $.ajax({
+                                                    url: "imageUploadTable.php",
+                                                    type: 'POST',
+                                                    beforeSend: function (xhr) {
+                                                        $("html").addClass("js");
+                                                    }, success: function (data, textStatus, jqXHR) {
+                                                        $("#show_image_tbl").html(data);
+                                                        $("html").removeClass("js");
+                                                    }
+                                                });
+                                            });
+
+                                            //Image upload part
+                                            $("#productImage").change(function () {
+                                                var file = this.files[0];
+                                                var imagefile = file.type;
+                                                var fileSize = (file.size / 1024 / 1024); //image size in kb
+
+                                                var match = ["image/jpeg", "image/png", "image/jpg"];
+                                                if (!((imagefile == match[0]) || (imagefile == match[1]) || (imagefile == match[2]))) {
+                                                    alert("Please Select A valid Image File\n Only jpeg, jpg and png Images type allowed");
+                                                    return false;
+                                                } else if (fileSize > 2) {
+                                                    // the image file size must not over than 2 mb
+                                                    alert("Please select a valid Image File\nOnly less than 2 mb of image are allowed");
+                                                } else {
+                                                    var reader = new FileReader();
+                                                    reader.onload = imageIsLoaded;
+                                                    reader.readAsDataURL(this.files[0]);
+                                                }
+                                            });
+
+
+
                                             $("#addDetailClick").click(function () {
                                                 $("#formCourseCreate").toggle("fast");
                                                 if ($("#iconName").html() == "Add Detail") {
@@ -484,7 +577,6 @@ if (!isset($_SESSION['token'])) {
                                             $("#useMap").click(function () {
                                                 if ($("#useMap").is(':checked')) {
                                                     $("#hideMap").show();  // checked
-//                                                    $("#ifChooseMap").hide();
                                                     $("#lat").val("");
                                                     $("#lng").val("");
                                                     CKEDITOR.instances.descriptionDetail.setData('');
@@ -558,35 +650,62 @@ if (!isset($_SESSION['token'])) {
                                                 }
                                             });
                                         }
+                                        function imageIsLoaded(e) {
+                                            $("#previewImageUploadDialog").modal("show");
+                                            $("#previewImageUpload").html("<img src='" + e.target.result + "' width='500px'/>");
+                                        }
                                         function saveCourseToTmp() {
                                             var descHeaderId = $("#descHeaderID").val();
                                             var lat = $("#lat").val();
                                             var lng = $("#lng").val();
                                             var courseDetail = CKEDITOR.instances.descriptionDetail.getData();
-//                                        var courseDetail = $("#descriptionDetail").val();
                                             var detailOrder = $("#detailOrder").val();
-                                            if (descHeaderId == "") {
-                                                alert("Please select Description Header");
-                                            } else if ($("#detailOrder").val() == "") {
-                                                alert("Please enter detail order as numberic");
-                                            } else if ($("#useMap").is(':checked')) {
-                                                if (lat == "") {
-                                                    alert("Please enter Latitude of your location");
-                                                } else if (lng == "") {
-                                                    alert("Please enter Longitude of your location");
+                                            if (tabState == "normal") {
+                                                if (descHeaderId == "") {
+                                                    alert("Please select Description Header");
+                                                } else if ($("#detailOrder").val() == "") {
+                                                    alert("Please enter detail order as numberic");
+                                                } else if ($("#useMap").is(':checked')) {
+                                                    if (lat == "") {
+                                                        alert("Please enter Latitude of your location");
+                                                    } else if (lng == "") {
+                                                        alert("Please enter Longitude of your location");
+                                                    } else {
+                                                        processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder, "false");
+                                                    }
                                                 } else {
-                                                    processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder);
+                                                    processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder, "false");
                                                 }
                                             } else {
-                                                processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder);
+                                                console.log(tabState);
+                                                if (descHeaderId == "") {
+                                                    alert("Please select Description Header");
+                                                } else if ($("#detailOrder").val() == "") {
+                                                    alert("Please enter detail order as numberic");
+                                                } else {
+                                                    $.ajax({
+                                                        url: "../../model/com.gogetrich.function/CheckGalleryHaveSaveToTmp.php",
+                                                        type: 'POST',
+                                                        success: function (isSave, textStatus, jqXHR) {
+                                                            if (isSave >= 1) {
+                                                                processTempTransaction(descHeaderId, '', '', '', detailOrder, "true");
+                                                            } else {
+                                                                alert("Please add at least one image to gallery");
+                                                            }
+                                                        }
+                                                    });
+                                                }
                                             }
+
+
+
                                         }
-                                        function processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder) {
+                                        function processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder, refGallery) {
                                             if (saveCourseTempState == "Save") {
                                                 $.ajax({
                                                     url: "../../model/com.gogetrich.function/SaveCourseToTemp.php",
                                                     type: 'POST',
-                                                    data: {'detailOrder': detailOrder, 'descHeaderId': descHeaderId, 'lat': lat, 'lng': lng, 'courseDetail': courseDetail},
+                                                    data: {'refGallery': refGallery, 'detailOrder': detailOrder, 'descHeaderId': descHeaderId, 'lat': lat, 'lng': lng, 'courseDetail': courseDetail},
                                                     beforeSend: function (xhr) {
                                                         $("html").addClass("js");
                                                     },
@@ -613,13 +732,14 @@ if (!isset($_SESSION['token'])) {
                                                     }
                                                 });
                                                 saveCourseTempState = "Save";
+                                                tabState = "normal";
                                             } else {
                                                 var tempDetailID = $("#tempCourseDetailID").val();
                                                 var dateTimeTem = $("#dateTimeCourseTemp").val();
                                                 $.ajax({
                                                     url: "../../model/com.gogetrich.function/UpdateCourseInTemp.php",
                                                     type: 'POST',
-                                                    data: {'dateTimeTem': dateTimeTem, 'detailOrder': detailOrder, 'descHeaderId': descHeaderId, 'lat': lat, 'lng': lng, 'courseDetail': courseDetail, 'tempDetailID': tempDetailID},
+                                                    data: {'refGallery': refGallery, 'dateTimeTem': dateTimeTem, 'detailOrder': detailOrder, 'descHeaderId': descHeaderId, 'lat': lat, 'lng': lng, 'courseDetail': courseDetail, 'tempDetailID': tempDetailID},
                                                     beforeSend: function (xhr) {
                                                         $("html").addClass("js");
                                                     },
@@ -647,9 +767,27 @@ if (!isset($_SESSION['token'])) {
                                                     }
                                                 });
                                                 saveCourseTempState = "Save";
+                                                tabState = "normal";
                                             }
                                         }
                                         function clearHeaderDetailField() {
+                                            //Tab content
+                                            $("#normalContentTab").addClass("active");
+                                            $("#galleryContentTab").removeClass("active");
+                                            $("#normalContentTabHeader").addClass("active");
+                                            $("#galleryContentTabHeader").removeClass("active");
+                                            tabState = "normal";
+                                            $.ajax({
+                                                url: "../../model/com.gogetrich.function/deleteImageGalleryInTmp.php",
+                                                type: 'POST',
+                                                beforeSend: function (xhr) {
+                                                    $("html").addClass("js");
+                                                },
+                                                success: function (data, textStatus, jqXHR) {
+                                                    $("html").removeClass("js");
+                                                }
+                                            });
+
                                             $("#descHeaderID").val("");
                                             $("#lat").val("");
                                             $("#lng").val("");
@@ -660,11 +798,11 @@ if (!isset($_SESSION['token'])) {
                                             $("#detailOrder").val("");
                                             saveCourseTempState = "Save";
                                         }
-                                        function deleteCourseTmp(tmpCourseID) {
+                                        function deleteCourseTmp(tmpCourseID, isGall) {
                                             var r = confirm("Do you want to delete this permanently !");
                                             if (r == true) {
                                                 $.ajax({
-                                                    url: "../../model/com.gogetrich.function/deleteCourseTmpByID.php?tmpCourseID=" + tmpCourseID,
+                                                    url: "../../model/com.gogetrich.function/deleteCourseTmpByID.php?tmpCourseID=" + tmpCourseID + "&isGall=" + isGall,
                                                     type: 'POST',
                                                     beforeSend: function (xhr) {
                                                         $("html").addClass("js");
@@ -766,11 +904,10 @@ if (!isset($_SESSION['token'])) {
                                                 success: function (data, textStatus, jqXHR) {
                                                     $("html").removeClass("js");
                                                     var json = $.parseJSON(data);
-                                                    $("#descHeaderID").val(json.REF_COURSE_HEADER_ID);
+
                                                     if (json.DETAIL_LAT != "") {
                                                         $('#useMap').attr('checked', true);
                                                         $("#hideMap").show();
-//                                                        $("#ifChooseMap").hide();
                                                         $("#lat").val(json.DETAIL_LAT);
                                                         $("#lng").val(json.DETAIL_LNG);
                                                     } else {
@@ -778,8 +915,47 @@ if (!isset($_SESSION['token'])) {
                                                         $("#hideMap").hide();
                                                         $("#ifChooseMap").show();
                                                     }
+
+                                                    if (json.REF_GALLERY_ID == "true") {
+                                                        tabState = "gallery";
+                                                        $("#galleryContentTab").addClass("active");
+                                                        $("#galleryContentTabHeader").addClass("active");
+
+                                                        $("#normalContentTab").removeClass("active");
+                                                        $("#normalContentTabHeader").removeClass("active");
+
+                                                        $.ajax({
+                                                            url: "../../model/com.gogetrich.function/getGalleryFromTbl.php?detailId=" + courseTmpID,
+                                                            type: 'POST',
+                                                            beforeSend: function (xhr) {
+                                                                $("html").addClass("js");
+                                                            },
+                                                            success: function (isGet, textStatus, jqXHR) {
+                                                                $("html").removeClass("js");
+                                                                $.ajax({
+                                                                    url: "imageUploadTable.php",
+                                                                    type: 'POST',
+                                                                    beforeSend: function (xhr) {
+                                                                        $("html").addClass("js");
+                                                                    }, success: function (data, textStatus, jqXHR) {
+                                                                        $("#show_image_tbl").html(data);
+                                                                        $("html").removeClass("js");
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    } else {
+                                                        tabState = "normal";
+                                                        $("#normalContentTab").addClass("active");
+                                                        $("#normalContentTabHeader").addClass("active");
+
+                                                        $("#galleryContentTab").removeClass("active");
+                                                        $("#galleryContentTabHeader").removeClass("active");
+                                                    }
+
+
+                                                    $("#descHeaderID").val(json.REF_COURSE_HEADER_ID);
                                                     CKEDITOR.instances.descriptionDetail.setData(json.DETAIL_DESCRIPTION);
-                                                    //                                                $("#descriptionDetail").wysiwyg("setContent", json.DETAIL_DESCRIPTION);
                                                     $("#tempCourseDetailID").val(json.DETAIL_ID);
                                                     $("#detailOrder").val(json.DETAIL_ORDER);
                                                     $("#dateTimeCourseTemp").val(json.DETAIL_CREATED_DATE_TIME);
@@ -1084,6 +1260,82 @@ if (!isset($_SESSION['token'])) {
                                             $("#endTimePickerFromSecondDate").val("");
                                             saveEventDateState = "Save";
                                         }
+                                        function saveGalleryToTmp() {
+                                            $("#previewImageUploadDialog").modal("hide");
+                                            setTimeout(function () {
+                                                var formData = new FormData();
+                                                //Append files infos
+                                                jQuery.each($("#productImage")[0].files, function (i, file) {
+                                                    formData.append('productImage', file);
+                                                });
+
+                                                $.ajax({
+                                                    url: "../../model/com.gogetrich.function/uploadCourseGalleryImage.php?cHeaderId=",
+                                                    type: 'POST',
+                                                    xhr: function () {  // Custom XMLHttpRequest
+                                                        var myXhr = $.ajaxSettings.xhr();
+                                                        if (myXhr.upload) { // Check if upload property exists
+                                                            myXhr.upload.addEventListener('progress', function (e) {
+                                                                if (e.lengthComputable) {
+
+                                                                }
+                                                            }, false); // For handling the progress of the upload
+                                                        }
+                                                        return myXhr;
+                                                    },
+                                                    beforeSend: function (e) {
+
+                                                    },
+                                                    success: function (e) {
+                                                        tabState = "gallery";
+                                                        $.ajax({
+                                                            url: "imageUploadTable.php",
+                                                            type: 'POST',
+                                                            beforeSend: function (xhr) {
+                                                                $("html").addClass("js");
+                                                            }, success: function (data, textStatus, jqXHR) {
+                                                                $("#show_image_tbl").html(data);
+                                                                $("html").removeClass("js");
+                                                            }
+                                                        });
+                                                        $("#productImage").val("");
+                                                    },
+                                                    data: formData,
+                                                    cache: false,
+                                                    contentType: false,
+                                                    processData: false
+                                                });
+                                            }, 100);
+
+                                        }
+                                        function deleteGaleryInTmp(imgId, imgName) {
+                                            var r = confirm("Do you want to delete this item ?");
+                                            if (r == true) {
+                                                $.ajax({
+                                                    url: "../../model/com.gogetrich.function/deleteImageInTmp.php?imgId=" + imgId + "&imgName=" + imgName,
+                                                    type: 'POST',
+                                                    beforeSend: function (xhr) {
+                                                        $("html").addClass("js");
+                                                    },
+                                                    success: function (data, textStatus, jqXHR) {
+                                                        $("html").removeClass("js");
+
+                                                        tabState = "gallery";
+                                                        $.ajax({
+                                                            url: "imageUploadTable.php",
+                                                            type: 'POST',
+                                                            beforeSend: function (xhr) {
+                                                                $("html").addClass("js");
+                                                            }, success: function (data, textStatus, jqXHR) {
+                                                                $("#show_image_tbl").html(data);
+                                                                $("html").removeClass("js");
+                                                            }
+                                                        });
+                                                        $("#productImage").val("");
+                                                    }
+                                                });
+                                            }
+                                        }
             </script>
 
         </div>
@@ -1101,5 +1353,23 @@ if (!isset($_SESSION['token'])) {
         </div>
         <input type="hidden" id="eventDateTimeID"/>
         <input type="hidden" id="eventDateTimeDate"/>
+
+        <div class="modal hide" id="previewImageUploadDialog">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" id="closeNoti">×</button>
+                <h3>Images preview</h3>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-block alert-info fade in">
+                    <p id="previewImageUpload" style="max-height: 300px; overflow: auto;">
+
+                    </p>
+
+                </div>
+                <input type="button" onclick="saveGalleryToTmp()" class="btn btn-gebo" value="Save"> 
+                <input type="button" onclick="$('#previewImageUploadDialog').modal('hide');
+                        $('#productImage').val('')" class="btn btn-danger" value="Cancel">
+            </div>
+        </div>
     </body>
 </html>

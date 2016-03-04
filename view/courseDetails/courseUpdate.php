@@ -653,7 +653,7 @@ if (!empty($notFound)) {
                                             var lng = $("#lng").val();
                                             var courseDetail = CKEDITOR.instances.descriptionDetail.getData();
                                             var detailOrder = $("#detailOrder").val();
-                                            
+
                                             if (tabState == "normal") {
                                                 console.log(tabState);
                                                 //tab state normal content
@@ -1325,7 +1325,8 @@ if (!empty($notFound)) {
                                                     }
                                                 });
                                             }
-                                        }</script>
+                                        }
+            </script>
         </div>       
         <div class="modal hide" id="notificationDialog">
             <div class="modal-header">
