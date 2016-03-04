@@ -653,8 +653,9 @@ if (!empty($notFound)) {
                                             var lng = $("#lng").val();
                                             var courseDetail = CKEDITOR.instances.descriptionDetail.getData();
                                             var detailOrder = $("#detailOrder").val();
-//                                            console.log(tabState);
+                                            
                                             if (tabState == "normal") {
+                                                console.log(tabState);
                                                 //tab state normal content
                                                 if (descHeaderId == "") {
                                                     alert("Please select Description Header");
@@ -668,12 +669,13 @@ if (!empty($notFound)) {
                                                     } else if (lng == "") {
                                                         alert("Please enter Longitude of your location");
                                                     } else {
-                                                        processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder, false);
+                                                        processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder, "false");
                                                     }
                                                 } else {
-                                                    processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder, false);
+                                                    processTempTransaction(descHeaderId, lat, lng, courseDetail, detailOrder, "false");
                                                 }
                                             } else {
+                                                console.log(tabState);
                                                 //tab state gallery content
                                                 if (descHeaderId == "") {
                                                     alert("Please select Description Header");
@@ -685,7 +687,7 @@ if (!empty($notFound)) {
                                                         type: 'POST',
                                                         success: function (isSave, textStatus, jqXHR) {
                                                             if (isSave >= 1) {
-                                                                processTempTransaction(descHeaderId, '', '', '', detailOrder, true);
+                                                                processTempTransaction(descHeaderId, '', '', '', detailOrder, "true");
                                                             } else {
                                                                 alert("Please add at least one image to gallery");
                                                             }
@@ -728,6 +730,7 @@ if (!empty($notFound)) {
                                                 saveCourseTempState = "Save";
                                                 tabState = "normal";
                                             } else {
+                                                console.log(refGallery);
                                                 var tempDetailID = $("#tempCourseDetailID").val();
                                                 var dateTimeTem = $("#dateTimeCourseTemp").val();
                                                 $.ajax({
@@ -739,7 +742,6 @@ if (!empty($notFound)) {
                                                     },
                                                     success: function (data, textStatus, jqXHR) {
                                                         if (data == 200) {
-
                                                             $('#courseDetailForm').stepy('step', 2);
                                                             setTimeout(function () {
                                                                 $("#notificationDialog").modal("show");
@@ -905,7 +907,7 @@ if (!empty($notFound)) {
                                                         $('#useMap').attr('checked', false);
                                                         $("#hideMap").hide();
                                                     }
-                                                    if (json.REF_GALLERY_ID == true) {
+                                                    if (json.REF_GALLERY_ID == "true") {
                                                         tabState = "gallery";
                                                         $("#galleryContentTab").addClass("active");
                                                         $("#galleryContentTabHeader").addClass("active");
@@ -1062,7 +1064,7 @@ if (!empty($notFound)) {
                                         function goToByScroll(id) {
                                             $('html,body').animate({
                                                 scrollTop: $(id).offset().top},
-                                            50);
+                                                    50);
                                         }
                                         function clearPromotion() {
                                             $("#promotionId").val("");

@@ -22,13 +22,17 @@ $tempDetailID = (string) filter_input(INPUT_POST, 'tempDetailID');
 $detailOrder = (string) filter_input(INPUT_POST, 'detailOrder');
 $dateTimeTem = (string) filter_input(INPUT_POST, 'dateTimeTem');
 
-$refGallery = (boolean) filter_input(INPUT_POST, 'refGallery'); //true, false
+$refGallery = (string) filter_input(INPUT_POST, 'refGallery'); //true, false
 
 $sqlUpdate = "UPDATE GTRICH_COURSE_DETAIL_TMP "
         . "SET REF_GALLERY_ID='" . $refGallery . "',DETAIL_CREATED_DATE_TIME='" . $dateTimeTem . "',DETAIL_ORDER='" . $detailOrder . "',DETAIL_DESCRIPTION = '" . $courseDetail . "',DETAIL_LAT='" . $lat . "',DETAIL_LNG='" . $lng . "',REF_COURSE_HEADER_ID='" . $descHeaderId . "',DISTRIBUTOR_ID='" . $jsonValue['USERID'] . "' "
         . "WHERE DETAIL_ID = '" . $tempDetailID . "'";
-
-if ($refGallery == true) {
+if (mysql_query($sqlUpdate)) {
+    echo 200;
+} else {
+    echo mysql_error();
+}
+if ($refGallery == "true") {
     mysql_query("DELETE FROM GTRICH_GALLERY_IMAGES_UPLOAD WHERE REF_COURSE_ID = '" . $tempDetailID . "'");
 
     $sqlGetFromTmp = "SELECT * FROM GTRICH_GALLERY_IMAGES_UPLOAD_TMP WHERE DISTRIBUTOR_ID = '" . $jsonValue['USERID'] . "'";
@@ -44,7 +48,7 @@ if ($refGallery == true) {
     //in case false delete all existing because change state
     $out_dir = "../../view/assets/uploads/images/";
     $sqlGetForDelete = "SELECT * FROM GTRICH_GALLERY_IMAGES_UPLOAD WHERE REF_COURSE_ID = '" . $tempDetailID . "'";
-    $resGetForDel = mysql_query($resGetForDel);
+    $resGetForDel = mysql_query($sqlGetForDelete);
     while ($rowGetForDel = mysql_fetch_array($resGetForDel)) {
         $fileName = $out_dir . $rowGetForDel['IMAGE_NAME'];
         if (file_exists($sqlGetForDelete)) {
@@ -56,8 +60,3 @@ if ($refGallery == true) {
     mysql_query($sqlDeleteIncaseChangeState);
 }
 
-if (mysql_query($sqlUpdate)) {
-    echo 200;
-} else {
-    echo mysql_error();
-}
