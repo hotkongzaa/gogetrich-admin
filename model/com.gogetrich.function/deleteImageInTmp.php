@@ -21,10 +21,10 @@ $out_dir = "../../view/assets/uploads/images/";
 $sqlDeleteImage = "DELETE FROM GTRICH_GALLERY_IMAGES_UPLOAD_TMP WHERE IMAGE_ID = '" . $imageId . "' AND DISTRIBUTOR_ID = '" . $jsonValue['USERID'] . "'";
 $res = mysql_query($sqlDeleteImage);
 if ($res) {
-    $fileName = $out_dir . $imgName;
-    if (file_exists($fileName)) {
-        unlink($fileName);
-    }
+//    $fileName = $out_dir . $imgName;
+//    if (file_exists($fileName)) {
+//        unlink($fileName);
+//    }
 } else {
     echo $res;
 }
