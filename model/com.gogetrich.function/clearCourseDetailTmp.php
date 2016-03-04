@@ -17,8 +17,9 @@ $jsonValue = json_decode($jsonObj, true);
 $sqlDeleteCourseDetailTmp = "DELETE FROM GTRICH_COURSE_DETAIL_TMP WHERE DISTRIBUTOR_ID='" . $jsonValue['USERID'] . "'";
 $sqlDeletePromotionTmp = "DELETE FROM GTRICH_PROMOTION_TMP WHERE DISTRIBUTOR_ID='" . $jsonValue['USERID'] . "'";
 $sqlDeleteEventDate = "DELETE FROM GTRICH_COURSE_EVENT_DATE_TIME_TMP WHERE EVENT_DISTRIBUTOR_ID='" . $jsonValue['USERID'] . "'";
+$sqlDeleteGalleryTmp = "DELETE FROM GTRICH_GALLERY_IMAGES_UPLOAD_TMP WHERE DISTRIBUTOR_ID = '" . $jsonValue['USERID'] . "'";
 
-if (mysql_query($sqlDeleteCourseDetailTmp) && mysql_query($sqlDeletePromotionTmp) && mysql_query($sqlDeleteEventDate)) {
+if (mysql_query($sqlDeleteCourseDetailTmp) && mysql_query($sqlDeletePromotionTmp) && mysql_query($sqlDeleteEventDate) && mysql_query($sqlDeleteGalleryTmp)) {
     echo 200;
 } else {
     echo mysql_error();

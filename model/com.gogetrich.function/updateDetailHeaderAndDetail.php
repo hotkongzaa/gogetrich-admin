@@ -47,9 +47,9 @@ if ($saveResHeader) {
         $sqlSelectDetailFromTmp = "SELECT * FROM GTRICH_COURSE_DETAIL_TMP WHERE DISTRIBUTOR_ID = '" . $jsonValue['USERID'] . "'";
         $resFromTmp = mysql_query($sqlSelectDetailFromTmp);
         while ($rowFromTmp = mysql_fetch_array($resFromTmp)) {
-            $insertToDetail = "INSERT INTO GTRICH_COURSE_DETAIL (DETAIL_ID,DESC_HEADER_ID,DETAIL_DESCRIPTION,DETAIL_LAT,DETAIL_LNG,DETAIL_CREATED_DATE_TIME,REF_COURSE_HEADER_ID,DETAIL_ORDER) "
+            $insertToDetail = "INSERT INTO GTRICH_COURSE_DETAIL (DETAIL_ID,DESC_HEADER_ID,DETAIL_DESCRIPTION,DETAIL_LAT,DETAIL_LNG,DETAIL_CREATED_DATE_TIME,REF_COURSE_HEADER_ID,DETAIL_ORDER,REF_GALLERY_ID) "
                     . "VALUES "
-                    . "('" . $rowFromTmp['DETAIL_ID'] . "','" . $rowFromTmp['REF_COURSE_HEADER_ID'] . "','" . $rowFromTmp['DETAIL_DESCRIPTION'] . "','" . $rowFromTmp['DETAIL_LAT'] . "','" . $rowFromTmp['DETAIL_LNG'] . "','" . $rowFromTmp['DETAIL_CREATED_DATE_TIME'] . "','" . $headaerID . "','" . $rowFromTmp['DETAIL_ORDER'] . "')";
+                    . "('" . $rowFromTmp['DETAIL_ID'] . "','" . $rowFromTmp['REF_COURSE_HEADER_ID'] . "','" . $rowFromTmp['DETAIL_DESCRIPTION'] . "','" . $rowFromTmp['DETAIL_LAT'] . "','" . $rowFromTmp['DETAIL_LNG'] . "','" . $rowFromTmp['DETAIL_CREATED_DATE_TIME'] . "','" . $headaerID . "','" . $rowFromTmp['DETAIL_ORDER'] . "','" . $rowFromTmp['REF_GALLERY_ID'] . "')";
             $saveCourseDetail = mysql_query($insertToDetail);
             if ($saveCourseDetail) {
                 $delCourseTmp = "DELETE FROM GTRICH_COURSE_DETAIL_TMP WHERE DETAIL_ID = '" . $rowFromTmp['DETAIL_ID'] . "'";
@@ -86,7 +86,9 @@ if ($saveResHeader) {
                 mysql_query($delEventDateTmp);
             }
         }
-
+        // Update gallery image upload 
+        $sql = "UPDATE GTRICH_GALLERY_IMAGES_UPLOAD SET REF_COURSE_HEADER_ID ='" . $headaerID . "' WHERE REF_COURSE_HEADER_ID = ''";
+        mysql_query($sql);
         echo 200;
     } else {
         echo 'Cannot clear course detail with ' . mysql_error();

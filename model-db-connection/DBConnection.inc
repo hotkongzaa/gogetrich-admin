@@ -133,6 +133,24 @@ if (mysqli_query($con, $sql)) {
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
     mysqli_query($con_create_tbl, $sqlCreateEventTmp);
 
+    $sqlCreateGalleryTmp = "CREATE TABLE IF NOT EXISTS GTRICH_GALLERY_IMAGES_UPLOAD_TMP ("
+            . "IMAGE_ID VARCHAR(100) NOT NULL,"
+            . "IMAGE_NAME VARCHAR(255),"
+            . "IMAGE_UPLOAD_DATE_TIME TIMESTAMP,"
+            . "REF_COURSE_HEADER_ID VARCHAR(200),"
+            . "DISTRIBUTOR_ID VARCHAR(100),"
+            . "PRIMARY KEY (IMAGE_ID)"
+            . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    mysqli_query($con_create_tbl, $sqlCreateGalleryTmp);
+
+    $sqlCreateGallery = "CREATE TABLE IF NOT EXISTS GTRICH_GALLERY_IMAGES_UPLOAD ("
+            . "IMAGE_ID VARCHAR(100) NOT NULL,"
+            . "IMAGE_NAME VARCHAR(255),"
+            . "IMAGE_UPLOAD_DATE_TIME TIMESTAMP,"
+            . "REF_COURSE_HEADER_ID VARCHAR(200),"
+            . "PRIMARY KEY (IMAGE_ID)"
+            . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    mysqli_query($con_create_tbl, $sqlCreateGallery);
     return true;
 } else {
     echo "Error creating database: " . mysqli_error($con);

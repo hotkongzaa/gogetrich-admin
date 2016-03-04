@@ -47,7 +47,7 @@ $jsonValue = json_decode($jsonObj, true);
                 <td style="text-align: center" class="edit"><?= $row['DETAIL_ORDER'] ?></td>
                 <td style="text-align: center">
                     <a href="#" class="btn btn-small" title="Edit" onclick="getCourseTmpForEdit('<?= $row['DETAIL_ID'] ?>')"><i class="icon-pencil"></i> Edit</a>
-                    <a href="#" class="btn btn-small" title="Delete" onclick="deleteCourseTmp('<?= $row['DETAIL_ID'] ?>')"><i class="icon-trash"></i> Delete</a>
+                    <a href="#" class="btn btn-small" title="Delete" onclick="deleteCourseTmp('<?= $row['DETAIL_ID'] ?>', '<?= $row['REF_GALLERY_ID'] ?>')"><i class="icon-trash"></i> Delete</a>
                 </td>
             </tr>
             <?php
