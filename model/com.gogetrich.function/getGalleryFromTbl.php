@@ -13,6 +13,9 @@ $serviceCheck = new CredentialValidationService();
 $jsonObj = $serviceCheck->getTokenDetail($_SESSION['token']);
 $jsonValue = json_decode($jsonObj, true);
 $detailId = (string) filter_input(INPUT_GET, 'detailId');
+
+mysql_query("DELETE FROM GTRICH_GALLERY_IMAGES_UPLOAD_TMP WHERE DISTRIBUTOR_ID = '" . $jsonValue['USERID'] . "'");
+
 $sqlGet = "SELECT * FROM GTRICH_GALLERY_IMAGES_UPLOAD WHERE REF_COURSE_ID ='" . $detailId . "'";
 $resGet = mysql_query($sqlGet);
 while ($row = mysql_fetch_array($resGet)) {

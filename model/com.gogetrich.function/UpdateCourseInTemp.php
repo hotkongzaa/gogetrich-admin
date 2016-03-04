@@ -22,10 +22,10 @@ $tempDetailID = (string) filter_input(INPUT_POST, 'tempDetailID');
 $detailOrder = (string) filter_input(INPUT_POST, 'detailOrder');
 $dateTimeTem = (string) filter_input(INPUT_POST, 'dateTimeTem');
 
-$refGallery = (boolean) filter_input(INPUT_POST, 'refGallery');
+$refGallery = (boolean) filter_input(INPUT_POST, 'refGallery'); //true, false
 
 $sqlUpdate = "UPDATE GTRICH_COURSE_DETAIL_TMP "
-        . "SET DETAIL_CREATED_DATE_TIME='" . $dateTimeTem . "',DETAIL_ORDER='" . $detailOrder . "',DETAIL_DESCRIPTION = '" . $courseDetail . "',DETAIL_LAT='" . $lat . "',DETAIL_LNG='" . $lng . "',REF_COURSE_HEADER_ID='" . $descHeaderId . "',DISTRIBUTOR_ID='" . $jsonValue['USERID'] . "' "
+        . "SET REF_GALLERY_ID='" . $refGallery . "',DETAIL_CREATED_DATE_TIME='" . $dateTimeTem . "',DETAIL_ORDER='" . $detailOrder . "',DETAIL_DESCRIPTION = '" . $courseDetail . "',DETAIL_LAT='" . $lat . "',DETAIL_LNG='" . $lng . "',REF_COURSE_HEADER_ID='" . $descHeaderId . "',DISTRIBUTOR_ID='" . $jsonValue['USERID'] . "' "
         . "WHERE DETAIL_ID = '" . $tempDetailID . "'";
 
 if ($refGallery == true) {
@@ -40,6 +40,20 @@ if ($refGallery == true) {
     }
     $sqlDeleteIntmp = "DELETE FROM GTRICH_GALLERY_IMAGES_UPLOAD_TMP WHERE DISTRIBUTOR_ID ='" . $jsonValue['USERID'] . "'";
     mysql_query($sqlDeleteIntmp);
+} else {
+    //in case false delete all existing because change state
+    $out_dir = "../../view/assets/uploads/images/";
+    $sqlGetForDelete = "SELECT * FROM GTRICH_GALLERY_IMAGES_UPLOAD WHERE REF_COURSE_ID = '" . $tempDetailID . "'";
+    $resGetForDel = mysql_query($resGetForDel);
+    while ($rowGetForDel = mysql_fetch_array($resGetForDel)) {
+        $fileName = $out_dir . $rowGetForDel['IMAGE_NAME'];
+        if (file_exists($sqlGetForDelete)) {
+            unlink($fileName);
+        }
+    }
+
+    $sqlDeleteIncaseChangeState = "DELETE FROM GTRICH_GALLERY_IMAGES_UPLOAD WHERE REF_COURSE_ID = '" . $tempDetailID . "'";
+    mysql_query($sqlDeleteIncaseChangeState);
 }
 
 if (mysql_query($sqlUpdate)) {

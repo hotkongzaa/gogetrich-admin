@@ -653,6 +653,7 @@ if (!empty($notFound)) {
                                             var lng = $("#lng").val();
                                             var courseDetail = CKEDITOR.instances.descriptionDetail.getData();
                                             var detailOrder = $("#detailOrder").val();
+//                                            console.log(tabState);
                                             if (tabState == "normal") {
                                                 //tab state normal content
                                                 if (descHeaderId == "") {
@@ -932,7 +933,6 @@ if (!empty($notFound)) {
                                                                 });
                                                             }
                                                         });
-
                                                     } else {
                                                         tabState = "normal";
                                                         $("#normalContentTab").addClass("active");
