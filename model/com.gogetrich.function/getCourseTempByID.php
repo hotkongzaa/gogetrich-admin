@@ -6,8 +6,6 @@ session_start();
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-session_start();
 require '../../model-db-connection/config.php';
 require '../../model/com.gogetrich.function/CredentialValidationService.php';
 $serviceCheck = new CredentialValidationService();
