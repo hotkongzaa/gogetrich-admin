@@ -38,8 +38,8 @@ if ($refGallery == "true") {
     $sqlGetFromTmp = "SELECT * FROM GTRICH_GALLERY_IMAGES_UPLOAD_TMP WHERE DISTRIBUTOR_ID = '" . $jsonValue['USERID'] . "'";
     $resGetFromTmp = mysql_query($sqlGetFromTmp);
     while ($rowGetFromTmp = mysql_fetch_array($resGetFromTmp)) {
-        $sqlSaveGallerToGallery = "INSERT INTO GTRICH_GALLERY_IMAGES_UPLOAD (IMAGE_ID,IMAGE_NAME,IMAGE_UPLOAD_DATE_TIME,REF_COURSE_HEADER_ID,REF_COURSE_ID) "
-                . "VALUES ('" . $rowGetFromTmp['IMAGE_ID'] . "','" . $rowGetFromTmp['IMAGE_NAME'] . "','" . $rowGetFromTmp['IMAGE_UPLOAD_DATE_TIME'] . "','','" . $tempDetailID . "')";
+        $sqlSaveGallerToGallery = "INSERT INTO GTRICH_GALLERY_IMAGES_UPLOAD (IMAGE_ID,IMAGE_NAME,IMAGE_UPLOAD_DATE_TIME,REF_COURSE_HEADER_ID,REF_COURSE_ID,REF_COURSE_DESCRIPTION_HEADER_ID) "
+                . "VALUES ('" . $rowGetFromTmp['IMAGE_ID'] . "','" . $rowGetFromTmp['IMAGE_NAME'] . "','" . $rowGetFromTmp['IMAGE_UPLOAD_DATE_TIME'] . "','','" . $tempDetailID . "','" . $descHeaderId . "')";
         mysql_query($sqlSaveGallerToGallery);
     }
     $sqlDeleteIntmp = "DELETE FROM GTRICH_GALLERY_IMAGES_UPLOAD_TMP WHERE DISTRIBUTOR_ID ='" . $jsonValue['USERID'] . "'";
