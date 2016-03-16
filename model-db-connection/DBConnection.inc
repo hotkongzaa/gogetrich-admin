@@ -151,6 +151,27 @@ if (mysqli_query($con, $sql)) {
             . "PRIMARY KEY (IMAGE_ID)"
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
     mysqli_query($con_create_tbl, $sqlCreateGallery);
+
+    $sqlCreateBlogDetail = "CREATE TABLE IF NOT EXISTS GTRICH_BLOG_DETAIL ("
+            . "BLOG_ID VARCHAR(100) NOT NULL,"
+            . "BLOG_TITLE VARCHAR(255),"
+            . "BLOG_DETAIL MEDIUMTEXT,"
+            . "ALLOW_COMMENT VARCHAR(10),"
+            . "BLOG_POST_DATE TIMESTAMP,"
+            . "BLOG_CATE_ID VARCHAR(100),"
+            . "BLOG_SPECIAL VARCHAR(100),"
+            . "BLOG_PUBLISH VARCHAR(100),"
+            . "BLOG_PUBLISH_DATE TIMESTAMP,"
+            . "PRIMARY KEY (BLOG_ID)"
+            . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    mysqli_query($con_create_tbl, $sqlCreateBlogDetail);
+    $sqlCreateBlogCate = "CREATE TABLE IF NOT EXISTS GTRICH_BLOG_CATEGORY ("
+            . "B_CATE_ID VARCHAR(100) NOT NULL,"
+            . "B_CATE_NAME MEDIUMTEXT,"
+            . "B_CREATED_DATE TIMESTAMP,"
+            . "PRIMARY KEY (B_CATE_ID)"
+            . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    mysqli_query($con_create_tbl, $sqlCreateBlogCate);
     return true;
 } else {
     echo "Error creating database: " . mysqli_error($con);

@@ -53,8 +53,14 @@
                                         <li><a href="#">Content Detail</a></li>                                                       
                                     </ul>
                                 </li>
-                                <li>
-                                    <a href="#"><i class="icon-book"></i> Blog management</a>
+                                <li class="dropdown">
+                                    <a href="#">
+                                        <i class="icon-book"></i> Blog management <b class="caret-right"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="blog/blogDetailCategory">Blog Category</a></li>
+                                        <li><a href="blog/blogDetail">Blo Detail</a></li>                                                       
+                                    </ul>
                                 </li>
                             </ul>
                         </li>

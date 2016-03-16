@@ -118,14 +118,18 @@ if (!isset($_SESSION['token'])) {
                                                     <ul class="dropdown-menu">
                                                         <li><a href="../courseCategories/courseCategories">Course Categories</a></li>
                                                         <li><a href="../descriptionHeader/descriptionHeader">Course Description Header</a></li>   
-                                                        <li><a href="courseDetail">Course Detail</a></li>                                                       
+                                                        <li><a href="../courseDetails/courseDetail">Course Detail</a></li>                                                       
                                                     </ul>
                                                 </li>
                                                 <li class="dropdown">
                                                     <a href="#"><i class="icon-bullhorn"></i> Learn to rich <b class="caret-right"></b></a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="#">Content Categories</a></li>
-                                                        <li><a href="#">Content Detail</a></li>                                                       
+                                                        <li>
+                                                            <a href="#">Content Categories</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Content Detail</a>
+                                                        </li>                                                       
                                                     </ul>
                                                 </li>
                                                 <li class="dropdown">
@@ -133,71 +137,19 @@ if (!isset($_SESSION['token'])) {
                                                         <i class="icon-book"></i> Blog management <b class="caret-right"></b>
                                                     </a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="../blog/blogDetailCategory">Blog Category</a></li>
-                                                        <li><a href="../blog/blogDetail">Blog Detail</a></li>                                                       
+                                                        <li><a href="blogDetailCategory">Blog Category</a></li>
+                                                        <li><a href="blogDetail">Blog Detail</a></li>                                                       
                                                     </ul>
                                                 </li>
                                             </ul>
                                         </li>
+
                                     </ul>
                                 </div>
                             </nav>
                         </div>
                     </div>
-                </div>                
-                <div class="modal hide fade" id="myTasks">
-                    <div class="modal-header">
-                        <button class="close" data-dismiss="modal">×</button>
-                        <h3>New Tasks</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-info">In this table jquery plugin turns a table row into a clickable link.</div>
-                        <table class="table table-condensed table-striped" data-rowlink="a">
-                            <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>Summary</th>
-                                    <th>Updated</th>
-                                    <th>Priority</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>P-23</td>
-                                    <td><a href="javascript:void(0)">Admin should not break if URL&hellip;</a></td>
-                                    <td>23/05/2012</td>
-                                    <td class="tac"><span class="label label-important">High</span></td>
-                                    <td>Open</td>
-                                </tr>
-                                <tr>
-                                    <td>P-18</td>
-                                    <td><a href="javascript:void(0)">Displaying submenus in custom&hellip;</a></td>
-                                    <td>22/05/2012</td>
-                                    <td class="tac"><span class="label label-warning">Medium</span></td>
-                                    <td>Reopen</td>
-                                </tr>
-                                <tr>
-                                    <td>P-25</td>
-                                    <td><a href="javascript:void(0)">Featured image on post types&hellip;</a></td>
-                                    <td>22/05/2012</td>
-                                    <td class="tac"><span class="label label-success">Low</span></td>
-                                    <td>Updated</td>
-                                </tr>
-                                <tr>
-                                    <td>P-10</td>
-                                    <td><a href="javascript:void(0)">Multiple feed fixes and&hellip;</a></td>
-                                    <td>17/05/2012</td>
-                                    <td class="tac"><span class="label label-warning">Medium</span></td>
-                                    <td>Open</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="javascript:void(0)" class="btn">Go to task manager</a>
-                    </div>
-                </div>
+                </div>                                
             </header>
 
             <!-- main content -->
@@ -213,10 +165,7 @@ if (!isset($_SESSION['token'])) {
                                     <a href="#">Content management</a>
                                 </li>
                                 <li>
-                                    <a href="#">Schedule</a>
-                                </li>
-                                <li>
-                                    Course Detail
+                                    Blog Category
                                 </li>
                             </ul>
                         </div>
@@ -224,10 +173,10 @@ if (!isset($_SESSION['token'])) {
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="heading clearfix">
-                                <h3 class="pull-left">Course Content Header & Detail</h3>
-                                <span class="pull-right btn" onclick="clearAndLocate()"><i class="icon-plus"></i> Create Course</span>
+                                <h3 class="pull-left">Blog Category</h3>
+                                <span class="pull-right btn"><i class="icon-plus"></i> Create Blog Category</span>
                             </div>
-                            <div id="courseCateTbl"></div>
+                            <div id="blogCateTbl"></div>
                         </div>                        
                     </div>
                 </div>
@@ -286,11 +235,12 @@ if (!isset($_SESSION['token'])) {
             <!-- additional sorting for datatables -->
             <script src="../assets/lib/datatables/jquery.dataTables.sorting.js"></script>            
 
-            <script>
-                        var saveState = "Save";
+            <script type="text/javascript">
                         $(document).ready(function () {
-                            $("#alertCate").hide();
 
+                            $("#blogCateTbl").load("blogCateTbl.php", function () {
+                                $("html").removeClass("js");
+                            });
                             setInterval(function () {
                                 $.ajax({
                                     url: "../../model/com.gogetrich.function/SessionCheck.php",
@@ -303,62 +253,7 @@ if (!isset($_SESSION['token'])) {
                                     }
                                 });
                             }, 3000);
-
-                            $("#courseCateTbl").load("courseTable.php", function () {
-                                $("html").removeClass("js");
-                            });
                         });
-                        function prepareAndUpdateDetail(headerID) {
-                            $.ajax({
-                                url: "../../model/com.gogetrich.function/prepareToUpdateDetail.php?headerID=" + headerID,
-                                type: 'POST',
-                                beforeSend: function (xhr) {
-                                    $("html").addClass("js");
-                                },
-                                success: function (data, textStatus, jqXHR) {
-                                    if (data == 200) {
-                                        window.location.href = 'courseUpdate?hId=' + headerID;
-                                    } else {
-                                        alert(data);
-                                    }
-                                    $("html").removeClass("js");
-                                }
-                            });
-                        }
-                        function clearAndLocate() {
-                            $.ajax({
-                                url: "../../model/com.gogetrich.function/clearCourseDetailTmp.php",
-                                type: 'POST',
-                                success: function (data, textStatus, jqXHR) {
-                                    if (data == 200) {
-                                        window.location.href = 'courseCreate';
-                                    }
-                                }
-                            });
-                        }
-                        function deleteCourseHeaderDetailByID(headerID) {
-                            var r = confirm("Do you want to delete this permanently !");
-                            if (r == true) {
-                                $.ajax({
-                                    url: "../../model/com.gogetrich.function/deleteCourseHeaderAndDetail.php?headerID=" + headerID,
-                                    type: 'POST',
-                                    beforeSend: function (xhr) {
-                                        $("html").addClass("js");
-                                    },
-                                    success: function (data, textStatus, jqXHR) {
-                                        if (data == 200) {
-                                            $("#courseCateTbl").load("courseTable.php", function () {
-                                                $("html").removeClass("js");
-                                            });
-                                        } else {
-                                            alert(data);
-                                            $("html").removeClass("js");
-                                        }
-
-                                    }
-                                });
-                            }
-                        }
             </script>
         </div>
     </body>

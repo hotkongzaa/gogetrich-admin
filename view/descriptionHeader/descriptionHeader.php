@@ -100,7 +100,7 @@ if (!isset($_SESSION['token'])) {
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li>
-                                                    <a href="form_elements.html">View All Users</a>
+                                                    <a href="#">View All Users</a>
                                                 </li>
                                                 <li>
                                                     <a href="../dashboard">View User Enroll</a>
@@ -113,7 +113,7 @@ if (!isset($_SESSION['token'])) {
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="dropdown">
-                                                    <a href="#">Schedule <b class="caret-right"></b></a>
+                                                    <a href="#"><i class="icon-calendar"></i> Course Schedule <b class="caret-right"></b></a>
                                                     <ul class="dropdown-menu">
                                                         <li><a href="../courseCategories/courseCategories">Course Categories</a></li>
                                                         <li><a href="descriptionHeader">Course Description Header</a></li>   
@@ -121,10 +121,19 @@ if (!isset($_SESSION['token'])) {
                                                     </ul>
                                                 </li>
                                                 <li class="dropdown">
-                                                    <a href="#">Learn to rich <b class="caret-right"></b></a>
+                                                    <a href="#"><i class="icon-bullhorn"></i> Learn to rich <b class="caret-right"></b></a>
                                                     <ul class="dropdown-menu">
                                                         <li><a href="#">Content Categories</a></li>
                                                         <li><a href="#">Content Detail</a></li>                                                       
+                                                    </ul>
+                                                </li>
+                                                <li class="dropdown">
+                                                    <a href="#">
+                                                        <i class="icon-book"></i> Blog management <b class="caret-right"></b>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="../blog/blogDetailCategory">Blog Category</a></li>
+                                                        <li><a href="../blog/blogDetail">Blog Detail</a></li>                                                       
                                                     </ul>
                                                 </li>
                                             </ul>
