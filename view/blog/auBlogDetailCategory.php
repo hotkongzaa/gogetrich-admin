@@ -21,7 +21,27 @@ if (!isset($_SESSION['token'])) {
         $jsonValue = json_decode($jsonObj, true);
     }
 }
-$fPage = basename(__FILE__, '.php');
+$cid = (string) filter_input(INPUT_GET, 'cid');
+$flag = (string) filter_input(INPUT_GET, 'f');
+
+if ($flag == "create") {
+    $sqlGetCateDetail = "SELECT * FROM GTRICH_BLOG_CATEGORY WHERE B_CATE_ID=''";
+    $resultGetCateDetail = mysql_query($sqlGetCateDetail);
+    //Fake input if create type
+    $rowGetCateDetail = mysql_fetch_assoc($resultGetCateDetail);
+} else {
+    $sqlGetCateDetail = "SELECT * FROM GTRICH_BLOG_CATEGORY WHERE B_CATE_ID='" . $cid . "'";
+    $resultGetCateDetail = mysql_query($sqlGetCateDetail);
+    if (mysql_num_rows($resultGetCateDetail) >= 1) {
+        $rowGetCateDetail = mysql_fetch_assoc($resultGetCateDetail);
+    } else {
+        echo '<script type="text/javascript">'
+        . 'var r = confirm("Invalid Category detail \nPlease contact administrator");'
+        . 'if(r==true){ window.location.href="blogDetailCategory"; } else {window.location.href="blogDetailCategory";}'
+        . '</script>';
+    }
+}
+$fPage = (string) filter_input(INPUT_GET, 'fPage');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -172,39 +192,41 @@ $fPage = basename(__FILE__, '.php');
                         </div>
                     </nav>
                     <div class="row-fluid">
+
                         <div class="span12">
-                            <div class="heading clearfix">
-                                <h3 class="pull-left">Blog Category</h3>
-                                <span class="pull-right btn" onclick="window.location = 'auBlogDetailCategory?f=create&cid=&fPage=<?= $fPage ?>'">
-                                    <i class="icon-plus"></i> Create Blog Category
-                                </span>
+                            <div>
+                                <a href="<?= $fPage ?>">
+                                    <i class="splashy-arrow_state_blue_left"></i> Back
+                                </a>
                             </div>
-                            <div id="blogCateTbl"></div>
+                            <div class="heading clearfix">
+                                <h3 class="pull-left">Create/Update Category Form</h3>
+                            </div>
+                            <div>
+                                <fieldset>
+                                    <div class="control-group">
+                                        <label class="control-label">Category Name*</label>
+                                        <form id="blogCateForm">
+                                            <div class="controls">
+                                                <input type="text" name="cateName" id="cateName" class="span4" placeholder="Category Name" value="<?= $rowGetCateDetail['B_CATE_NAME'] ?>" required/>
+                                            </div>
+                                            <br/>
+                                            <input type="hidden" name="cateId" id="cateId" value="<?= $rowGetCateDetail['B_CATE_ID'] ?>"/>
+                                            <input type="hidden" name="careateDateTime" id="careateDateTime" value="<?= $rowGetCateDetail['B_CREATED_DATE'] ?>"/>
+                                            <input type="submit" name="saveBlogCate"  class="btn btn-primary" value="Submit"/>
+                                        </form>
+                                    </div>
+                                </fieldset>
+                            </div>
                         </div>                        
                     </div>
                 </div>
             </div>
-            <div class="modal hide fade" id="createCate">
-                <div class="modal-header">
-                    <button class="close" data-dismiss="modal">×</button>
-                    <h3>Category Form</h3>
-                </div>
-                <div class="modal-body">                   
-                    <div id="alertCate" class="alert alert-danger">Please enter category name</div>
-                    <form id="courseCateForm">
-                        <div class="formSep">
-                            <label>Category Name*</label>
-                            <input type="text" name="cateName" id="cateName">
-                            <input type="hidden" name="cateID" id="cateID">
-                            <input type="hidden" name="cateDate" id="cateDate">
-                        </div>                        
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn" onclick="saveCate();">Save</a>
-                </div>
-            </div>
-
+            <style>
+                label.error{
+                    color: red !important;
+                }
+            </style>
 
             <script src="../assets/js/jquery.min.js"></script>
             <!-- smart resize event -->
@@ -236,52 +258,42 @@ $fPage = basename(__FILE__, '.php');
             <!-- datatable -->
             <script src="../assets/lib/datatables/jquery.dataTables.min.js"></script>
             <!-- additional sorting for datatables -->
-            <script src="../assets/lib/datatables/jquery.dataTables.sorting.js"></script>            
+            <script src="../assets/lib/datatables/jquery.dataTables.sorting.js"></script>     
+            <script src="../assets/lib/validation/jquery.validate.js"></script>     
 
             <script type="text/javascript">
-                        $(document).ready(function () {
-
-                            $("#blogCateTbl").load("blogCateTbl.php", function () {
+            $(document).ready(function () {
+                $("html").removeClass("js");
+                $("#blogCateForm").validate({
+                    submitHandler: function (form) {
+                        var formEle = $("#blogCateForm").serialize();
+                        $.ajax({
+                            url: "../../model/com.gogetrich.function/SaveCateGory.php?" + formEle + "&type=<?= $flag ?>",
+                            type: 'POST',
+                            beforeSend: function (xhr) {
+                                $("html").addClass("js");
+                            }, success: function (data, textStatus, jqXHR) {
                                 $("html").removeClass("js");
-                            });
-                            setInterval(function () {
-                                $.ajax({
-                                    url: "../../model/com.gogetrich.function/SessionCheck.php",
-                                    type: 'POST',
-                                    success: function (data, textStatus, jqXHR) {
-                                        if (data == 409) {
-                                            //session expired
-                                            window.location.href = "../loginError?rc=<?= md5(409) ?>&aRed=true";
-                                        }
-                                    }
-                                });
-                            }, 3000);
-                        });
-                        function updateCate(cateId) {
-                            window.location = "auBlogDetailCategory?f=edit&cid=" + cateId + "&fPage=<?= $fPage ?>";
-                        }
-                        function deleteCateById(cateId) {
-                            var r = confirm("Do you want to delete this item?");
-                            if (r == true) {
-                                $.ajax({
-                                    url: "../../model/com.gogetrich.function/deleteCateById.php?cateId=" + cateId,
-                                    type: 'POST',
-                                    beforeSend: function (xhr) {
-                                        $("html").addClass("js");
-                                    }, success: function (data, textStatus, jqXHR) {
-                                        $("html").removeClass("js");
-                                        if (data == 200) {
-                                            $("#blogCateTbl").load("blogCateTbl.php", function () {
-                                                $("html").removeClass("js");
-                                            });
-                                        } else {
-                                            alert(data);
-                                        }
-                                    }
-                                });
+                                if (data == 200) {
+                                    window.location.href = "blogDetailCategory";
+                                }
                             }
-
+                        });
+                    }
+                });
+                setInterval(function () {
+                    $.ajax({
+                        url: "../../model/com.gogetrich.function/SessionCheck.php",
+                        type: 'POST',
+                        success: function (data, textStatus, jqXHR) {
+                            if (data == 409) {
+                                //session expired
+                                window.location.href = "../loginError?rc=<?= md5(409) ?>&aRed=true";
+                            }
                         }
+                    });
+                }, 3000);
+            });
             </script>
         </div>
     </body>

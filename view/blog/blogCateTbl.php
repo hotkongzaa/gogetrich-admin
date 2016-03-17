@@ -13,7 +13,7 @@ require '../../model-db-connection/config.php';
     <tbody>
         <?php
         $id = 1;
-        $sqlSelectCate = "SELECT * FROM GTRICH_BLOG_CATEGORY";
+        $sqlSelectCate = "SELECT * FROM GTRICH_BLOG_CATEGORY ORDER BY B_CREATED_DATE DESC";
         $res = mysql_query($sqlSelectCate);
         while ($row = mysql_fetch_array($res)) {
             ?>
@@ -22,7 +22,7 @@ require '../../model-db-connection/config.php';
                 <td><?= $row['B_CATE_NAME'] ?></td>
                 <td style="text-align: center" width="150px"><?= $row['B_CREATED_DATE'] ?></td>
                 <td style="text-align: center" width="150px">
-                    <a href="#" class="btn btn-small" title="Edit" onclick="getCateById('<?= $row['B_CATE_ID'] ?>')"><i class="icon-pencil"></i> Edit</a>
+                    <a href="#" class="btn btn-small" title="Edit" onclick="updateCate('<?= $row['B_CATE_ID'] ?>')"><i class="icon-pencil"></i> Edit</a>
                     <a href="#" class="btn btn-small" title="Delete" onclick="deleteCateById('<?= $row['B_CATE_ID'] ?>')"><i class="icon-trash"></i> Delete</a>
                 </td>
             </tr>
