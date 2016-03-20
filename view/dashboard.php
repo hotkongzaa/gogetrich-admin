@@ -155,7 +155,7 @@ if (!isset($_SESSION['token'])) {
                         </div>  
                         <div class="span8">
                             <div class="heading clearfix">
-                                <h3 class="pull-left">Customer Enroll</h3>          
+                                <h3 class="pull-left">Enrolled Customers</h3>          
                                 <span class="pull-right btn" onclick="exportExcel()"><img src="assets/img/Excel-icon.png" width="30px" height="30px"/></span>
                             </div>
                             <div id="customerEnroll"></div>
