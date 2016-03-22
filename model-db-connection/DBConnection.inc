@@ -172,6 +172,18 @@ if (mysqli_query($con, $sql)) {
             . "PRIMARY KEY (B_CATE_ID)"
             . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
     mysqli_query($con_create_tbl, $sqlCreateBlogCate);
+
+    $sqlCreateBlogImage = "CREATE TABLE IF NOT EXISTS GTRICH_BLOG_IMAGES_UPLOAD ("
+            . "IMAGE_ID VARCHAR(100) NOT NULL,"
+            . "IMAGE_NAME VARCHAR(255),"
+            . "IMAGE_UPLOAD_DATE_TIME TIMESTAMP,"
+            . "REF_BLOG_ID VARCHAR(200),"
+            . "REF_STAFF_ID VARCHAR(200),"
+            . "PARTIAL_REG VARCHAR(100),"
+            . "IMAGE_TYPE VARCHAR(100),"
+            . "PRIMARY KEY (IMAGE_ID)"
+            . ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    mysqli_query($con_create_tbl, $sqlCreateBlogImage);
     return true;
 } else {
     echo "Error creating database: " . mysqli_error($con);

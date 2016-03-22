@@ -229,6 +229,20 @@ if (!empty($type) && $type == "Edit") {
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="control-group" style="border: #000 solid 1px; padding: 10px;">
+                                        <label class="control-label">Image Blog Type*</label>
+                                        <select id="imageBlogType" name="imageBlogType" class="span6" required>
+                                            <option value="">== Select Image type ==</option>
+                                            <option value="Cover Image">Cover Image</option>
+                                            <option value="Blog Image">Blog Image</option>                                                
+                                        </select>
+                                        <form role="form" id="blogImageForm" enctype="multipart/form-data"> 
+                                            <div class="well well-sm">
+                                                <input type="file" id="blogImage" name="blogImage">
+                                            </div>
+                                        </form>
+                                        <div id="show_image_tbl"></div>
+                                    </div>
                                     <div class="control-group">
                                         <label class="control-label">Blog Detail*</label>
                                         <div class="controls">
@@ -290,6 +304,25 @@ if (!empty($type) && $type == "Edit") {
                                                 //Initial Element in page
                                                 auBlogPage.initialElement();
 
+                                                $("#blogImage").change(function () {
+                                                    var file = this.files[0];
+                                                    var imagefile = file.type;
+                                                    var fileSize = (file.size / 1024 / 1024); //image size in kb
+
+                                                    var match = ["image/jpeg", "image/png", "image/jpg"];
+                                                    if (!((imagefile == match[0]) || (imagefile == match[1]) || (imagefile == match[2]))) {
+                                                        alert("Please Select A valid Image File\n Only jpeg, jpg and png Images type allowed");
+                                                        return false;
+                                                    } else if (fileSize > 2) {
+                                                        // the image file size must not over than 2 mb
+                                                        alert("Please select a valid Image File\nOnly less than 2 mb of image are allowed");
+                                                    } else {
+                                                        var reader = new FileReader();
+                                                        reader.onload = imageIsLoaded;
+                                                        reader.readAsDataURL(this.files[0]);
+                                                    }
+                                                });
+
                                                 setInterval(function () {
                                                     $.ajax({
                                                         url: "../../model/com.gogetrich.function/SessionCheck.php",
@@ -309,12 +342,119 @@ if (!empty($type) && $type == "Edit") {
                                                     $editor = CKEDITOR;
                                                     $editorConfig = CKEDITOR.config;
                                                     $editor.replace('blogDetail');
+
+                                                    //Load image table
+                                                    $.ajax({
+                                                        url: "imageUploadTable.php",
+                                                        type: 'POST',
+                                                        beforeSend: function (xhr) {
+                                                            $("html").addClass("js");
+                                                        }, success: function (data, textStatus, jqXHR) {
+                                                            $("#show_image_tbl").html(data);
+                                                            $("html").removeClass("js");
+                                                        }
+                                                    });
                                                 }
                                             };
                                             function cancelBlog() {
                                                 window.location.href = "<?= $fPage ?>";
                                             }
+                                            function imageIsLoaded(e) {
+                                                $("#previewImageUploadDialog").modal("show");
+                                                $("#previewImageUpload").html("<img src='" + e.target.result + "' width='500px'/>");
+                                            }
+                                            function saveBlogImageToTmp() {
+                                                var imageBlogType = $("#imageBlogType").val();
+                                                if (imageBlogType == "") {
+                                                    alert("Please select image blog type");
+                                                } else {
+                                                    $("#previewImageUploadDialog").modal("hide");
+                                                    setTimeout(function () {
+                                                        var formData = new FormData();
+                                                        //Append files infos
+                                                        jQuery.each($("#blogImage")[0].files, function (i, file) {
+                                                            formData.append('blogImage', file);
+                                                        });
+                                                        $.ajax({
+                                                            url: "../../model/com.gogetrich.function/uploadBlogImage.php?imageType=" + imageBlogType,
+                                                            type: 'POST',
+                                                            xhr: function () {  // Custom XMLHttpRequest
+                                                                var myXhr = $.ajaxSettings.xhr();
+                                                                if (myXhr.upload) { // Check if upload property exists
+                                                                    myXhr.upload.addEventListener('progress', function (e) {
+                                                                        if (e.lengthComputable) {
+
+                                                                        }
+                                                                    }, false); // For handling the progress of the upload
+                                                                }
+                                                                return myXhr;
+                                                            },
+                                                            beforeSend: function (e) {
+                                                                $("html").addClass("js");
+                                                            },
+                                                            success: function (e) {
+                                                                $.ajax({
+                                                                    url: "imageUploadTable.php",
+                                                                    type: 'POST',
+                                                                    beforeSend: function (xhr) {
+
+                                                                    }, success: function (data, textStatus, jqXHR) {
+                                                                        $("#show_image_tbl").html(data);
+                                                                        $("html").removeClass("js");
+                                                                    }
+                                                                });
+                                                                $("#productImage").val("");
+                                                            },
+                                                            data: formData,
+                                                            cache: false,
+                                                            contentType: false,
+                                                            processData: false
+                                                        });
+                                                    }, 100);
+                                                }
+                                            }
+                                            function deleteBlogImageInTmp(imageId) {
+                                                var r = confirm("Do you want to delete this item?");
+                                                if (r == true) {
+                                                    $.ajax({
+                                                        url: "../../model/com.gogetrich.function/deleteImageBlogInTmp.php?imageId=" + imageId,
+                                                        type: 'POST',
+                                                        beforeSend: function (xhr) {
+                                                            $("html").addClass("js");
+                                                        }, success: function (data, textStatus, jqXHR) {
+                                                            $.ajax({
+                                                                url: "imageUploadTable.php",
+                                                                type: 'POST',
+                                                                beforeSend: function (xhr) {
+                                                                    $("html").addClass("js");
+                                                                }, success: function (data, textStatus, jqXHR) {
+                                                                    $("#show_image_tbl").html(data);
+                                                                    $("html").removeClass("js");
+                                                                }
+                                                            });
+                                                            $("html").removeClass("js");
+
+                                                        }
+                                                    });
+                                                }
+                                            }
             </script>
+        </div>
+        <div class="modal hide" id="previewImageUploadDialog">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" id="closeNoti">×</button>
+                <h3>Images preview</h3>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-block alert-info fade in">
+                    <p id="previewImageUpload" style="max-height: 300px; overflow: auto;">
+
+                    </p>
+                </div>
+                <input type="button" onclick="saveBlogImageToTmp()" class="btn btn-gebo" value="Save"> 
+                <input type="button" onclick="$('#previewImageUploadDialog').modal('hide');
+                        $('#blogImage').val('')" class="btn btn-danger" value="Cancel">
+            </div>
         </div>
     </body>
 </html>
