@@ -11,5 +11,3 @@ require './CredentialValidationService.php';
 $serviceCheck = new CredentialValidationService();
 $jsonObj = $serviceCheck->getTokenDetail($_SESSION['token']);
 $jsonValue = json_decode($jsonObj, true);
-
-$

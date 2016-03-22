@@ -292,6 +292,20 @@ if (!isset($_SESSION['token'])) {
                                             }
                                         });
                                     }
+                                    function changeEnrollSatus(enrollID, status) {
+                                        $.ajax({
+                                            url: "../model/com.gogetrich.function/changeEnrollStatus.php?enrollId=" + enrollID + "&status=" + status,
+                                            type: 'POST',
+                                            beforeSend: function (xhr) {
+                                                $("html").addClass("js");
+                                            },
+                                            success: function (data, textStatus, jqXHR) {
+                                                $("#customerEnroll").load("dashboard_tbl.php", function () {
+                                                    $("html").removeClass("js");
+                                                });
+                                            }
+                                        });
+                                    }
                                     function deleteEnrollment(enrollID) {
                                         var r = confirm("Do you want to delete this item?");
                                         if (r == true) {

@@ -10,6 +10,7 @@ require '../model-db-connection/config.php';
             <th>Phone number</th>
             <th>Register Date</th>
             <th>Course Name</th>
+            <th>Enrollment Status</th>
             <th></th>
         </tr>
     </thead>
@@ -35,8 +36,8 @@ require '../model-db-connection/config.php';
             if (!empty($paymentStatus) || $paymentStatus != 0) {
                 $conditionPaymentStatus = "AND RCE.PAYMENT_STATUS LIKE '" . $paymentStatus . "' ";
             }
-			$conditioncourseHeaderId = "";
-			if (!empty($courseHeaderId) || $courseHeaderId != 0) {
+            $conditioncourseHeaderId = "";
+            if (!empty($courseHeaderId) || $courseHeaderId != 0) {
                 $conditioncourseHeaderId = "AND GCH.HEADER_ID LIKE '" . $courseHeaderId . "' ";
             }
             $conditionaDate = "";
@@ -54,9 +55,8 @@ require '../model-db-connection/config.php';
                     . $conditionPaymentStatus
                     . $conditionaDate
                     . "ORDER BY RCE.CREATED_DATE_TIME DESC";
-										
         }
-        
+
         $resGetUserEnroll = mysql_query($sqlGetUserEnroll);
         $no = 1;
         while ($rowGetUserEnroll = mysql_fetch_array($resGetUserEnroll)) {
@@ -80,6 +80,18 @@ require '../model-db-connection/config.php';
                 <td><i class="splashy-comment_reply"></i> <?= $rowGetUserEnroll['CUS_PHONE_NUMBER'] ?></td>
                 <td><i class="splashy-calendar_week"></i> <?= $rowGetUserEnroll['CREATED_DATE_TIME'] ?></td>
                 <td><i class="splashy-mail_light_stuffed"></i>: <?= $rowGetUserEnroll['HEADER_NAME'] ?></td>
+                <?php
+                if ($rowGetUserEnroll['ENROLL_STATUS'] == "Confirm" || $rowGetUserEnroll['ENROLL_STATUS'] == "") {
+                    ?>
+                    <td><i class="splashy-check"></i> <?= $rowGetUserEnroll['ENROLL_STATUS'] ?></td>
+                    <?php
+                } else {
+                    ?>
+                    <td><i class="splashy-warning"></i> <?= $rowGetUserEnroll['ENROLL_STATUS'] ?></td>
+                    <?php
+                }
+                ?>
+
                 <td>
                     <div class="btn-group">
                         <button data-toggle="dropdown" class="btn dropdown-toggle">Action <span class="caret"></span></button>
@@ -87,6 +99,9 @@ require '../model-db-connection/config.php';
                             <li><a href="viewEnroll?enID=<?= $rowGetUserEnroll['ENROLL_ID'] ?>&uID=<?= $rowGetUserEnroll['CUS_ID'] ?>&cName=<?= $rowGetUserEnroll['HEADER_NAME'] ?>&pT=<?= md5($rowGetUserEnroll['PAYMENT_STATUS']) ?>"><i class="splashy-application_windows_share"></i> View Enroll</a></li>
                             <li><a href="#"><i class="splashy-application_windows_edit"></i> Edit Enroll</a>
                             <li><a href="#" onclick="deleteEnrollment('<?= $rowGetUserEnroll['ENROLL_ID'] ?>')"><i class="splashy-application_windows_remove"></i> Delete Enroll</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#" onclick="changeEnrollSatus('<?= $rowGetUserEnroll['ENROLL_ID'] ?>', 'Confirm')"><i class="splashy-check"></i> Confirm Enrollment</a></li>
+                            <li><a href="#" onclick="changeEnrollSatus('<?= $rowGetUserEnroll['ENROLL_ID'] ?>', 'Cancel')"><i class="splashy-warning"></i> Cancel Enrollment</a></li>
                             <li class="divider"></li>
                             <li><a href="#" onclick="changePaymentStatus('<?= $rowGetUserEnroll['ENROLL_ID'] ?>', 'COMPLETE')"><i class="splashy-box_okay"></i> Complete payment</a></li>
                             <li><a href="#" onclick="changePaymentStatus('<?= $rowGetUserEnroll['ENROLL_ID'] ?>', 'PENDING')"><i class="splashy-box_locked"></i> Pending payment</a></li>
