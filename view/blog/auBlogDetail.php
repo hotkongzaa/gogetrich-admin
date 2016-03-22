@@ -21,7 +21,13 @@ if (!isset($_SESSION['token'])) {
         $jsonValue = json_decode($jsonObj, true);
     }
 }
-$fPage = basename(__FILE__, '.php');
+$type = (string) filter_input(INPUT_GET, 'Create');
+$bId = (string) filter_input(INPUT_GET, 'bId');
+$fPage = (string) filter_input(INPUT_GET, 'fPage');
+//Update case
+if (!empty($type) && $type == "Edit") {
+    
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,8 +90,6 @@ $fPage = basename(__FILE__, '.php');
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?= $jsonValue['USERNAME']; ?> <b class="caret"></b></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">My Profile</a></li>
-                                        <li class="divider"></li>
                                         <li><a href="../../model/com.gogetrich.function/Logout.php">Log Out</a></li>
                                     </ul>
                                 </li>
@@ -150,13 +154,12 @@ $fPage = basename(__FILE__, '.php');
                             </nav>
                         </div>
                     </div>
-                </div>                
-
+                </div>                                
             </header>
 
             <!-- main content -->
             <div id="contentwrapper">
-                <div class="main_content" style="margin-left: 0px !important; height:700px !important;">
+                <div class="main_content" style="margin-left: 0px !important;">
                     <nav>
                         <div id="jCrumbs" class="breadCrumb module">
                             <ul>
@@ -167,26 +170,86 @@ $fPage = basename(__FILE__, '.php');
                                     <a href="#">Content management</a>
                                 </li>
                                 <li>
-                                    Blog
+                                    Blog Detail
                                 </li>
                             </ul>
                         </div>
                     </nav>
                     <div class="row-fluid">
                         <div class="span12">
-                            <div class="heading clearfix">
-                                <h3 class="pull-left">Blog Detail</h3>
-                                <span class="pull-right btn" id="createBlog">
-                                    <i class="icon-plus"></i> Create Blog
-                                </span>
+                            <div>
+                                <a href="<?= $fPage ?>">
+                                    <i class="splashy-arrow_state_blue_left"></i> Back
+                                </a>
                             </div>
-                            <div id="blogTbl"></div>
+                            <div class="heading clearfix">
+                                <h3 class="pull-left">Create/Update Blog Form</h3>
+                            </div>
+                            <div>
+                                <fieldset>
+                                    <div class="control-group">
+                                        <label class="control-label">Blog Categories*</label>
+                                        <div class="controls">
+                                            <select id="blogCate" name="blogCate" class="span6" required>
+                                                <option value="">-- Please select blog category --</option>
+                                                <?php
+                                                $sqlGetBcate = "SELECT * FROM GTRICH_BLOG_CATEGORY";
+                                                $resGetBcare = mysql_query($sqlGetBcate);
+                                                while ($rowBcate = mysql_fetch_array($resGetBcare)) {
+                                                    ?>
+                                                    <option value="<?= $rowBcate['B_CATE_ID'] ?>"><?= $rowBcate['B_CATE_NAME'] ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Blog Title*</label>
+                                        <div class="controls">
+                                            <input type="text" name="cateName" id="blogTitle" class="span6" placeholder="blogTitle" required/>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Allow user comment*</label>
+                                        <div class="controls">
+                                            <select id="blogCate" name="blogCate" class="span6" required>
+                                                <option value="false">Now Allow</option>
+                                                <option value="true">Allow</option>                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Blog Status*</label>
+                                        <div class="controls">
+                                            <select id="blogPublish" name="blogPublish" class="span6" required>
+                                                <option value="">== Select blog status ==</option>
+                                                <option value="Publish">Publish</option>
+                                                <option value="Not Publish">Not Publish</option>                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Blog Detail*</label>
+                                        <div class="controls">
+                                            <textarea type="text" name="cateName" id="blogDetail" class="span6" placeholder="Blog Detail" ></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <input type="button" class="btn btn-gebo" value="Save Blog"> 
+                                        <input type="button" onclick="cancelBlog()" class="btn btn-danger" value="Cancel Blog">
+                                    </div>
+                                </fieldset>
+                            </div>
                         </div>                        
                     </div>
                 </div>
             </div>
-
-
+            <style>
+                label.error{
+                    color: red !important;
+                }
+            </style>
 
             <script src="../assets/js/jquery.min.js"></script>
             <!-- smart resize event -->
@@ -218,30 +281,39 @@ $fPage = basename(__FILE__, '.php');
             <!-- datatable -->
             <script src="../assets/lib/datatables/jquery.dataTables.min.js"></script>
             <!-- additional sorting for datatables -->
-            <script src="../assets/lib/datatables/jquery.dataTables.sorting.js"></script>            
+            <script src="../assets/lib/datatables/jquery.dataTables.sorting.js"></script>     
+            <script src="../assets/lib/validation/jquery.validate.js"></script>     
+            <script src="../assets/ckeditor/ckeditor.js"></script>
 
             <script type="text/javascript">
-            $(document).ready(function () {
-                $("#blogTbl").load("blogDetailTbl.php", function () {
-                    $("html").removeClass("js");
-                });
-                
-                $("#createBlog").click(function () {
-                    window.location.href = "auBlogDetail?type=Create&bId=&fPage=<?=$fPage?>";
-                });
-                setInterval(function () {
-                    $.ajax({
-                        url: "../../model/com.gogetrich.function/SessionCheck.php",
-                        type: 'POST',
-                        success: function (data, textStatus, jqXHR) {
-                            if (data == 409) {
-                                //session expired
-                                window.location.href = "../loginError?rc=<?= md5(409) ?>&aRed=true";
-                            }
-                        }
-                    });
-                }, 3000);
-            });
+                                            $(document).ready(function () {
+                                                //Initial Element in page
+                                                auBlogPage.initialElement();
+
+                                                setInterval(function () {
+                                                    $.ajax({
+                                                        url: "../../model/com.gogetrich.function/SessionCheck.php",
+                                                        type: 'POST',
+                                                        success: function (data, textStatus, jqXHR) {
+                                                            if (data == 409) {
+                                                                //session expired
+                                                                window.location.href = "../loginError?rc=<?= md5(409) ?>&aRed=true";
+                                                            }
+                                                        }
+                                                    });
+                                                }, 3000);
+                                            });
+                                            auBlogPage = {
+                                                initialElement: function () {
+                                                    $("html").removeClass("js");
+                                                    $editor = CKEDITOR;
+                                                    $editorConfig = CKEDITOR.config;
+                                                    $editor.replace('blogDetail');
+                                                }
+                                            };
+                                            function cancelBlog() {
+                                                window.location.href = "<?= $fPage ?>";
+                                            }
             </script>
         </div>
     </body>
