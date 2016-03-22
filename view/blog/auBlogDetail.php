@@ -186,74 +186,77 @@ if (!empty($type) && $type == "Edit") {
                                 <h3 class="pull-left">Create/Update Blog Form</h3>
                             </div>
                             <div>
-                                <fieldset>
-                                    <div class="control-group">
-                                        <label class="control-label">Blog Categories*</label>
-                                        <div class="controls">
-                                            <select id="blogCate" name="blogCate" class="span6" required>
-                                                <option value="">-- Please select blog category --</option>
-                                                <?php
-                                                $sqlGetBcate = "SELECT * FROM GTRICH_BLOG_CATEGORY";
-                                                $resGetBcare = mysql_query($sqlGetBcate);
-                                                while ($rowBcate = mysql_fetch_array($resGetBcare)) {
-                                                    ?>
-                                                    <option value="<?= $rowBcate['B_CATE_ID'] ?>"><?= $rowBcate['B_CATE_NAME'] ?></option>
+                                <form id="blogForm" method="post">
+                                    <fieldset>
+                                        <div class="control-group">
+                                            <label class="control-label">Blog Categories*</label>
+                                            <div class="controls">
+                                                <select id="blogCate" name="blogCate" class="span6" required>
+                                                    <option value="">-- Please select blog category --</option>
                                                     <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">Blog Title*</label>
-                                        <div class="controls">
-                                            <input type="text" name="cateName" id="blogTitle" class="span6" placeholder="blogTitle" required/>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">Allow user comment*</label>
-                                        <div class="controls">
-                                            <select id="blogCate" name="blogCate" class="span6" required>
-                                                <option value="false">Now Allow</option>
-                                                <option value="true">Allow</option>                                                
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">Blog Status*</label>
-                                        <div class="controls">
-                                            <select id="blogPublish" name="blogPublish" class="span6" required>
-                                                <option value="">== Select blog status ==</option>
-                                                <option value="Publish">Publish</option>
-                                                <option value="Not Publish">Not Publish</option>                                                
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="control-group" style="border: #000 solid 1px; padding: 10px;">
-                                        <label class="control-label">Image Blog Type*</label>
-                                        <select id="imageBlogType" name="imageBlogType" class="span6" required>
-                                            <option value="">== Select Image type ==</option>
-                                            <option value="Cover Image">Cover Image</option>
-                                            <option value="Blog Image">Blog Image</option>                                                
-                                        </select>
-                                        <form role="form" id="blogImageForm" enctype="multipart/form-data"> 
-                                            <div class="well well-sm">
-                                                <input type="file" id="blogImage" name="blogImage">
+                                                    $sqlGetBcate = "SELECT * FROM GTRICH_BLOG_CATEGORY";
+                                                    $resGetBcare = mysql_query($sqlGetBcate);
+                                                    while ($rowBcate = mysql_fetch_array($resGetBcare)) {
+                                                        ?>
+                                                        <option value="<?= $rowBcate['B_CATE_ID'] ?>"><?= $rowBcate['B_CATE_NAME'] ?></option>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
-                                        </form>
-                                        <div id="show_image_tbl"></div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">Blog Detail*</label>
-                                        <div class="controls">
-                                            <textarea type="text" name="cateName" id="blogDetail" class="span6" placeholder="Blog Detail" ></textarea>
                                         </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <input type="button" class="btn btn-gebo" value="Save Blog"> 
-                                        <input type="button" onclick="cancelBlog()" class="btn btn-danger" value="Cancel Blog">
-                                    </div>
-                                </fieldset>
+                                        <div class="control-group">
+                                            <label class="control-label">Blog Title*</label>
+                                            <div class="controls">
+                                                <input type="text" name="cateName" id="blogTitle" class="span6" placeholder="blogTitle" required/>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">Allow user comment*</label>
+                                            <div class="controls">
+                                                <select id="blogAllogComment" name="blogAllogComment" class="span6" required>
+                                                    <option value="false">Now Allow</option>
+                                                    <option value="true">Allow</option>                                                
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">Blog Status*</label>
+                                            <div class="controls">
+                                                <select id="blogPublish" name="blogPublish" class="span6" required>
+                                                    <option value="">== Select blog status ==</option>
+                                                    <option value="Publish">Publish</option>
+                                                    <option value="Not Publish">Not Publish</option>                                                
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="control-group" style="border: #000 solid 1px; padding: 10px;">
+                                            <label class="control-label">Image Blog Type*</label>
+                                            <select id="imageBlogType" name="imageBlogType" class="span6" required>
+                                                <option value="">== Select Image type ==</option>
+                                                <option value="Cover Image">Cover Image</option>
+                                                <option value="Blog Image">Blog Image</option>                                                
+                                            </select>
+                                            <form role="form" id="blogImageForm" enctype="multipart/form-data"> 
+                                                <div class="well well-sm">
+                                                    <input type="file" id="blogImage" name="blogImage">
+                                                </div>
+                                            </form>
+                                            <div id="show_image_tbl"></div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">Blog Detail*</label>
+                                            <div class="controls">
+                                                <textarea type="text" name="cateName" id="blogDetail" class="span6" placeholder="Blog Detail" required></textarea>
+                                            </div>
+                                        </div>
+
+                                        <input type="submit" class="btn btn-gebo" value="Save Blog"/> 
+                                        <input type="button" onclick="cancelBlog()" class="btn btn-danger" value="Cancel Blog"/>
+
+
+                                    </fieldset>
+                                </form>
                             </div>
                         </div>                        
                     </div>
@@ -296,7 +299,7 @@ if (!empty($type) && $type == "Edit") {
             <script src="../assets/lib/datatables/jquery.dataTables.min.js"></script>
             <!-- additional sorting for datatables -->
             <script src="../assets/lib/datatables/jquery.dataTables.sorting.js"></script>     
-            <script src="../assets/lib/validation/jquery.validate.js"></script>     
+            <script src="../assets/js/jquery-validation/jquery.validate.js"></script>   
             <script src="../assets/ckeditor/ckeditor.js"></script>
 
             <script type="text/javascript">
@@ -304,6 +307,35 @@ if (!empty($type) && $type == "Edit") {
                                                 //Initial Element in page
                                                 auBlogPage.initialElement();
 
+                                                $("#blogForm").validate({
+                                                    submitHandler: function (form) {
+                                                        var formEle = $(form).serialize();
+                                                        //Count have image or not
+                                                        $.ajax({
+                                                            url: "../../model/com.gogetrich.function/checkIsImageUpload.php",
+                                                            type: 'POST',
+                                                            success: function (data, textStatus, jqXHR) {
+                                                                if (data > 0) {
+                                                                    var blogDetail = CKEDITOR.instances.blogDetail.getData();
+                                                                    //Start saving blog
+                                                                    $.ajax({
+                                                                        url: "../../model/com.gogetrich.function/SaveBlogDetail.php?" + formEle,
+                                                                        type: 'POST',
+                                                                        data: {'blogDetail': blogDetail},
+                                                                        beforeSend: function (xhr) {
+                                                                            $("html").addClass("js");
+                                                                        }, success: function (saveData, textStatus, jqXHR) {
+                                                                            $("html").removeClass("js");
+                                                                        }
+                                                                    });
+                                                                } else {
+                                                                    $("#notificationDialog").modal("show");
+                                                                    $("#notiDetailDialog").html("Pleaes upload atleast one image");
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                });
                                                 $("#blogImage").change(function () {
                                                     var file = this.files[0];
                                                     var imagefile = file.type;
@@ -311,11 +343,15 @@ if (!empty($type) && $type == "Edit") {
 
                                                     var match = ["image/jpeg", "image/png", "image/jpg"];
                                                     if (!((imagefile == match[0]) || (imagefile == match[1]) || (imagefile == match[2]))) {
-                                                        alert("Please Select A valid Image File\n Only jpeg, jpg and png Images type allowed");
+                                                        $("#notificationDialog").modal("show");
+                                                        $("#notiDetailDialog").html("Please Select A valid Image File\n Only jpeg, jpg and png Images type allowed");
+                                                        $('#blogImage').val('');
                                                         return false;
                                                     } else if (fileSize > 2) {
                                                         // the image file size must not over than 2 mb
-                                                        alert("Please select a valid Image File\nOnly less than 2 mb of image are allowed");
+                                                        $("#notificationDialog").modal("show");
+                                                        $("#notiDetailDialog").html("Please select a valid Image File\nOnly less than 2 mb of image are allowed");
+                                                        $('#blogImage').val('');
                                                     } else {
                                                         var reader = new FileReader();
                                                         reader.onload = imageIsLoaded;
@@ -366,7 +402,8 @@ if (!empty($type) && $type == "Edit") {
                                             function saveBlogImageToTmp() {
                                                 var imageBlogType = $("#imageBlogType").val();
                                                 if (imageBlogType == "") {
-                                                    alert("Please select image blog type");
+                                                    $("#notificationDialog").modal("show");
+                                                    $("#notiDetailDialog").html("Please select image blog type");
                                                 } else {
                                                     $("#previewImageUploadDialog").modal("hide");
                                                     setTimeout(function () {
@@ -413,11 +450,11 @@ if (!empty($type) && $type == "Edit") {
                                                     }, 100);
                                                 }
                                             }
-                                            function deleteBlogImageInTmp(imageId) {
+                                            function deleteBlogImageInTmp(imageId, imagename) {
                                                 var r = confirm("Do you want to delete this item?");
                                                 if (r == true) {
                                                     $.ajax({
-                                                        url: "../../model/com.gogetrich.function/deleteImageBlogInTmp.php?imageId=" + imageId,
+                                                        url: "../../model/com.gogetrich.function/deleteImageBlogInTmp.php?imageId=" + imageId + "&imageName=" + imagename,
                                                         type: 'POST',
                                                         beforeSend: function (xhr) {
                                                             $("html").addClass("js");
@@ -454,6 +491,18 @@ if (!empty($type) && $type == "Edit") {
                 <input type="button" onclick="saveBlogImageToTmp()" class="btn btn-gebo" value="Save"> 
                 <input type="button" onclick="$('#previewImageUploadDialog').modal('hide');
                         $('#blogImage').val('')" class="btn btn-danger" value="Cancel">
+            </div>
+        </div>
+        <div class="modal hide" id="notificationDialog">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" id="closeNoti">×</button>
+                <h3>System notification</h3>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-block alert-warning fade in">
+                    <h4 class="alert-heading">System notification!</h4>
+                    <p id="notiDetailDialog"></p>
+                </div>
             </div>
         </div>
     </body>

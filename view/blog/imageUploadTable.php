@@ -31,7 +31,7 @@ $jsonValue = json_decode($jsonObj, true);
                 <td><?= $row['IMAGE_UPLOAD_DATE_TIME'] ?></td>   
                 <td><?= $row['IMAGE_TYPE'] ?></td>   
                 <td style="text-align: center">                    
-                    <a href="#" class="btn btn-small" title="Delete" onclick="deleteBlogImageInTmp('<?= $row['IMAGE_ID'] ?>')">
+                    <a href="#" class="btn btn-small" title="Delete" onclick="deleteBlogImageInTmp('<?= $row['IMAGE_ID'] ?>', '<?= $row['IMAGE_NAME'] ?>')">
                         <i class="icon-adt_trash"></i> Delete
                     </a>
                 </td>
