@@ -8,7 +8,7 @@ require '../model-db-connection/config.php';
             <th>Customer Name</th>
             <th>Payment Status</th>
             <th>Phone number</th>
-            <th>Register Date</th>
+            <th>Register Course Date</th>
             <th>Course Name</th>
             <th>Enrollment Status</th>
             <th></th>
@@ -18,7 +18,8 @@ require '../model-db-connection/config.php';
         <?php
         $searchCriteria = (string) filter_input(INPUT_GET, 'searchCriteria');
         if ($searchCriteria == "all") {
-            $sqlGetUserEnroll = "SELECT * FROM RICH_CUSTOMER_ENROLL RCE "
+            $sqlGetUserEnroll = "SELECT RCE.ENROLL_ID,RC.CUS_ID,RC.CUS_FIRST_NAME, RC.CUS_LAST_NAME,RCE.PAYMENT_STATUS, RC.CUS_PHONE_NUMBER, RCE.CREATED_DATE_TIME, GCH.HEADER_NAME, RCE.ENROLL_STATUS "
+                    . "FROM RICH_CUSTOMER_ENROLL RCE "
                     . "LEFT JOIN RICH_CUSTOMER RC ON RC.CUS_ID = RCE.ENROLL_CUS_ID "
                     . "LEFT JOIN GTRICH_COURSE_HEADER GCH ON RCE.ENROLL_COURSE_ID = GCH.HEADER_ID "
                     . "ORDER BY RCE.CREATED_DATE_TIME DESC";
@@ -45,7 +46,8 @@ require '../model-db-connection/config.php';
                 $conditionaDate = "AND RCE.CREATED_DATE_TIME BETWEEN '" . $regisFromDate . "' AND '" . $regisToDate . "' ";
             }
 
-            $sqlGetUserEnroll = "SELECT * FROM RICH_CUSTOMER_ENROLL RCE "
+            $sqlGetUserEnroll = "SELECT RCE.ENROLL_ID,RC.CUS_ID,RC.CUS_FIRST_NAME, RC.CUS_LAST_NAME,RCE.PAYMENT_STATUS, RC.CUS_PHONE_NUMBER, RCE.CREATED_DATE_TIME, GCH.HEADER_NAME, RCE.ENROLL_STATUS "
+                    . "FROM RICH_CUSTOMER_ENROLL RCE "
                     . "LEFT JOIN RICH_CUSTOMER RC ON RC.CUS_ID = RCE.ENROLL_CUS_ID "
                     . "LEFT JOIN GTRICH_COURSE_HEADER GCH ON RCE.ENROLL_COURSE_ID = GCH.HEADER_ID "
                     . "WHERE 1=1 "
@@ -56,7 +58,6 @@ require '../model-db-connection/config.php';
                     . $conditionaDate
                     . "ORDER BY RCE.CREATED_DATE_TIME DESC";
         }
-
         $resGetUserEnroll = mysql_query($sqlGetUserEnroll);
         $no = 1;
         while ($rowGetUserEnroll = mysql_fetch_array($resGetUserEnroll)) {
