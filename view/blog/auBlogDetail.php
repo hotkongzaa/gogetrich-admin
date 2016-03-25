@@ -208,7 +208,7 @@ if (!empty($type) && $type == "Edit") {
                                         <div class="control-group">
                                             <label class="control-label">Blog Title*</label>
                                             <div class="controls">
-                                                <input type="text" name="cateName" id="blogTitle" class="span6" placeholder="blogTitle" required/>
+                                                <input type="text" name="blogTitle" id="blogTitle" class="span6" placeholder="blogTitle" required/>
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -232,7 +232,7 @@ if (!empty($type) && $type == "Edit") {
                                         </div>
                                         <div class="control-group" style="border: #000 solid 1px; padding: 10px;">
                                             <label class="control-label">Image Blog Type*</label>
-                                            <select id="imageBlogType" name="imageBlogType" class="span6" required>
+                                            <select id="imageBlogType" name="imageBlogType" class="span6">
                                                 <option value="">== Select Image type ==</option>
                                                 <option value="Cover Image">Cover Image</option>
                                                 <option value="Blog Image">Blog Image</option>                                                
@@ -247,14 +247,11 @@ if (!empty($type) && $type == "Edit") {
                                         <div class="control-group">
                                             <label class="control-label">Blog Detail*</label>
                                             <div class="controls">
-                                                <textarea type="text" name="cateName" id="blogDetail" class="span6" placeholder="Blog Detail" required></textarea>
+                                                <textarea type="text" name="blogDetail" id="blogDetail" class="span6" required></textarea>
                                             </div>
                                         </div>
-
                                         <input type="submit" class="btn btn-gebo" value="Save Blog"/> 
                                         <input type="button" onclick="cancelBlog()" class="btn btn-danger" value="Cancel Blog"/>
-
-
                                     </fieldset>
                                 </form>
                             </div>
@@ -325,6 +322,12 @@ if (!empty($type) && $type == "Edit") {
                                                                         beforeSend: function (xhr) {
                                                                             $("html").addClass("js");
                                                                         }, success: function (saveData, textStatus, jqXHR) {
+                                                                            if (saveData == 200) {
+                                                                                window.location = '<?= $fPage ?>';
+                                                                            } else {
+                                                                                $("#notificationDialog").modal("show");
+                                                                                $("#notiDetailDialog").html(saveData);
+                                                                            }
                                                                             $("html").removeClass("js");
                                                                         }
                                                                     });
@@ -430,6 +433,8 @@ if (!empty($type) && $type == "Edit") {
                                                                 $("html").addClass("js");
                                                             },
                                                             success: function (e) {
+                                                                $('#blogImage').val('');
+                                                                $("#imageBlogType").val('');
                                                                 $.ajax({
                                                                     url: "imageUploadTable.php",
                                                                     type: 'POST',
