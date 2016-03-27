@@ -20,9 +20,10 @@ if ($result == 401) {
     header("Location: ../../view/loginError?rc=" . md5(401) . "&aRed=true");
     die();
 } else {
-    if (explode(":", $result)[0] == 200) {
+    $loginRes = explode(":", $result);
+    if ($loginRes[0] == 200) {
         $service = new CredentialValidationService();
-        if ($service->submitToken(explode(":", $result)[2], explode(":", $result)[1]) == 200) {
+        if ($service->submitToken($loginRes[2], $loginRes[1]) == 200) {
             header("Location: ../../view/dashboard");
         } else {
             header("Location: ../../view/loginError?rc=" . md5(503) . "&aRed=true");
