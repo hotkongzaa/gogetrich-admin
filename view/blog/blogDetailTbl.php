@@ -26,8 +26,8 @@ require '../../model-db-connection/config.php';
                 <td style="text-align: center" width="150px"><?= $row['B_CATE_NAME'] ?></td>
                 <td style="text-align: center" width="150px"><?= $row['BLOG_PUBLISH_DATE'] ?></td>
                 <td style="text-align: center" width="150px">
-                    <a href="#" class="btn btn-small" title="Edit" onclick="getCateById('<?= $row['B_CATE_ID'] ?>')"><i class="icon-pencil"></i> Edit</a>
-                    <a href="#" class="btn btn-small" title="Delete" onclick="deleteCateById('<?= $row['B_CATE_ID'] ?>')"><i class="icon-trash"></i> Delete</a>
+                    <a href="#" class="btn btn-small" title="Edit" onclick="getBlogDetail('<?= $row['BLOG_ID'] ?>')"><i class="icon-pencil"></i> Edit</a>
+                    <a href="#" class="btn btn-small" title="Delete" onclick="deleteBlogDetail('<?= $row['BLOG_ID'] ?>')"><i class="icon-trash"></i> Delete</a>
                 </td>
             </tr>
             <?php

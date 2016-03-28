@@ -21,12 +21,14 @@ if (!isset($_SESSION['token'])) {
         $jsonValue = json_decode($jsonObj, true);
     }
 }
-$type = (string) filter_input(INPUT_GET, 'Create');
+$type = (string) filter_input(INPUT_GET, 'type');
 $bId = (string) filter_input(INPUT_GET, 'bId');
 $fPage = (string) filter_input(INPUT_GET, 'fPage');
 //Update case
 if (!empty($type) && $type == "Edit") {
-    
+    $sqlGetBlogDetail = "SELECT * FROM GTRICH_BLOG_DETAIL WHERE BLOG_ID LIKE '" . $bId . "'";
+    $resGetBlogDetail = mysql_query($sqlGetBlogDetail);
+    $rowBlgoDetail = mysql_fetch_assoc($resGetBlogDetail);
 }
 ?>
 <!DOCTYPE html>
@@ -314,23 +316,30 @@ if (!empty($type) && $type == "Edit") {
                                                             success: function (data, textStatus, jqXHR) {
                                                                 if (data > 0) {
                                                                     var blogDetail = CKEDITOR.instances.blogDetail.getData();
-                                                                    //Start saving blog
-                                                                    $.ajax({
-                                                                        url: "../../model/com.gogetrich.function/SaveBlogDetail.php?" + formEle,
-                                                                        type: 'POST',
-                                                                        data: {'blogDetail': blogDetail},
-                                                                        beforeSend: function (xhr) {
-                                                                            $("html").addClass("js");
-                                                                        }, success: function (saveData, textStatus, jqXHR) {
-                                                                            if (saveData == 200) {
-                                                                                window.location = '<?= $fPage ?>';
-                                                                            } else {
-                                                                                $("#notificationDialog").modal("show");
-                                                                                $("#notiDetailDialog").html(saveData);
+                                                                    //State Create new blog
+                                                                    if ("<?= $type ?>" == "Create") {
+                                                                        //Start saving blog
+                                                                        $.ajax({
+                                                                            url: "../../model/com.gogetrich.function/SaveBlogDetail.php?" + formEle,
+                                                                            type: 'POST',
+                                                                            data: {'blogDetail': blogDetail},
+                                                                            beforeSend: function (xhr) {
+                                                                                $("html").addClass("js");
+                                                                            }, success: function (saveData, textStatus, jqXHR) {
+                                                                                if (saveData == 200) {
+                                                                                    window.location = '<?= $fPage ?>';
+                                                                                } else {
+                                                                                    $("#notificationDialog").modal("show");
+                                                                                    $("#notiDetailDialog").html(saveData);
+                                                                                }
+                                                                                $("html").removeClass("js");
                                                                             }
-                                                                            $("html").removeClass("js");
-                                                                        }
-                                                                    });
+                                                                        });
+                                                                    } else {
+                                                                        //State update existing blog
+                                                                        alert("Not Implement yet");
+                                                                    }
+
                                                                 } else {
                                                                     $("#notificationDialog").modal("show");
                                                                     $("#notiDetailDialog").html("Pleaes upload atleast one image");
@@ -382,17 +391,24 @@ if (!empty($type) && $type == "Edit") {
                                                     $editorConfig = CKEDITOR.config;
                                                     $editor.replace('blogDetail');
 
-                                                    //Load image table
-                                                    $.ajax({
-                                                        url: "imageUploadTable.php",
-                                                        type: 'POST',
-                                                        beforeSend: function (xhr) {
-                                                            $("html").addClass("js");
-                                                        }, success: function (data, textStatus, jqXHR) {
-                                                            $("#show_image_tbl").html(data);
-                                                            $("html").removeClass("js");
-                                                        }
-                                                    });
+                                                    if ("<?= $type ?>" == "Create") {
+                                                        //Load image table
+                                                        $.ajax({
+                                                            url: "imageUploadTable.php",
+                                                            type: 'POST',
+                                                            beforeSend: function (xhr) {
+                                                                $("html").addClass("js");
+                                                            }, success: function (data, textStatus, jqXHR) {
+                                                                $("#show_image_tbl").html(data);
+                                                                $("html").removeClass("js");
+                                                            }
+                                                        });
+                                                    } else {
+                                                        $("#blogCate").val('<?= $rowBlgoDetail['BLOG_CATE_ID'] ?>');
+                                                        $("#blogTitle").val('<?= $rowBlgoDetail['BLOG_TITLE'] ?>');
+                                                        $("#blogAllogComment").val('<?= $rowBlgoDetail['ALLOW_COMMENT'] ?>');
+                                                        $("#blogPublish").val('<?= $rowBlgoDetail['BLOG_PUBLISH'] ?>');
+                                                    }
                                                 }
                                             };
                                             function cancelBlog() {

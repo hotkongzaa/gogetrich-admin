@@ -225,9 +225,9 @@ $fPage = basename(__FILE__, '.php');
                 $("#blogTbl").load("blogDetailTbl.php", function () {
                     $("html").removeClass("js");
                 });
-                
+
                 $("#createBlog").click(function () {
-                    window.location.href = "auBlogDetail?type=Create&bId=&fPage=<?=$fPage?>";
+                    window.location.href = "auBlogDetail?type=Create&bId=&fPage=<?= $fPage ?>";
                 });
                 setInterval(function () {
                     $.ajax({
@@ -242,6 +242,9 @@ $fPage = basename(__FILE__, '.php');
                     });
                 }, 3000);
             });
+            function getBlogDetail(blogId) {
+                window.location.href = "auBlogDetail?type=Edit&bId=" + blogId + "&fPage=<?= $fPage ?>";
+            }
             </script>
         </div>
     </body>
