@@ -24,12 +24,6 @@ if (!isset($_SESSION['token'])) {
 $type = (string) filter_input(INPUT_GET, 'type');
 $bId = (string) filter_input(INPUT_GET, 'bId');
 $fPage = (string) filter_input(INPUT_GET, 'fPage');
-//Update case
-if (!empty($type) && $type == "Edit") {
-    $sqlGetBlogDetail = "SELECT * FROM GTRICH_BLOG_DETAIL WHERE BLOG_ID LIKE '" . $bId . "'";
-    $resGetBlogDetail = mysql_query($sqlGetBlogDetail);
-    $rowBlgoDetail = mysql_fetch_assoc($resGetBlogDetail);
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -404,10 +398,41 @@ if (!empty($type) && $type == "Edit") {
                                                             }
                                                         });
                                                     } else {
-                                                        $("#blogCate").val('<?= $rowBlgoDetail['BLOG_CATE_ID'] ?>');
-                                                        $("#blogTitle").val('<?= $rowBlgoDetail['BLOG_TITLE'] ?>');
-                                                        $("#blogAllogComment").val('<?= $rowBlgoDetail['ALLOW_COMMENT'] ?>');
-                                                        $("#blogPublish").val('<?= $rowBlgoDetail['BLOG_PUBLISH'] ?>');
+                                                        $.ajax({
+                                                            url: "../../model/com.gogetrich.function/getBlogDetailByID.php?bid=<?= $bId ?>",
+                                                            type: 'POST',
+                                                            beforeSend: function (xhr) {
+                                                                $("html").addClass("js");
+                                                            },
+                                                            success: function (data, textStatus, jqXHR) {
+                                                                $("html").removeClass("js");
+                                                                var status = data.split("||");
+                                                                if (status[0] == 101) {
+                                                                    var jsonData = $.parseJSON(status[1]);
+                                                                    $("#blogCate").val(jsonData['BLOG_CATE_ID']);
+                                                                    $("#blogTitle").val(jsonData['BLOG_TITLE']);
+                                                                    $("#blogAllogComment").val(jsonData['ALLOW_COMMENT']);
+                                                                    $("#blogPublish").val(jsonData['BLOG_PUBLISH']);
+                                                                    CKEDITOR.instances.blogDetail.setData(jsonData['BLOG_DETAIL']);
+
+                                                                    //Loading upload image
+                                                                    $.ajax({
+                                                                        url: "../../model/com.gogetrich.function/updateImageToPartial.php?bid=<?= $bId ?>",
+                                                                        type: 'POST',
+                                                                        beforeSend: function (xhr) {
+                                                                            $("html").addClass("js");
+                                                                        },
+                                                                        success: function (data, textStatus, jqXHR) {
+                                                                            $("html").removeClass("js");
+                                                                            $("#show_image_tbl").load("imageUploadTable.php");
+                                                                        }
+                                                                    });
+
+                                                                } else {
+                                                                    window.location.href = "<?= $fPage ?>";
+                                                                }
+                                                            }
+                                                        });
                                                     }
                                                 }
                                             };
