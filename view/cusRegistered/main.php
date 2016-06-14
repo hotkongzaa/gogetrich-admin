@@ -78,7 +78,7 @@ if (!isset($_SESSION['token'])) {
 
             <!-- main content -->
             <div id="contentwrapper">
-                <div class="main_content" style="margin-left: 0px !important; height:700px !important;">
+                <div class="main_content">
                     <nav>
                         <div id="jCrumbs" class="breadCrumb module">
                             <ul>
@@ -86,13 +86,13 @@ if (!isset($_SESSION['token'])) {
                                     <a href="../dashboard"><i class="icon-home"></i></a>
                                 </li>
                                 <li>
-                                    <a href="#">Content management</a>
+                                    <a href="#">Account management</a>
                                 </li>
                                 <li>
-                                    <a href="#">Schedule</a>
+                                    <a href="#">User Access</a>
                                 </li>
                                 <li>
-                                    Course Categories
+                                    <i class="icon icon-edit"></i> Registered User
                                 </li>
                             </ul>
                         </div>
@@ -100,8 +100,8 @@ if (!isset($_SESSION['token'])) {
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="heading clearfix">
-                                <h3 class="pull-left">Course Categories</h3>
-                                <span class="pull-right btn" onclick="createCate();"><i class="icon-plus"></i> Create Category</span>
+                                <h3 class="pull-left">Course Description Header</h3>
+                                <span class="pull-right btn" onclick="createCate();"><i class="icon-plus"></i> Create Description Header</span>
                             </div>
                             <div id="courseCateTbl"></div>
                         </div>                        
@@ -111,16 +111,16 @@ if (!isset($_SESSION['token'])) {
             <div class="modal hide fade" id="createCate">
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal">×</button>
-                    <h3>Category Form</h3>
+                    <h3>Description Header Form</h3>
                 </div>
                 <div class="modal-body">                   
-                    <div id="alertCate" class="alert alert-danger">Please enter category name</div>
+                    <div id="alertCate" class="alert alert-danger">Please enter description header name</div>
                     <form id="courseCateForm">
                         <div class="formSep">
-                            <label>Category Name*</label>
-                            <input type="text" name="cateName" id="cateName">
-                            <input type="hidden" name="cateID" id="cateID">
-                            <input type="hidden" name="cateDate" id="cateDate">
+                            <label>Description Header Name*</label>
+                            <input type="text" name="headerName" id="headerName">
+                            <input type="hidden" name="headerID" id="headerID">
+                            <input type="hidden" name="headerDate" id="headerDate">
                         </div>                        
                     </form>
                 </div>
@@ -128,6 +128,85 @@ if (!isset($_SESSION['token'])) {
                     <a href="#" class="btn" onclick="saveCate();">Save</a>
                 </div>
             </div>
+
+            <a href="javascript:void(0)" class="sidebar_switch on_switch ttip_r" title="Hide Sidebar">Sidebar switch</a>
+            <div class="sidebar">
+                <div class="antiscroll-inner">
+                    <div class="antiscroll-content">
+
+                        <div class="sidebar_inner">
+                            <form class="input-append" method="post" >
+
+                            </form>
+                            <div id="side_accordion" class="accordion">
+
+                                <div class="accordion-group">
+                                    <div class="accordion-heading">
+                                        <a  href="#collapseUser" data-parent="#side_accordion" data-toggle="collapse" class="accordion-toggle">
+                                            <i class="icon icon-edit"></i> Registered User
+                                        </a>
+                                    </div>
+                                    <div class="accordion-body in collapse" id="collapseUser" style="height: auto">
+                                        <div class="accordion-inner">
+                                            <ul class="nav nav-list">
+                                                <li class="nav-header">Course Enrollment</li>
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="icon icon-globe"></i> Enroll to user
+                                                    </a>
+                                                </li>
+                                                <li class="nav-header">Users</li>
+                                                <li class="active">
+                                                    <a href="main" >
+                                                        <i class="icon icon-user"></i> User Registered
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-group">
+                                    <div class="accordion-heading">
+                                        <a href="#collapseFour" data-parent="#side_accordion" data-toggle="collapse" class="accordion-toggle">
+                                            <i class="icon-cog"></i> Administration Configure
+                                        </a>
+                                    </div>
+                                    <div class="accordion-body in collapse" id="collapseFour" style="height: auto">
+                                        <div class="accordion-inner">
+                                            <ul class="nav nav-list">
+                                                <li class="nav-header">Group & Permission</li>
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="icon icon-globe"></i> User Group Management
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="icon icon-lock"></i> Permission Management
+                                                    </a>
+                                                </li>
+                                                <li class="nav-header">Users</li>
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i class="icon icon-user"></i> User Management
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="push"></div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
 
 
             <script src="../assets/js/jquery.min.js"></script>
@@ -162,8 +241,7 @@ if (!isset($_SESSION['token'])) {
             <!-- additional sorting for datatables -->
             <script src="../assets/lib/datatables/jquery.dataTables.sorting.js"></script>            
 
-            <script>
-                        var saveState = "Save";
+            <script type="text/javascript">
                         $(document).ready(function () {
                             $("#alertCate").hide();
 
@@ -180,82 +258,11 @@ if (!isset($_SESSION['token'])) {
                                 });
                             }, 3000);
 
-                            $("#courseCateTbl").load("courseCateTable.php", function () {
+                            $("#courseCateTbl").load("descrtionHeaderTbl.php", function () {
                                 $("html").removeClass("js");
                             });
                         });
-                        function createCate() {
-                            saveState = "Save";
-                            $('#createCate').modal('show');
-                            $("#alertCate").hide();
-                            $("#courseCateForm").trigger("reset");
-                        }
-                        function saveCate() {
-                            var cateName = $("#cateName").val();
-                            if (cateName == "") {
-                                $("#alertCate").show();
-                            } else {
-                                $("html").addClass("js");
-                                if (saveState == "Save") {
-                                    $.ajax({
-                                        url: "../../model/com.gogetrich.function/SaveCourseCategory.php?cateName=" + cateName,
-                                        type: 'POST',
-                                        success: function (data, textStatus, jqXHR) {
-                                            $('#createCate').modal('hide');
-                                            $("#alertCate").hide();
-                                            $("#courseCateTbl").load("courseCateTable.php", function () {
-                                                $("html").removeClass("js");
-                                            });
-                                        }
-                                    });
-                                } else {
-                                    var cateID = $("#cateID").val();
-                                    var cateDate = $("#cateDate").val();
-                                    $.ajax({
-                                        url: "../../model/com.gogetrich.function/UpdateCourseCategory.php?cateID=" + cateID + "&cateName=" + cateName + "&cateDate=" + cateDate,
-                                        type: 'POST',
-                                        success: function (data, textStatus, jqXHR) {
-                                            $('#createCate').modal('hide');
-                                            $("#alertCate").hide();
-                                            $("#courseCateTbl").load("courseCateTable.php", function () {
-                                                $("html").removeClass("js");
-                                            });
-                                        }
-                                    });
-                                }
-                                saveState = "Save";
-                            }
-                        }
-                        function deleteCourseCate(cateID) {
-                            var r = confirm("Do you want to delete this permanently !");
-                            if (r == true) {
-                                $("html").addClass("js");
-                                $.ajax({
-                                    url: "../../model/com.gogetrich.function/DeleteCourseCate.php?cateID=" + cateID,
-                                    type: 'POST',
-                                    success: function (data, textStatus, jqXHR) {
-                                        $("#courseCateTbl").load("courseCateTable.php", function () {
-                                            $("html").removeClass("js");
-                                        });
-                                    }
-                                });
-                            }
 
-                        }
-                        function getCourseCateByID(cateID) {
-                            saveState = "Edit";
-                            $.ajax({
-                                url: "../../model/com.gogetrich.function/GetCourseCateByID.php?cateID=" + cateID,
-                                type: 'POST',
-                                success: function (data, textStatus, jqXHR) {
-                                    $('#createCate').modal('show');
-                                    var json = $.parseJSON(data);
-                                    $("#cateID").val(json.CATE_ID);
-                                    $("#cateName").val(json.CATE_NAME);
-                                    $("#cateDate").val(json.CATE_CREATE_DATE_TIME);
-                                }
-                            });
-                        }
             </script>
 
         </div>
