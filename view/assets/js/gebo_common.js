@@ -8,13 +8,17 @@ $(document).ready(function () {
 
     $('body').click(function (evt) {
         $.ajax({
-            url: "../../../model/com.gogetrich.function/UpdateSession.php",
+            url: "../model/com.gogetrich.function/UpdateSession.php",
             success: function (data, textStatus, jqXHR) {
                 if (data == 409) {
                     //Session already timeout
+                    var r = confirm("Your session has been time out, Please re-login again");
+                    if (r == true) {
+                        window.location = "login";
+                    }
                 } else if (data == 200) {
                     //Update session complete
-                    console.log("Test");
+
                 } else {
                     console.log(data);
                 }
