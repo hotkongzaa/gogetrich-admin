@@ -5,6 +5,24 @@ function is_touch_device() {
     return !!('ontouchstart' in window);
 }
 $(document).ready(function () {
+
+    $('body').click(function (evt) {
+        $.ajax({
+            url: "../../../model/com.gogetrich.function/UpdateSession.php",
+            success: function (data, textStatus, jqXHR) {
+                if (data == 409) {
+                    //Session already timeout
+                } else if (data == 200) {
+                    //Update session complete
+                    console.log("Test");
+                } else {
+                    console.log(data);
+                }
+            }
+        });
+
+    });
+
     //* search typeahead
     $('.search_query').typeahead({
         source: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Dakota", "North Carolina", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],

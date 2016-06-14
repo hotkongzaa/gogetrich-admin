@@ -84,7 +84,7 @@
         <script src="assets/bootstrap/js/bootstrap.min.js"></script>
         <script>
             $(document).ready(function () {
-
+                
                 //* boxes animation
                 form_wrapper = $('.login_box');
                 $('.linkform a,.link_reg a').on('click', function (e) {
