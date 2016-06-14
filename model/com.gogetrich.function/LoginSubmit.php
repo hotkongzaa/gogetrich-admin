@@ -11,6 +11,7 @@ require '../../model/com.gogetrich.dao/ADUserCredentialDaoImpl.php';
 require '../../model/com.gogetrich.service/ADUserService.php';
 require '../../model/com.gogetrich.model/ADUserVO.php';
 require 'CredentialValidationService.php';
+require '../../model-db-connection/config.php';
 
 $adUserDao = new ADUserCredentialDaoImpl();
 $adUserService = new ADUserService($adUserDao);
@@ -23,7 +24,11 @@ if ($result == 401) {
     $loginRes = explode(":", $result);
     if ($loginRes[0] == 200) {
         $service = new CredentialValidationService();
-        if ($service->submitToken($loginRes[2], $loginRes[1]) == 200) {
+        //Check is multiple login?
+        if (!$service->checkIsMultiple($loginRes[2], $loginRes[1])) {
+            $_SESSION['userIdForMultilple'] = $loginRes[1];
+            header("Location: ../../view/loginMultiple");
+        } else if ($service->submitToken($loginRes[2], $loginRes[1]) == 200) {
             header("Location: ../../view/dashboard");
         } else {
             header("Location: ../../view/loginError?rc=" . md5(503) . "&aRed=true");

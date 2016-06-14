@@ -35,6 +35,16 @@ class CredentialValidationService {
         $conn->close();
     }
 
+    public function checkIsMultiple($username, $userId) {
+        $sqlCheck = "SELECT * FROM RICH_SECURITY_TOKEN WHERE USERID='" . $userId . "' AND USERNAME='" . $username . "' AND STATUS=1";
+        $res = mysql_query($sqlCheck);
+        if (mysql_num_rows($res) >= 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function checkIsTokenValid($token) {
         $sqlCheck = "SELECT * FROM RICH_SECURITY_TOKEN WHERE TOKEN='" . $token . "'";
         $res = mysql_query($sqlCheck);
