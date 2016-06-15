@@ -48,7 +48,7 @@ class CredentialValidationService {
     public function checkIsTokenValid($token) {
         $sqlCheck = "SELECT * FROM RICH_SECURITY_TOKEN WHERE TOKEN='" . $token . "'";
         $res = mysql_query($sqlCheck);
-        $row = mysql_fetch_assoc($res);
+        $row = mysql_fetch_assoc($res);        
         if ($row['STATUS'] == 1) {
             return 200;
         } else {

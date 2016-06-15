@@ -15,6 +15,8 @@ $(document).ready(function () {
                     var r = confirm("Your session has been time out, Please re-login again");
                     if (r == true) {
                         window.location = "login";
+                    } else {
+                        window.location = "login";
                     }
                 } else if (data == 200) {
                     //Update session complete

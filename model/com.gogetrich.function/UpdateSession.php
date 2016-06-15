@@ -8,6 +8,7 @@ session_start();
  */
 $config = require '../../model-db-connection/GoGetRighconf.properties.php';
 require './CredentialValidationService.php';
+require '../../model-db-connection/config.php';
 $now = time();
 $service = new CredentialValidationService();
 if ($now > $_SESSION['expire']) {
@@ -17,13 +18,13 @@ if ($now > $_SESSION['expire']) {
         echo 409;
     }
 } else {
-//    var_dump(isset($_SESSION['token']));
     if (isset($_SESSION['token'])) {
         $validToken = $service->checkIsTokenValid($_SESSION['token']);
         if ($validToken == 200) {
             $_SESSION['expire'] = time() + (60 * $config['application_timeout']);
             echo 200;
         } else {
+            $service->invalidToken($_SESSION['token']);
             unset($_SESSION['token']);
             echo 409;
         }
