@@ -68,8 +68,9 @@ if (!isset($_SESSION['token'])) {
         </script>
         <!-- Shared on MafiaShare.net  --><!-- Shared on MafiaShare.net  --></head>
     <body>
-        <div id="loading_layer" style="display:none"><img src="../assets/img/ajax_loader.gif" alt="" /></div>        
-
+        <div id="loading_layer" style="display:none">
+            <img src="../assets/img/ajax_loader.gif" alt="" />
+        </div>        
         <div id="maincontainer" class="clearfix">
             <!-- header -->
             <header>
@@ -100,8 +101,13 @@ if (!isset($_SESSION['token'])) {
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="heading clearfix">
-                                <h3 class="pull-left">Course Description Header</h3>
-                                <span class="pull-right btn" onclick="createCate();"><i class="icon-plus"></i> Create Description Header</span>
+                                <h3 class="pull-left">User Registered Management</h3>
+                                <span class="pull-right btn">
+                                    <i class="icon-plus"></i> Create User
+                                </span>
+                                <span class="pull-right btn">
+                                    <i class="icon-search"></i> Search User
+                                </span>
                             </div>
                             <div id="courseCateTbl"></div>
                         </div>                        
@@ -209,7 +215,7 @@ if (!isset($_SESSION['token'])) {
 
 
 
-            <script src="../assets/js/jquery.min.js"></script>
+            <script src="../assets/js/jquery.min.js"></script>            
             <!-- smart resize event -->
             <script src="../assets/js/jquery.debouncedresize.min.js"></script>
             <!-- hidden elements width/height -->
@@ -232,14 +238,15 @@ if (!isset($_SESSION['token'])) {
             <script src="../assets/lib/antiscroll/antiscroll.js"></script>
             <script src="../assets/lib/antiscroll/jquery-mousewheel.js"></script>
             <!-- common functions -->
-            <script src="../assets/js/gebo_common.js"></script>
+            <script src="../assets/js/gebo_common_f.js"></script>
 
             <!-- colorbox -->
             <script src="../assets/lib/colorbox/jquery.colorbox.min.js"></script>
             <!-- datatable -->
-            <script src="../assets/lib/datatables/jquery.dataTables.min.js"></script>
             <!-- additional sorting for datatables -->
-            <script src="../assets/lib/datatables/jquery.dataTables.sorting.js"></script>            
+            <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+            <script src="../assets/lib/datatables/jquery.dataTables.sorting.js"></script>         
+
 
             <script type="text/javascript">
                         $(document).ready(function () {
@@ -258,13 +265,12 @@ if (!isset($_SESSION['token'])) {
                                 });
                             }, 3000);
 
-                            $("#courseCateTbl").load("descrtionHeaderTbl.php", function () {
+                            $("#courseCateTbl").load("cusRegisteredTbl.php", function () {
                                 $("html").removeClass("js");
                             });
                         });
 
-            </script>
-
+            </script>            
         </div>
     </body>
 </html>

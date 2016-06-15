@@ -2,7 +2,7 @@
     <div class="navbar-inner">
         <div class="container-fluid">
             <a class="brand" href="dashboard">
-                <img src="http://gogetrich.net/view/assets/images/logo.png" width="120"/>
+                <!--<img src="http://gogetrich.net/view/assets/images/logo.png" width="120"/>-->
             </a>
             <ul class="nav user_menu pull-right">                             
 
@@ -38,30 +38,30 @@
                                     <a href="cusRegistered/main">
                                         <i class="icon icon-user"></i> Users Access 
                                     </a>
-<!--                                    <ul class="dropdown-menu sub-menu">
-                                        <li>
-                                            <a href="cusRegistered/main">
-                                                <i class="icon icon-edit"></i> Registered Users
-                                            </a>
-                                        </li>
-                                        <li class="divider">
-                                        </li>
-                                        <li>
-                                            <a href="#"> 
-                                                <i class="icon icon-globe"></i> User Group Management
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#"> 
-                                                <i class="icon icon-lock"></i> Permission Management
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#"> 
-                                                <i class="icon icon-user"></i> User Management
-                                            </a>
-                                        </li>
-                                    </ul>-->
+                                    <!--                                    <ul class="dropdown-menu sub-menu">
+                                                                            <li>
+                                                                                <a href="cusRegistered/main">
+                                                                                    <i class="icon icon-edit"></i> Registered Users
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="divider">
+                                                                            </li>
+                                                                            <li>
+                                                                                <a href="#"> 
+                                                                                    <i class="icon icon-globe"></i> User Group Management
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a href="#"> 
+                                                                                    <i class="icon icon-lock"></i> Permission Management
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a href="#"> 
+                                                                                    <i class="icon icon-user"></i> User Management
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>-->
                                 </li>
                             </ul>
                         </li>
@@ -78,13 +78,13 @@
                                         <li><a href="courseDetails/courseDetail">Course Detail</a></li>                                                       
                                     </ul>
                                 </li>
-                                <li class="dropdown">
-                                    <a href="#"><i class="icon-bullhorn"></i> Learn to rich <b class="caret-right"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Content Categories</a></li>
-                                        <li><a href="#">Content Detail</a></li>                                                       
-                                    </ul>
-                                </li>
+                                <!--                                <li class="dropdown">
+                                                                    <a href="#"><i class="icon-bullhorn"></i> Learn to rich <b class="caret-right"></b></a>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a href="#">Content Categories</a></li>
+                                                                        <li><a href="#">Content Detail</a></li>                                                       
+                                                                    </ul>
+                                                                </li>-->
                                 <li class="dropdown">
                                     <a href="#">
                                         <i class="icon-book"></i> Blog management <b class="caret-right"></b>

@@ -2,7 +2,7 @@
     <div class="navbar-inner">
         <div class="container-fluid">
             <a class="brand" href="../dashboard">
-                <img src="http://gogetrich.net/view/assets/images/logo.png" width="120"/>
+                <!--<img src="http://gogetrich.net/view/assets/images/logo.png" width="120"/>-->
             </a>
             <ul class="nav user_menu pull-right">                             
 
@@ -78,13 +78,13 @@
                                         <li><a href="../courseDetails/courseDetail">Course Detail</a></li>                                                       
                                     </ul>
                                 </li>
-                                <li class="dropdown">
+<!--                                <li class="dropdown">
                                     <a href="#"><i class="icon-bullhorn"></i> Learn to rich <b class="caret-right"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#">Content Categories</a></li>
                                         <li><a href="#">Content Detail</a></li>                                                       
                                     </ul>
-                                </li>
+                                </li>-->
                                 <li class="dropdown">
                                     <a href="#">
                                         <i class="icon-book"></i> Blog management <b class="caret-right"></b>
