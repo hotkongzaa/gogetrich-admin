@@ -94,13 +94,29 @@ require '../../model-db-connection/config.php';
                                 '<td><strong>Customer Username:</strong></td>' +
                                 '<td>' + jsonObj['CUS_USERNAME'] + '</td>' +
                                 '<td><strong>Customer Password:</strong></td>' +
-                                '<td>********** <a href="">Reset password</a></td>' +
+                                '<td>********** <a href="javascript:void(0);">Reset password</a></td>' +
                                 '</tr>' +
                                 '<tr>' +
-                                '<td><strong>Customer Mobile No.</strong></td>' +
+                                '<td><strong>Customer Mobile No.:</strong></td>' +
                                 '<td>' + jsonObj['CUS_PHONE_NUMBER'] + '</td>' +
-                                '<td><strong>Customer Email.</strong></td>' +
+                                '<td><strong>Customer Email:</strong></td>' +
                                 '<td>' + jsonObj['CUS_EMAIL'] + '</td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                '<td><strong>Gender:</strong></td>' +
+                                '<td>' + jsonObj['CUS_GENDER'] + '</td>' +
+                                '<td><strong>Registered Date Time:</strong></td>' +
+                                '<td>' + jsonObj['CREATED_DATE_TIME'] + '</td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                '<td><strong>Contact Address:</strong></td>' +
+                                '<td>' + jsonObj['CUS_CONTACT_ADDRESS'] + '</td>' +
+                                '<td><strong>Receipt Address:</strong></td>' +
+                                '<td>' + jsonObj['CUS_RECEIPT_ADDRESS'] + '</td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                '<td colspan="4"><input type="button" class="btn btn-sm" value="Update"/> \n\
+                                <input type="button" class="btn btn-danger" value="Delete"/></td>' +
                                 '</tr>' +
                                 '</table>';
                         row.child(content).show();
