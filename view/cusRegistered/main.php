@@ -212,9 +212,36 @@ if (!isset($_SESSION['token'])) {
                 </div>
 
             </div>
-
-
-
+            <div id="createCusDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">
+                        User created form
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div id="loadCreateForm"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+            <div id="updateCusDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">
+                        User updated form
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div id="loadUpdatedForm"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
             <script src="../assets/js/jquery.min.js"></script>            
             <!-- smart resize event -->
             <script src="../assets/js/jquery.debouncedresize.min.js"></script>
@@ -269,7 +296,10 @@ if (!isset($_SESSION['token'])) {
                                 $("html").removeClass("js");
                             });
                         });
-
+                        function loadUserForm(cusId) {
+                            console.log(cusId);
+                            $('#updateCusDialog').modal('show');
+                        }
             </script>            
         </div>
     </body>

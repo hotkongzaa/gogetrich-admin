@@ -115,8 +115,9 @@ require '../../model-db-connection/config.php';
                                 '<td>' + jsonObj['CUS_RECEIPT_ADDRESS'] + '</td>' +
                                 '</tr>' +
                                 '<tr>' +
-                                '<td colspan="4"><input type="button" class="btn btn-sm" value="Update"/> \n\
-                                <input type="button" class="btn btn-danger" value="Delete"/></td>' +
+                                '<td colspan="4">\n\
+                                <a href="javascript:void(0);" onclick="loadUserForm(\'' + jsonObj['CUS_ID'] + '\')" class="btn btn-sm"><i class="icon icon-edit"></i> แก้ไข</a> \n\
+                                <a href="javacsript:void(0);" class="btn btn-sm"><i class="icon icon-trash"></i> ลบ</a></td>' +
                                 '</tr>' +
                                 '</table>';
                         row.child(content).show();
