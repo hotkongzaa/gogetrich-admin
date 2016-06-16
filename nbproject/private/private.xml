@@ -3,11 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/gogetrich-admin/model/com.gogetrich.function/LoginSubmit.php</file>
-            <file>file:/C:/xampp/htdocs/gogetrich-admin/model/com.gogetrich.function/UpdateSession.php</file>
-            <file>file:/C:/xampp/htdocs/gogetrich-admin/view/login.php</file>
-            <file>file:/C:/xampp/htdocs/gogetrich-admin/view/assets/js/gebo_common.js</file>
-            <file>file:/C:/xampp/htdocs/gogetrich-admin/model/com.gogetrich.function/CredentialValidationService.php</file>
+            <file>file:/C:/xampp/htdocs/gogetrich-admin/view/cusRegistered/main.php</file>
+            <file>file:/C:/xampp/htdocs/gogetrich-admin/view/cusRegistered/cusRegisteredTbl.php</file>
         </group>
     </open-files>
 </project-private>

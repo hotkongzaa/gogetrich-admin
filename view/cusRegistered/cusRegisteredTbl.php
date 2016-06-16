@@ -10,7 +10,6 @@ require '../../model-db-connection/config.php';
             <th>Customer Name</th>
             <th>Customer Email</th>
             <th>Mobile No.</th>
-            <!--<th></th>-->
         </tr>
     </thead>
     <tbody>
@@ -27,10 +26,6 @@ require '../../model-db-connection/config.php';
                 <td><?= $row['CUS_FIRST_NAME'] ?> <?= $row['CUS_LAST_NAME'] ?></td>
                 <td><?= $row['CUS_EMAIL'] ?></td>
                 <td><?= $row['CUS_PHONE_NUMBER'] ?></td>
-    <!--                <td style="text-align: center" width="150px">
-                    <a href="#" class="btn btn-small" title="Edit" onclick="getCourseCateByID('<?= $row['DESC_HEADER_ID'] ?>')"><i class="icon-pencil"></i> Edit</a>
-                    <a href="#" class="btn btn-small" title="Delete" onclick="deleteCourseCate('<?= $row['DESC_HEADER_ID'] ?>')"><i class="icon-trash"></i> Delete</a>
-                </td>-->
             </tr>
             <?php
             $id++;
