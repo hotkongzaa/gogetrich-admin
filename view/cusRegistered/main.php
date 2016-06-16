@@ -297,8 +297,20 @@ if (!isset($_SESSION['token'])) {
                             });
                         });
                         function loadUserForm(cusId) {
-                            console.log(cusId);
-                            $('#updateCusDialog').modal('show');
+                            $.ajax({
+                                url: "registerForm.php?cusId=" + cusId,
+                                type: 'POST',
+                                beforeSend: function (xhr) {
+                                    $("html").addClass("js");
+                                    $("#loadCreateForm").empty();
+                                },
+                                success: function (data, textStatus, jqXHR) {
+                                    $("html").removeClass("js");
+                                    $("#loadCreateForm").html(data);
+                                    $('#updateCusDialog').modal('show');
+                                }
+
+                            });
                         }
             </script>            
         </div>
