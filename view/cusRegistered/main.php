@@ -235,11 +235,82 @@ if (!isset($_SESSION['token'])) {
                     </h3>
                 </div>
                 <div class="modal-body">
-                    <div id="loadUpdatedForm"></div>
+                    <div>
+                        <div class="alert alert-danger alert-dismissable" id="errorFormPart">
+                            <span class="errorMsgForm"></span>                            
+                        </div>
+                        <form id="cus_update_form">
+                            <fieldset>
+                                <legend>ข้อมูลล็อกอิน</legend>
+
+                                <div class="form-group">
+                                    <label for="username">ชื่อผู้ใช้ (Username) *</label>
+                                    <input type="text" name="username" id="username" placeholder="Username" class="form-control" disabled="disabled"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password">รหัสผ่าน (Password) * (กรุณาใส่อย่างน้อย 8 ตัวอักษร)</label> 
+                                    <input type="password" name="password" id="password" placeholder="Password" class="form-control">
+                                    <label style="color: red">Leave blank if not change or <a href="javascript:void(0)">Reset password</a> to default</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="confirmPassword">ยืนยันรหัสผ่าน (Confirm password) *</label>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">อีเมล์ (Email) * กรุณาสมัครสมาชิกด้วย Email ที่ไม่ใช่ hotmail</label>
+                                    <input type="email" id="email" name="email" placeholder="Email Address" class="form-control">
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>ข้อมูลส่วนตัว</legend>
+                                <div class="form-group">
+                                    <label for="fName">ชื่อ (First Name) *</label>
+                                    <input type="text" id="fName" name="fName" placeholder="First Name" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lName">สกุล (Last Name) *</label>
+                                    <input type="text" id="lName" name="lName" placeholder="Last Name" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender">เพศ (Gender)</label>
+                                    <select id="gender" name="gender">
+                                        <option value="0"></option>
+                                        <option value="Male">ชาย</option>
+                                        <option value="Female">หญิง</option>
+                                        <option value="Other">ไม่ระบุ</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">ที่อยู่ (เพื่อการติดต่อ) (Contact address) *</label>
+                                    <textarea id="contactAddress" name="contactAddress" style="height: 150px;"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">ที่อยู่ (เพื่อออกใบเสร็จ) (Receipt address)</label>
+                                    <textarea id="receiptAddress" name="receiptAddress" style="height: 150px;"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">หมายเลขโทรศัพท์ เพื่อการติดต่อ (Phone number) *</label>
+                                    <input type="text" id="phone" name="phone" placeholder="Phone number" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="facebookAdr">Facebook address</label>
+                                    <input type="text" id="facebookAdr" name="facebookAdr" placeholder="Facebook Address" class="form-control">
+                                </div>
+                                <div class="control-group">
+                                    <label for="forceChange">
+                                        <input type="checkbox" name="forceChange" id="forceChange" value="true"/> Force Change password
+                                    </label>
+                                </div>
+                            </fieldset>                 
+                            <input type="hidden" id="cusId" name="cusId"/>
+                        </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                    <button class="btn btn-primary">Save changes</button>
+                    <button class="btn btn-primary" id="saveChange">Save changes</button>
                 </div>
             </div>
             <script src="../assets/js/jquery.min.js"></script>            
@@ -277,6 +348,7 @@ if (!isset($_SESSION['token'])) {
 
             <script type="text/javascript">
                         $(document).ready(function () {
+                            $("#errorFormPart").hide();
                             $("#alertCate").hide();
 
                             setInterval(function () {
@@ -295,21 +367,42 @@ if (!isset($_SESSION['token'])) {
                             $("#courseCateTbl").load("cusRegisteredTbl.php", function () {
                                 $("html").removeClass("js");
                             });
+                            $("#saveChange").click(function () {
+                                var formEle = $("#cus_update_form").serialize();
+                                $.ajax({
+                                    url: "../../model/com.gogetrich.function/updateCusRegisteredDetail.php?" + formEle,
+                                    type: 'POST',
+                                    beforeSend: function (xhr) {
+                                        $(".errorMsgForm").empty();
+                                    },
+                                    success: function (data, textStatus, jqXHR) {
+                                        
+                                    }
+                                });
+                            });
                         });
                         function loadUserForm(cusId) {
                             $.ajax({
-                                url: "registerForm.php?cusId=" + cusId,
+                                url: "../../model/com.gogetrich.function/getCusRegisteredDetail.php?cusId=" + cusId,
                                 type: 'POST',
                                 beforeSend: function (xhr) {
                                     $("html").addClass("js");
-                                    $("#loadCreateForm").empty();
                                 },
                                 success: function (data, textStatus, jqXHR) {
                                     $("html").removeClass("js");
-                                    $("#loadCreateForm").html(data);
-                                    $('#updateCusDialog').modal('show');
+                                    var jsonObj = $.parseJSON(data);
+                                    $("#username").val(jsonObj['CUS_USERNAME']);
+                                    $("#email").val(jsonObj['CUS_EMAIL']);
+                                    $("#fName").val(jsonObj['CUS_FIRST_NAME']);
+                                    $("#lName").val(jsonObj['CUS_LAST_NAME']);
+                                    $("#gender").val(jsonObj['CUS_GENDER']);
+                                    $("#contactAddress").val(jsonObj['CUS_CONTACT_ADDRESS']);
+                                    $("#receiptAddress").val(jsonObj['CUS_RECEIPT_ADDRESS']);
+                                    $("#phone").val(jsonObj['CUS_PHONE_NUMBER']);
+                                    $("#facebookAdr").val(jsonObj['CUS_FACEBOOK_ADDRESS']);
+                                    $("#updateCusDialog").modal("show");
+                                    $("#cusId").val(jsonObj['CUS_ID']);
                                 }
-
                             });
                         }
             </script>            
